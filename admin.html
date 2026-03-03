@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Boyle Digital Services</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- ==============================
+       LOGIN SCREEN
+  ============================== -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <div class="login-logo">BDS</div>
+      <h1>Admin Panel</h1>
+      <p class="login-subtitle">Enter your password to continue</p>
+      <form id="loginForm" novalidate>
+        <div class="login-field">
+          <label for="passwordInput">Password</label>
+          <input type="password" id="passwordInput" placeholder="Enter password" autocomplete="current-password">
+        </div>
+        <p class="login-error" id="loginError"></p>
+        <button type="submit" class="btn-primary btn-full">Log In</button>
+      </form>
+      <p class="login-hint">Default password: <code>admin</code></p>
+    </div>
+  </div>
+
+  <!-- ==============================
+       ADMIN PANEL
+  ============================== -->
+  <div id="adminPanel" class="admin-panel hidden">
+
+    <!-- Header -->
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <span class="admin-logo">BDS Admin</span>
+      </div>
+      <div class="admin-header-right">
+        <a href="index.html" target="_blank" class="btn-ghost">View Site ↗</a>
+        <button id="resetBtn" class="btn-ghost btn-danger">Reset Defaults</button>
+        <button id="saveBtn" class="btn-primary">Save Changes</button>
+      </div>
+    </header>
+
+    <!-- Body -->
+    <div class="admin-body">
+
+      <!-- Sidebar -->
+      <nav class="admin-sidebar">
+        <ul>
+          <li><a href="#sec-general"  class="sidebar-link active">⚙ General</a></li>
+          <li><a href="#sec-hero"     class="sidebar-link">🚀 Hero</a></li>
+          <li><a href="#sec-about"    class="sidebar-link">💼 About</a></li>
+          <li><a href="#sec-services" class="sidebar-link">🛠 Services</a></li>
+          <li><a href="#sec-gallery"  class="sidebar-link">🖼 Gallery</a></li>
+          <li><a href="#sec-contact"  class="sidebar-link">✉ Contact</a></li>
+          <li class="sidebar-divider"></li>
+          <li><a href="#sec-security" class="sidebar-link">🔒 Security</a></li>
+        </ul>
+      </nav>
+
+      <!-- Main content -->
+      <main class="admin-content" id="adminContent">
+
+        <!-- ── GENERAL ──────────────────────────── -->
+        <section class="admin-section" id="sec-general">
+          <div class="section-title">
+            <h2>General</h2>
+            <p>Site-wide settings applied across all pages.</p>
+          </div>
+          <div class="card">
+            <div class="field-group">
+              <label for="f-companyName">Company Name</label>
+              <p class="field-hint">The second word will be highlighted in teal (e.g. "Boyle <strong>Digital</strong> Services").</p>
+              <input type="text" id="f-companyName" placeholder="Boyle Digital Services">
+            </div>
+          </div>
+        </section>
+
+        <!-- ── HERO ─────────────────────────────── -->
+        <section class="admin-section" id="sec-hero">
+          <div class="section-title">
+            <h2>Hero</h2>
+            <p>The full-screen banner at the top of the page.</p>
+          </div>
+          <div class="card">
+            <div class="field-group">
+              <label for="f-hero-eyebrow">Eyebrow Label</label>
+              <p class="field-hint">Small uppercase text above the headline.</p>
+              <input type="text" id="f-hero-eyebrow" placeholder="Digital Services Agency">
+            </div>
+            <div class="field-group">
+              <label for="f-hero-headline">Headline</label>
+              <textarea id="f-hero-headline" rows="2" placeholder="Driving Growth Through Digital Excellence"></textarea>
+            </div>
+            <div class="field-group">
+              <label for="f-hero-subtitle">Subtitle / Tagline</label>
+              <textarea id="f-hero-subtitle" rows="3" placeholder="We help businesses thrive…"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── ABOUT ─────────────────────────────── -->
+        <section class="admin-section" id="sec-about">
+          <div class="section-title">
+            <h2>About</h2>
+            <p>Company description and stat counters.</p>
+          </div>
+          <div class="card">
+            <div class="field-group">
+              <label for="f-about-heading">Section Heading</label>
+              <input type="text" id="f-about-heading" placeholder="Your Partner in Digital Transformation">
+            </div>
+            <div class="field-group">
+              <label for="f-about-p0">Paragraph 1</label>
+              <textarea id="f-about-p0" rows="4"></textarea>
+            </div>
+            <div class="field-group">
+              <label for="f-about-p1">Paragraph 2</label>
+              <textarea id="f-about-p1" rows="4"></textarea>
+            </div>
+            <div class="field-group">
+              <label for="f-about-p2">Paragraph 3</label>
+              <textarea id="f-about-p2" rows="4"></textarea>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-subheading">Stat Counters</div>
+            <div class="stats-grid">
+              <!-- Stat 0 -->
+              <div class="stat-editor">
+                <p class="stat-editor-label">Stat 1</p>
+                <div class="stat-editor-row">
+                  <div class="field-group field-group--sm">
+                    <label for="f-stat-0-number">Number</label>
+                    <input type="number" id="f-stat-0-number" min="0">
+                  </div>
+                  <div class="field-group field-group--sm">
+                    <label for="f-stat-0-suffix">Suffix</label>
+                    <input type="text" id="f-stat-0-suffix" placeholder="+" maxlength="5">
+                  </div>
+                  <div class="field-group field-grow">
+                    <label for="f-stat-0-label">Label</label>
+                    <input type="text" id="f-stat-0-label" placeholder="Happy Clients">
+                  </div>
+                </div>
+              </div>
+              <!-- Stat 1 -->
+              <div class="stat-editor">
+                <p class="stat-editor-label">Stat 2</p>
+                <div class="stat-editor-row">
+                  <div class="field-group field-group--sm">
+                    <label for="f-stat-1-number">Number</label>
+                    <input type="number" id="f-stat-1-number" min="0">
+                  </div>
+                  <div class="field-group field-group--sm">
+                    <label for="f-stat-1-suffix">Suffix</label>
+                    <input type="text" id="f-stat-1-suffix" placeholder="+" maxlength="5">
+                  </div>
+                  <div class="field-group field-grow">
+                    <label for="f-stat-1-label">Label</label>
+                    <input type="text" id="f-stat-1-label" placeholder="Projects Delivered">
+                  </div>
+                </div>
+              </div>
+              <!-- Stat 2 -->
+              <div class="stat-editor">
+                <p class="stat-editor-label">Stat 3</p>
+                <div class="stat-editor-row">
+                  <div class="field-group field-group--sm">
+                    <label for="f-stat-2-number">Number</label>
+                    <input type="number" id="f-stat-2-number" min="0">
+                  </div>
+                  <div class="field-group field-group--sm">
+                    <label for="f-stat-2-suffix">Suffix</label>
+                    <input type="text" id="f-stat-2-suffix" placeholder=" yrs" maxlength="5">
+                  </div>
+                  <div class="field-group field-grow">
+                    <label for="f-stat-2-label">Label</label>
+                    <input type="text" id="f-stat-2-label" placeholder="Years of Experience">
+                  </div>
+                </div>
+              </div>
+              <!-- Stat 3 -->
+              <div class="stat-editor">
+                <p class="stat-editor-label">Stat 4</p>
+                <div class="stat-editor-row">
+                  <div class="field-group field-group--sm">
+                    <label for="f-stat-3-number">Number</label>
+                    <input type="number" id="f-stat-3-number" min="0">
+                  </div>
+                  <div class="field-group field-group--sm">
+                    <label for="f-stat-3-suffix">Suffix</label>
+                    <input type="text" id="f-stat-3-suffix" placeholder="%" maxlength="5">
+                  </div>
+                  <div class="field-group field-grow">
+                    <label for="f-stat-3-label">Label</label>
+                    <input type="text" id="f-stat-3-label" placeholder="Client Satisfaction">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── SERVICES ───────────────────────────── -->
+        <section class="admin-section" id="sec-services">
+          <div class="section-title">
+            <h2>Services</h2>
+            <p>Edit the three service cards displayed on the site.</p>
+          </div>
+
+          <!-- Service 0 -->
+          <div class="card">
+            <div class="card-subheading">Card 1</div>
+            <div class="service-editor-row">
+              <div class="field-group field-group--icon">
+                <label for="f-service-0-icon">Icon (emoji)</label>
+                <input type="text" id="f-service-0-icon" placeholder="📋" maxlength="4">
+              </div>
+              <div class="field-group field-grow">
+                <label for="f-service-0-title">Title</label>
+                <input type="text" id="f-service-0-title" placeholder="Product Management">
+              </div>
+            </div>
+            <div class="field-group">
+              <label for="f-service-0-desc">Description</label>
+              <textarea id="f-service-0-desc" rows="3"></textarea>
+            </div>
+          </div>
+
+          <!-- Service 1 -->
+          <div class="card">
+            <div class="card-subheading">Card 2</div>
+            <div class="service-editor-row">
+              <div class="field-group field-group--icon">
+                <label for="f-service-1-icon">Icon (emoji)</label>
+                <input type="text" id="f-service-1-icon" placeholder="💻" maxlength="4">
+              </div>
+              <div class="field-group field-grow">
+                <label for="f-service-1-title">Title</label>
+                <input type="text" id="f-service-1-title" placeholder="Web Development">
+              </div>
+            </div>
+            <div class="field-group">
+              <label for="f-service-1-desc">Description</label>
+              <textarea id="f-service-1-desc" rows="3"></textarea>
+            </div>
+          </div>
+
+          <!-- Service 2 -->
+          <div class="card">
+            <div class="card-subheading">Card 3</div>
+            <div class="service-editor-row">
+              <div class="field-group field-group--icon">
+                <label for="f-service-2-icon">Icon (emoji)</label>
+                <input type="text" id="f-service-2-icon" placeholder="🔍" maxlength="4">
+              </div>
+              <div class="field-group field-grow">
+                <label for="f-service-2-title">Title</label>
+                <input type="text" id="f-service-2-title" placeholder="SEO &amp; Analytics">
+              </div>
+            </div>
+            <div class="field-group">
+              <label for="f-service-2-desc">Description</label>
+              <textarea id="f-service-2-desc" rows="3"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── GALLERY ────────────────────────────── -->
+        <section class="admin-section" id="sec-gallery">
+          <div class="section-title">
+            <h2>Gallery</h2>
+            <p>Update image URLs, alt text, and captions for all 12 gallery photos.</p>
+          </div>
+          <div class="gallery-editor-grid" id="galleryEditorGrid">
+            <!-- Populated by admin.js -->
+          </div>
+        </section>
+
+        <!-- ── CONTACT ────────────────────────────── -->
+        <section class="admin-section" id="sec-contact">
+          <div class="section-title">
+            <h2>Contact</h2>
+            <p>Update the contact details shown on the site.</p>
+          </div>
+          <div class="card">
+            <div class="field-group">
+              <label for="f-contact-address">Address</label>
+              <input type="text" id="f-contact-address" placeholder="123 Digital Avenue, Dublin, Ireland">
+            </div>
+            <div class="field-group">
+              <label for="f-contact-phone">Phone Number</label>
+              <input type="tel" id="f-contact-phone" placeholder="+353 1 234 5678">
+            </div>
+            <div class="field-group">
+              <label for="f-contact-email">Email Address</label>
+              <input type="email" id="f-contact-email" placeholder="hello@boyledigital.ie">
+            </div>
+          </div>
+        </section>
+
+        <!-- ── SECURITY ───────────────────────────── -->
+        <section class="admin-section" id="sec-security">
+          <div class="section-title">
+            <h2>Security</h2>
+            <p>Change your admin panel password.</p>
+          </div>
+          <div class="card">
+            <div class="field-group">
+              <label for="f-new-password">New Password</label>
+              <input type="password" id="f-new-password" placeholder="Enter new password" autocomplete="new-password">
+            </div>
+            <div class="field-group">
+              <label for="f-confirm-password">Confirm New Password</label>
+              <input type="password" id="f-confirm-password" placeholder="Repeat new password" autocomplete="new-password">
+            </div>
+            <p class="field-error hidden" id="passwordChangeError"></p>
+            <button id="changePasswordBtn" class="btn-primary">Update Password</button>
+          </div>
+        </section>
+
+      </main>
+    </div><!-- /admin-body -->
+  </div><!-- /admin-panel -->
+
+  <!-- Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Load content.js first for shared data helpers -->
+  <script src="js/content.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
