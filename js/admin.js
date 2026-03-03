@@ -6,13 +6,49 @@
 
 const ADMIN_PW_KEY = 'bds_admin_password';
 const ADMIN_SESSION_KEY = 'bds_admin_auth';
-const DEFAULT_ADMIN_PW = 'admin';
+const DEFAULT_ADMIN_PW = 'admin'; // plaintext default — hashed on first use
 
 /* ============================================================
-   AUTH
+   AUTH — passwords are stored as SHA-256 hashes, never plaintext
    ============================================================ */
-function getAdminPassword() {
-  return localStorage.getItem(ADMIN_PW_KEY) || DEFAULT_ADMIN_PW;
+
+/** Returns a hex SHA-256 digest of the given string. */
+async function hashPassword(password) {
+  const data = new TextEncoder().encode(password);
+  const buf  = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(buf))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+/**
+ * Verifies an entered password against storage.
+ * Handles three cases:
+ *   1. Nothing stored → compare against hash of DEFAULT_ADMIN_PW
+ *   2. Stored value is a 64-char hex hash → compare hashes
+ *   3. Legacy plaintext (migrating from old version) → compare directly,
+ *      then re-store as hash on success
+ */
+async function checkPassword(entered) {
+  const stored      = localStorage.getItem(ADMIN_PW_KEY);
+  const enteredHash = await hashPassword(entered);
+
+  if (!stored) {
+    // First run — no password set yet
+    return enteredHash === await hashPassword(DEFAULT_ADMIN_PW);
+  }
+
+  if (/^[0-9a-f]{64}$/.test(stored)) {
+    // Already a hash — compare hashes
+    return enteredHash === stored;
+  }
+
+  // Legacy plaintext — migrate to hash on successful login
+  if (entered === stored) {
+    localStorage.setItem(ADMIN_PW_KEY, enteredHash);
+    return true;
+  }
+  return false;
 }
 
 function isAuthed() {
@@ -32,12 +68,12 @@ function showLogin() {
 }
 
 /* Login form */
-document.getElementById('loginForm').addEventListener('submit', e => {
+document.getElementById('loginForm').addEventListener('submit', async e => {
   e.preventDefault();
   const entered = document.getElementById('passwordInput').value;
   const errorEl = document.getElementById('loginError');
 
-  if (entered === getAdminPassword()) {
+  if (await checkPassword(entered)) {
     sessionStorage.setItem(ADMIN_SESSION_KEY, '1');
     errorEl.textContent = '';
     showPanel();
@@ -248,7 +284,7 @@ document.getElementById('resetBtn').addEventListener('click', () => {
 /* ============================================================
    PASSWORD CHANGE
    ============================================================ */
-document.getElementById('changePasswordBtn').addEventListener('click', () => {
+document.getElementById('changePasswordBtn').addEventListener('click', async () => {
   const newPw  = document.getElementById('f-new-password').value;
   const confPw = document.getElementById('f-confirm-password').value;
   const errEl  = document.getElementById('passwordChangeError');
@@ -267,7 +303,9 @@ document.getElementById('changePasswordBtn').addEventListener('click', () => {
     return;
   }
 
-  localStorage.setItem(ADMIN_PW_KEY, newPw);
+  // Store as SHA-256 hash — never plaintext
+  const hash = await hashPassword(newPw);
+  localStorage.setItem(ADMIN_PW_KEY, hash);
   document.getElementById('f-new-password').value = '';
   document.getElementById('f-confirm-password').value = '';
   showToast('Password updated!', 'success');
