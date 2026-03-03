@@ -17,6 +17,7 @@
   ============================== -->
   <nav class="navbar" id="navbar">
     <div class="container nav-container">
+      <!-- Text updated dynamically by content.js -->
       <a href="#" class="nav-logo">Boyle <span>Digital</span> Services</a>
       <ul class="nav-links" id="navLinks">
         <li><a href="#about">About</a></li>
@@ -50,9 +51,9 @@
       <div class="shape shape-3"></div>
     </div>
     <div class="container hero-content">
-      <p class="hero-eyebrow reveal">Digital Services Agency</p>
-      <h1 class="reveal">Driving Growth Through Digital Excellence</h1>
-      <p class="hero-subtitle reveal">
+      <p class="hero-eyebrow reveal" data-content="hero.eyebrow">Digital Services Agency</p>
+      <h1 class="reveal" data-content="hero.headline">Driving Growth Through Digital Excellence</h1>
+      <p class="hero-subtitle reveal" data-content="hero.subtitle">
         We help businesses thrive in the digital landscape through strategic product management,
         data-driven marketing, and cutting-edge web development.
       </p>
@@ -74,47 +75,47 @@
       <div class="about-grid">
         <div class="about-text">
           <p class="section-eyebrow reveal">About Us</p>
-          <h2 class="reveal">Your Partner in Digital Transformation</h2>
-          <p class="reveal">
+          <h2 class="reveal" data-content="about.heading">Your Partner in Digital Transformation</h2>
+          <p class="reveal" data-content="about.p0">
             At Boyle Digital Services, we believe every business deserves a powerful digital presence.
             Founded with a passion for technology and a commitment to measurable results, we've helped
             hundreds of businesses transform their digital strategy from the ground up.
           </p>
-          <p class="reveal">
+          <p class="reveal" data-content="about.p1">
             Our multidisciplinary team combines deep technical expertise with creative thinking and
             data-driven insights. Whether you're launching a new product, scaling your marketing
             efforts, or rebuilding your web presence, we deliver solutions that move the needle.
           </p>
-          <p class="reveal">
+          <p class="reveal" data-content="about.p2">
             We're not just a service provider — we're a long-term partner invested in your success.
             Every engagement begins with a thorough understanding of your goals, audience, and
             competitive landscape.
           </p>
         </div>
         <div class="about-stats">
-          <div class="stat-card reveal">
+          <div class="stat-card reveal" data-stat="0">
             <div class="stat-value">
-              <span class="stat-number counter" data-target="150">0</span><span class="stat-suffix">+</span>
+              <span class="stat-number counter" data-target="150" data-field="number">0</span><span class="stat-suffix" data-field="suffix">+</span>
             </div>
-            <p class="stat-label">Happy Clients</p>
+            <p class="stat-label" data-field="label">Happy Clients</p>
           </div>
-          <div class="stat-card reveal">
+          <div class="stat-card reveal" data-stat="1">
             <div class="stat-value">
-              <span class="stat-number counter" data-target="320">0</span><span class="stat-suffix">+</span>
+              <span class="stat-number counter" data-target="320" data-field="number">0</span><span class="stat-suffix" data-field="suffix">+</span>
             </div>
-            <p class="stat-label">Projects Delivered</p>
+            <p class="stat-label" data-field="label">Projects Delivered</p>
           </div>
-          <div class="stat-card reveal">
+          <div class="stat-card reveal" data-stat="2">
             <div class="stat-value">
-              <span class="stat-number counter" data-target="8">0</span><span class="stat-suffix"> yrs</span>
+              <span class="stat-number counter" data-target="8" data-field="number">0</span><span class="stat-suffix" data-field="suffix"> yrs</span>
             </div>
-            <p class="stat-label">Years of Experience</p>
+            <p class="stat-label" data-field="label">Years of Experience</p>
           </div>
-          <div class="stat-card reveal">
+          <div class="stat-card reveal" data-stat="3">
             <div class="stat-value">
-              <span class="stat-number counter" data-target="98">0</span><span class="stat-suffix">%</span>
+              <span class="stat-number counter" data-target="98" data-field="number">0</span><span class="stat-suffix" data-field="suffix">%</span>
             </div>
-            <p class="stat-label">Client Satisfaction</p>
+            <p class="stat-label" data-field="label">Client Satisfaction</p>
           </div>
         </div>
       </div>
@@ -135,35 +136,20 @@
         </p>
       </div>
       <div class="services-grid">
-        <div class="service-card reveal">
-          <span class="service-icon" aria-hidden="true">📋</span>
-          <h3>Product Management</h3>
-          <p>Strategic roadmapping, backlog prioritisation, and cross-functional team alignment to bring your product vision to life on time and on budget.</p>
+        <div class="service-card reveal" data-service="0">
+          <span class="service-icon" aria-hidden="true" data-field="icon">📋</span>
+          <h3 data-field="title">Product Management</h3>
+          <p data-field="desc">Strategic roadmapping, backlog prioritisation, and cross-functional team alignment to bring your product vision to life on time and on budget.</p>
         </div>
-        <div class="service-card reveal">
-          <span class="service-icon" aria-hidden="true">📈</span>
-          <h3>Digital Marketing</h3>
-          <p>Integrated campaigns across paid search, display, and email that generate qualified leads and deliver measurable ROI for your business.</p>
+        <div class="service-card reveal" data-service="1">
+          <span class="service-icon" aria-hidden="true" data-field="icon">💻</span>
+          <h3 data-field="title">Web Development</h3>
+          <p data-field="desc">Custom, responsive websites and web applications built with modern technologies — fast, accessible, and optimised for conversion.</p>
         </div>
-        <div class="service-card reveal">
-          <span class="service-icon" aria-hidden="true">💻</span>
-          <h3>Web Development</h3>
-          <p>Custom, responsive websites and web applications built with modern technologies — fast, accessible, and optimised for conversion.</p>
-        </div>
-        <div class="service-card reveal">
-          <span class="service-icon" aria-hidden="true">🔍</span>
-          <h3>SEO &amp; Analytics</h3>
-          <p>Technical SEO audits, content strategy, and analytics dashboards that give you clear visibility into what's driving your growth.</p>
-        </div>
-        <div class="service-card reveal">
-          <span class="service-icon" aria-hidden="true">🎯</span>
-          <h3>Brand Strategy</h3>
-          <p>Positioning, messaging frameworks, and visual identity development that make your brand memorable and compelling in a crowded market.</p>
-        </div>
-        <div class="service-card reveal">
-          <span class="service-icon" aria-hidden="true">📱</span>
-          <h3>Social Media Management</h3>
-          <p>Content creation, community management, and paid social campaigns that build a loyal audience and drive real business outcomes.</p>
+        <div class="service-card reveal" data-service="2">
+          <span class="service-icon" aria-hidden="true" data-field="icon">🔍</span>
+          <h3 data-field="title">SEO &amp; Analytics</h3>
+          <p data-field="desc">Technical SEO audits, content strategy, and analytics dashboards that give you clear visibility into what's driving your growth.</p>
         </div>
       </div>
     </div>
@@ -276,15 +262,15 @@
           <ul class="contact-details">
             <li>
               <span class="contact-icon" aria-hidden="true">📍</span>
-              <span>123 Digital Avenue, Dublin, Ireland</span>
+              <span data-content="contact.address">123 Digital Avenue, Dublin, Ireland</span>
             </li>
             <li>
               <span class="contact-icon" aria-hidden="true">📞</span>
-              <a href="tel:+35312345678">+353 1 234 5678</a>
+              <a href="tel:+35312345678" data-content="contact.phone">+353 1 234 5678</a>
             </li>
             <li>
               <span class="contact-icon" aria-hidden="true">✉️</span>
-              <a href="mailto:hello@boyledigital.ie">hello@boyledigital.ie</a>
+              <a href="mailto:hello@boyledigital.ie" data-content="contact.email">hello@boyledigital.ie</a>
             </li>
           </ul>
           <div class="social-links">
@@ -340,6 +326,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
+          <!-- Text updated dynamically by content.js -->
           <p class="footer-logo">Boyle <span>Digital</span> Services</p>
           <p class="footer-tagline">
             Driving growth through digital excellence. Your trusted partner for the digital age.
@@ -358,10 +345,8 @@
           <h4>Services</h4>
           <ul>
             <li><a href="#services">Product Management</a></li>
-            <li><a href="#services">Digital Marketing</a></li>
             <li><a href="#services">Web Development</a></li>
             <li><a href="#services">SEO &amp; Analytics</a></li>
-            <li><a href="#services">Brand Strategy</a></li>
           </ul>
         </div>
         <div class="footer-col footer-contact-col">
@@ -377,6 +362,8 @@
     </div>
   </footer>
 
+  <!-- content.js must load before main.js so data-target attrs are set before observers register -->
+  <script src="js/content.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
