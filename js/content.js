@@ -66,9 +66,15 @@ const DEFAULT_CONTENT = {
   ],
 
   contact: {
-    address: '123 Digital Avenue, Dublin, Ireland',
-    phone:   '+353 1 234 5678',
-    email:   'hello@boyledigital.ie'
+    address:  '123 Digital Avenue, Dublin, Ireland',
+    phone:    '+353 1 234 5678',
+    email:    'hello@boyledigital.ie',
+    social: {
+      linkedin:  '',
+      twitter:   '',
+      instagram: '',
+      tiktok:    ''
+    }
   }
 };
 
@@ -164,19 +170,45 @@ function applyContent(data) {
     if (cap) cap.textContent = item.caption;
   });
 
-  /* Contact */
-  setText('[data-content="contact.address"]', data.contact.address);
+  /* Contact — hide any item whose field is blank */
+  toggleContactItem('address', !!data.contact.address);
+  if (data.contact.address) setText('[data-content="contact.address"]', data.contact.address);
 
-  const phoneEl = document.querySelector('[data-content="contact.phone"]');
-  if (phoneEl) {
-    phoneEl.textContent = data.contact.phone;
-    phoneEl.href = `tel:${data.contact.phone.replace(/[\s\-().]/g, '')}`;
+  toggleContactItem('phone', !!data.contact.phone);
+  if (data.contact.phone) {
+    document.querySelectorAll('[data-content="contact.phone"]').forEach(el => {
+      el.textContent = data.contact.phone;
+      el.href = `tel:${data.contact.phone.replace(/[\s\-().]/g, '')}`;
+    });
   }
 
-  const emailEl = document.querySelector('[data-content="contact.email"]');
-  if (emailEl) {
-    emailEl.textContent = data.contact.email;
-    emailEl.href = `mailto:${data.contact.email}`;
+  toggleContactItem('email', !!data.contact.email);
+  if (data.contact.email) {
+    document.querySelectorAll('[data-content="contact.email"]').forEach(el => {
+      el.textContent = data.contact.email;
+      el.href = `mailto:${data.contact.email}`;
+    });
+  }
+
+  /* Social links — rebuild from URLs, hide container if all blank */
+  const socialContainer = document.getElementById('socialLinksContainer');
+  if (socialContainer) {
+    const SOCIALS = [
+      { key: 'linkedin',  abbr: 'Li', label: 'LinkedIn'    },
+      { key: 'twitter',   abbr: 'Tw', label: 'Twitter / X' },
+      { key: 'instagram', abbr: 'Ig', label: 'Instagram'   },
+      { key: 'tiktok',    abbr: 'Tk', label: 'TikTok'      }
+    ];
+    const social = data.contact.social || {};
+    const links  = SOCIALS
+      .filter(s => safeUrl(social[s.key]))
+      .map(s =>
+        `<a href="${esc(safeUrl(social[s.key]))}" class="social-link" ` +
+        `aria-label="${s.label}" target="_blank" rel="noopener noreferrer">${s.abbr}</a>`
+      )
+      .join('');
+    socialContainer.innerHTML = links;
+    socialContainer.style.display = links ? '' : 'none';
   }
 }
 
@@ -210,6 +242,22 @@ function esc(str) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
+}
+
+/** Show or hide all elements labelled with [data-contact-item="key"]. */
+function toggleContactItem(key, show) {
+  document.querySelectorAll(`[data-contact-item="${key}"]`).forEach(el => {
+    el.style.display = show ? '' : 'none';
+  });
+}
+
+/** Returns the URL only if it uses http/https; otherwise returns ''. */
+function safeUrl(url) {
+  if (!url) return '';
+  try {
+    const p = new URL(url);
+    return (p.protocol === 'http:' || p.protocol === 'https:') ? url : '';
+  } catch { return ''; }
 }
 
 

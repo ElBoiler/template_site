@@ -201,6 +201,13 @@ function loadFormData() {
   val('f-contact-address', d.contact.address);
   val('f-contact-phone',   d.contact.phone);
   val('f-contact-email',   d.contact.email);
+
+  /* Social */
+  const social = d.contact.social || {};
+  val('f-social-linkedin',  social.linkedin);
+  val('f-social-twitter',   social.twitter);
+  val('f-social-instagram', social.instagram);
+  val('f-social-tiktok',    social.tiktok);
 }
 
 /** Set a field's value */
@@ -256,9 +263,15 @@ function buildDataFromForm() {
     })),
 
     contact: {
-      address: get('f-contact-address') || DEFAULT_CONTENT.contact.address,
-      phone:   get('f-contact-phone')   || DEFAULT_CONTENT.contact.phone,
-      email:   get('f-contact-email')   || DEFAULT_CONTENT.contact.email
+      address: get('f-contact-address'),
+      phone:   get('f-contact-phone'),
+      email:   get('f-contact-email'),
+      social: {
+        linkedin:  get('f-social-linkedin'),
+        twitter:   get('f-social-twitter'),
+        instagram: get('f-social-instagram'),
+        tiktok:    get('f-social-tiktok')
+      }
     }
   };
 }
