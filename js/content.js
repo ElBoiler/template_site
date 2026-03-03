@@ -1,7 +1,7 @@
 /* ============================================================
    BOYLE DIGITAL SERVICES — content.js
    Single source of truth for all editable site content.
-   Loaded by both index.html and admin.html.
+   Loaded by both index.html and admin.html (after i18n.js).
    ============================================================ */
 
 'use strict';
@@ -9,63 +9,9 @@
 const CONTENT_KEY = 'bds_content';
 
 const DEFAULT_CONTENT = {
-  companyName: 'Boyle Digital Services',
+  companyName: 'Boyle Digital Services',  // language-neutral
 
-  hero: {
-    eyebrow:  'Digital Services Agency',
-    headline: 'Driving Growth Through Digital Excellence',
-    subtitle: 'We help businesses thrive in the digital landscape through strategic product management, data-driven marketing, and cutting-edge web development.'
-  },
-
-  about: {
-    heading: 'Your Partner in Digital Transformation',
-    paragraphs: [
-      'At Boyle Digital Services, we believe every business deserves a powerful digital presence. Founded with a passion for technology and a commitment to measurable results, we\'ve helped hundreds of businesses transform their digital strategy from the ground up.',
-      'Our multidisciplinary team combines deep technical expertise with creative thinking and data-driven insights. Whether you\'re launching a new product, scaling your marketing efforts, or rebuilding your web presence, we deliver solutions that move the needle.',
-      'We\'re not just a service provider — we\'re a long-term partner invested in your success. Every engagement begins with a thorough understanding of your goals, audience, and competitive landscape.'
-    ],
-    stats: [
-      { number: 150, suffix: '+',    label: 'Happy Clients'       },
-      { number: 320, suffix: '+',    label: 'Projects Delivered'  },
-      { number: 8,   suffix: ' yrs', label: 'Years of Experience' },
-      { number: 98,  suffix: '%',    label: 'Client Satisfaction' }
-    ]
-  },
-
-  services: [
-    {
-      icon:  '📋',
-      title: 'Product Management',
-      desc:  'Strategic roadmapping, backlog prioritisation, and cross-functional team alignment to bring your product vision to life on time and on budget.'
-    },
-    {
-      icon:  '💻',
-      title: 'Web Development',
-      desc:  'Custom, responsive websites and web applications built with modern technologies — fast, accessible, and optimised for conversion.'
-    },
-    {
-      icon:  '🔍',
-      title: 'SEO & Analytics',
-      desc:  'Technical SEO audits, content strategy, and analytics dashboards that give you clear visibility into what\'s driving your growth.'
-    }
-  ],
-
-  gallery: [
-    { src: 'https://picsum.photos/seed/bds1/600/400',  alt: 'Digital marketing campaign',  caption: 'Digital Marketing Campaign'  },
-    { src: 'https://picsum.photos/seed/bds2/600/400',  alt: 'E-commerce web platform',     caption: 'E-Commerce Web Platform'     },
-    { src: 'https://picsum.photos/seed/bds3/600/400',  alt: 'Brand identity refresh',      caption: 'Brand Identity Refresh'      },
-    { src: 'https://picsum.photos/seed/bds4/600/400',  alt: 'SaaS product launch',         caption: 'SaaS Product Launch'         },
-    { src: 'https://picsum.photos/seed/bds5/600/400',  alt: 'SEO and analytics dashboard', caption: 'SEO & Analytics Dashboard'   },
-    { src: 'https://picsum.photos/seed/bds6/600/400',  alt: 'Social media strategy',       caption: 'Social Media Strategy'       },
-    { src: 'https://picsum.photos/seed/bds7/600/400',  alt: 'Team collaboration workshop', caption: 'Team Collaboration Workshop'  },
-    { src: 'https://picsum.photos/seed/bds8/600/400',  alt: 'Mobile app design',           caption: 'Mobile App Design'           },
-    { src: 'https://picsum.photos/seed/bds9/600/400',  alt: 'Email marketing campaign',    caption: 'Email Marketing Campaign'    },
-    { src: 'https://picsum.photos/seed/bds10/600/400', alt: 'Content strategy workshop',   caption: 'Content Strategy Workshop'   },
-    { src: 'https://picsum.photos/seed/bds11/600/400', alt: 'Data analytics report',       caption: 'Data Analytics Report'       },
-    { src: 'https://picsum.photos/seed/bds12/600/400', alt: 'Client success story',        caption: 'Client Success Story'        }
-  ],
-
-  contact: {
+  contact: {                               // language-neutral
     address:  '123 Digital Avenue, Dublin, Ireland',
     phone:    '+353 1 234 5678',
     email:    'hello@boyledigital.ie',
@@ -75,6 +21,120 @@ const DEFAULT_CONTENT = {
       instagram: '',
       tiktok:    ''
     }
+  },
+
+  /* ── German content (default language) ──────────────────── */
+  de: {
+    hero: {
+      eyebrow:  'Digitalagentur',
+      headline: 'Wachstum durch digitale Exzellenz',
+      subtitle: 'Wir helfen Unternehmen, sich in der digitalen Welt zu behaupten – durch strategisches Produktmanagement, datengetriebenes Marketing und moderne Webentwicklung.'
+    },
+
+    about: {
+      heading: 'Ihr Partner für die digitale Transformation',
+      paragraphs: [
+        'Bei Boyle Digital Services sind wir überzeugt, dass jedes Unternehmen eine starke digitale Präsenz verdient. Gegründet mit Leidenschaft für Technologie und dem Anspruch auf messbare Ergebnisse, haben wir bereits Hunderte von Unternehmen dabei unterstützt, ihre digitale Strategie von Grund auf zu transformieren.',
+        'Unser interdisziplinäres Team vereint tiefgehende technische Expertise mit kreativem Denken und datengestützten Erkenntnissen. Egal, ob Sie ein neues Produkt einführen, Ihre Marketingaktivitäten skalieren oder Ihren Webauftritt erneuern möchten – wir liefern Lösungen, die wirklich etwas bewegen.',
+        'Wir sind nicht nur ein Dienstleister – wir sind ein langfristiger Partner, der in Ihren Erfolg investiert. Jede Zusammenarbeit beginnt mit einem gründlichen Verständnis Ihrer Ziele, Ihrer Zielgruppe und Ihres Wettbewerbsumfelds.'
+      ],
+      stats: [
+        { number: 150, suffix: '+',    label: 'Zufriedene Kunden'       },
+        { number: 320, suffix: '+',    label: 'Abgeschlossene Projekte' },
+        { number: 8,   suffix: ' J.',  label: 'Jahre Erfahrung'         },
+        { number: 98,  suffix: '%',    label: 'Kundenzufriedenheit'     }
+      ]
+    },
+
+    services: [
+      {
+        icon:  '📋',
+        title: 'Produktmanagement',
+        desc:  'Strategische Roadmaps, Backlog-Priorisierung und bereichsübergreifende Teamkoordination – damit Ihre Produktvision termingerecht und budgetkonform Wirklichkeit wird.'
+      },
+      {
+        icon:  '💻',
+        title: 'Webentwicklung',
+        desc:  'Individuelle, responsive Websites und Web-Applikationen mit modernen Technologien – schnell, barrierefrei und für maximale Conversion optimiert.'
+      },
+      {
+        icon:  '🔍',
+        title: 'SEO & Analytics',
+        desc:  'Technische SEO-Audits, Content-Strategie und Analytics-Dashboards, die Ihnen klaren Einblick in die treibenden Faktoren Ihres Wachstums geben.'
+      }
+    ],
+
+    gallery: [
+      { src: 'https://picsum.photos/seed/bds1/600/400',  alt: 'Digitale Marketingkampagne',       caption: 'Digitale Marketingkampagne'      },
+      { src: 'https://picsum.photos/seed/bds2/600/400',  alt: 'E-Commerce-Webplattform',          caption: 'E-Commerce-Webplattform'         },
+      { src: 'https://picsum.photos/seed/bds3/600/400',  alt: 'Markenidentität Relaunch',         caption: 'Markenidentität Relaunch'        },
+      { src: 'https://picsum.photos/seed/bds4/600/400',  alt: 'SaaS-Produktlaunch',               caption: 'SaaS-Produktlaunch'              },
+      { src: 'https://picsum.photos/seed/bds5/600/400',  alt: 'SEO- und Analytics-Dashboard',    caption: 'SEO & Analytics Dashboard'       },
+      { src: 'https://picsum.photos/seed/bds6/600/400',  alt: 'Social-Media-Strategie',           caption: 'Social-Media-Strategie'          },
+      { src: 'https://picsum.photos/seed/bds7/600/400',  alt: 'Team-Workshop Zusammenarbeit',     caption: 'Team-Workshop Zusammenarbeit'    },
+      { src: 'https://picsum.photos/seed/bds8/600/400',  alt: 'Mobile-App-Design',                caption: 'Mobile-App-Design'               },
+      { src: 'https://picsum.photos/seed/bds9/600/400',  alt: 'E-Mail-Marketingkampagne',         caption: 'E-Mail-Marketingkampagne'        },
+      { src: 'https://picsum.photos/seed/bds10/600/400', alt: 'Content-Strategie Workshop',       caption: 'Content-Strategie Workshop'      },
+      { src: 'https://picsum.photos/seed/bds11/600/400', alt: 'Datenanalyse-Bericht',             caption: 'Datenanalyse-Bericht'            },
+      { src: 'https://picsum.photos/seed/bds12/600/400', alt: 'Kundenerfolgsgeschichte',          caption: 'Kundenerfolgsgeschichte'         }
+    ]
+  },
+
+  /* ── English content ─────────────────────────────────────── */
+  en: {
+    hero: {
+      eyebrow:  'Digital Services Agency',
+      headline: 'Driving Growth Through Digital Excellence',
+      subtitle: 'We help businesses thrive in the digital landscape through strategic product management, data-driven marketing, and cutting-edge web development.'
+    },
+
+    about: {
+      heading: 'Your Partner in Digital Transformation',
+      paragraphs: [
+        'At Boyle Digital Services, we believe every business deserves a powerful digital presence. Founded with a passion for technology and a commitment to measurable results, we\'ve helped hundreds of businesses transform their digital strategy from the ground up.',
+        'Our multidisciplinary team combines deep technical expertise with creative thinking and data-driven insights. Whether you\'re launching a new product, scaling your marketing efforts, or rebuilding your web presence, we deliver solutions that move the needle.',
+        'We\'re not just a service provider — we\'re a long-term partner invested in your success. Every engagement begins with a thorough understanding of your goals, audience, and competitive landscape.'
+      ],
+      stats: [
+        { number: 150, suffix: '+',    label: 'Happy Clients'       },
+        { number: 320, suffix: '+',    label: 'Projects Delivered'  },
+        { number: 8,   suffix: ' yrs', label: 'Years of Experience' },
+        { number: 98,  suffix: '%',    label: 'Client Satisfaction' }
+      ]
+    },
+
+    services: [
+      {
+        icon:  '📋',
+        title: 'Product Management',
+        desc:  'Strategic roadmapping, backlog prioritisation, and cross-functional team alignment to bring your product vision to life on time and on budget.'
+      },
+      {
+        icon:  '💻',
+        title: 'Web Development',
+        desc:  'Custom, responsive websites and web applications built with modern technologies — fast, accessible, and optimised for conversion.'
+      },
+      {
+        icon:  '🔍',
+        title: 'SEO & Analytics',
+        desc:  'Technical SEO audits, content strategy, and analytics dashboards that give you clear visibility into what\'s driving your growth.'
+      }
+    ],
+
+    gallery: [
+      { src: 'https://picsum.photos/seed/bds1/600/400',  alt: 'Digital marketing campaign',  caption: 'Digital Marketing Campaign'  },
+      { src: 'https://picsum.photos/seed/bds2/600/400',  alt: 'E-commerce web platform',     caption: 'E-Commerce Web Platform'     },
+      { src: 'https://picsum.photos/seed/bds3/600/400',  alt: 'Brand identity refresh',      caption: 'Brand Identity Refresh'      },
+      { src: 'https://picsum.photos/seed/bds4/600/400',  alt: 'SaaS product launch',         caption: 'SaaS Product Launch'         },
+      { src: 'https://picsum.photos/seed/bds5/600/400',  alt: 'SEO and analytics dashboard', caption: 'SEO & Analytics Dashboard'   },
+      { src: 'https://picsum.photos/seed/bds6/600/400',  alt: 'Social media strategy',       caption: 'Social Media Strategy'       },
+      { src: 'https://picsum.photos/seed/bds7/600/400',  alt: 'Team collaboration workshop', caption: 'Team Collaboration Workshop'  },
+      { src: 'https://picsum.photos/seed/bds8/600/400',  alt: 'Mobile app design',           caption: 'Mobile App Design'           },
+      { src: 'https://picsum.photos/seed/bds9/600/400',  alt: 'Email marketing campaign',    caption: 'Email Marketing Campaign'    },
+      { src: 'https://picsum.photos/seed/bds10/600/400', alt: 'Content strategy workshop',   caption: 'Content Strategy Workshop'   },
+      { src: 'https://picsum.photos/seed/bds11/600/400', alt: 'Data analytics report',       caption: 'Data Analytics Report'       },
+      { src: 'https://picsum.photos/seed/bds12/600/400', alt: 'Client success story',        caption: 'Client Success Story'        }
+    ]
   }
 };
 
@@ -87,7 +147,7 @@ function getContent() {
   try {
     const raw = localStorage.getItem(CONTENT_KEY);
     if (!raw) return JSON.parse(JSON.stringify(DEFAULT_CONTENT));
-    // Deep-merge so new default keys added later don't break old saves
+    // Deep-merge so new default keys (e.g. new language block) don't break old saves
     return deepMerge(DEFAULT_CONTENT, JSON.parse(raw));
   } catch {
     return JSON.parse(JSON.stringify(DEFAULT_CONTENT));
@@ -122,25 +182,29 @@ function deepMerge(defaults, overrides) {
 
 /* ============================================================
    DOM patching — called on index.html load
+   lang: 'de' | 'en'  (defaults to getLang() from i18n.js)
    ============================================================ */
 
-function applyContent(data) {
+function applyContent(data, lang) {
+  const l  = (lang && ['de','en'].includes(lang)) ? lang : (typeof getLang === 'function' ? getLang() : 'de');
+  const ld = (data[l] && data[l].hero) ? data[l] : data['de']; // language-specific block
+
   /* Company name — nav logo + footer logo */
   document.querySelectorAll('.nav-logo, .footer-logo').forEach(el => {
     el.innerHTML = formatCompanyName(data.companyName);
   });
 
   /* Hero */
-  setText('[data-content="hero.eyebrow"]',  data.hero.eyebrow);
-  setText('[data-content="hero.headline"]', data.hero.headline);
-  setText('[data-content="hero.subtitle"]', data.hero.subtitle);
+  setText('[data-content="hero.eyebrow"]',  ld.hero.eyebrow);
+  setText('[data-content="hero.headline"]', ld.hero.headline);
+  setText('[data-content="hero.subtitle"]', ld.hero.subtitle);
 
   /* About */
-  setText('[data-content="about.heading"]', data.about.heading);
-  data.about.paragraphs.forEach((p, i) => setText(`[data-content="about.p${i}"]`, p));
+  setText('[data-content="about.heading"]', ld.about.heading);
+  ld.about.paragraphs.forEach((p, i) => setText(`[data-content="about.p${i}"]`, p));
 
   /* Stats */
-  data.about.stats.forEach((stat, i) => {
+  ld.about.stats.forEach((stat, i) => {
     const card = document.querySelector(`[data-stat="${i}"]`);
     if (!card) return;
     const numEl = card.querySelector('[data-field="number"]');
@@ -152,7 +216,7 @@ function applyContent(data) {
   });
 
   /* Services */
-  data.services.forEach((svc, i) => {
+  ld.services.forEach((svc, i) => {
     const card = document.querySelector(`[data-service="${i}"]`);
     if (!card) return;
     setFieldText(card, 'icon',  svc.icon);
@@ -161,7 +225,7 @@ function applyContent(data) {
   });
 
   /* Gallery */
-  data.gallery.forEach((item, i) => {
+  ld.gallery.forEach((item, i) => {
     const fig = document.querySelector(`.gallery-item[data-index="${i}"]`);
     if (!fig) return;
     const img = fig.querySelector('img');
@@ -265,5 +329,6 @@ function safeUrl(url) {
    Auto-apply on index.html load
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
-  applyContent(getContent());
+  const lang = typeof getLang === 'function' ? getLang() : 'de';
+  applyContent(getContent(), lang);
 });

@@ -258,7 +258,7 @@ contactForm.addEventListener('submit', e => {
 
   // Name
   if (!nameVal) {
-    setFieldError('name', 'nameError', 'Please enter your full name.');
+    setFieldError('name', 'nameError', T('err_name_required'));
     isValid = false;
   } else {
     clearFieldError('name', 'nameError');
@@ -266,10 +266,10 @@ contactForm.addEventListener('submit', e => {
 
   // Email
   if (!emailVal) {
-    setFieldError('email', 'emailError', 'Please enter your email address.');
+    setFieldError('email', 'emailError', T('err_email_required'));
     isValid = false;
   } else if (!emailRegex.test(emailVal)) {
-    setFieldError('email', 'emailError', 'Please enter a valid email address.');
+    setFieldError('email', 'emailError', T('err_email_invalid'));
     isValid = false;
   } else {
     clearFieldError('email', 'emailError');
@@ -277,7 +277,7 @@ contactForm.addEventListener('submit', e => {
 
   // Subject
   if (!subjectVal) {
-    setFieldError('subject', 'subjectError', 'Please select a subject.');
+    setFieldError('subject', 'subjectError', T('err_subject_required'));
     isValid = false;
   } else {
     clearFieldError('subject', 'subjectError');
@@ -285,7 +285,7 @@ contactForm.addEventListener('submit', e => {
 
   // Message
   if (!msgVal || msgVal.length < 10) {
-    setFieldError('message', 'messageError', 'Please enter a message (at least 10 characters).');
+    setFieldError('message', 'messageError', T('err_message_short'));
     isValid = false;
   } else {
     clearFieldError('message', 'messageError');
