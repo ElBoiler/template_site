@@ -303,6 +303,54 @@ h3 {
 
 .nav-links .nav-cta:hover { background: var(--clr-teal-hover); }
 
+/* ── Language switcher ──────────────────────────────────── */
+.lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.lang-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem 0.35rem;
+  color: var(--clr-muted);
+  border-radius: var(--radius-sm);
+  transition: color var(--trans), background var(--trans);
+  font-family: var(--font-body);
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  line-height: 1;
+}
+
+.lang-btn:hover         { color: var(--clr-teal); }
+.lang-btn.active        { color: var(--clr-teal); background: var(--clr-teal-light); }
+.lang-divider           { color: var(--clr-border); user-select: none; line-height: 1; }
+
+/* Hero nav: white text override */
+.navbar .lang-btn       { color: rgba(255,255,255,0.7); }
+.navbar.scrolled .lang-btn { color: var(--clr-muted); }
+.navbar .lang-btn.active,
+.navbar.scrolled .lang-btn.active { color: var(--clr-teal); background: var(--clr-teal-light); }
+.navbar .lang-divider   { color: rgba(255,255,255,0.3); }
+.navbar.scrolled .lang-divider { color: var(--clr-border); }
+
+/* Mobile overlay variant */
+.lang-switcher--mobile {
+  justify-content: center;
+  padding: 1rem 0 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  margin-bottom: 0.5rem;
+}
+.lang-switcher--mobile .lang-btn { color: rgba(255,255,255,0.7); }
+.lang-switcher--mobile .lang-btn.active { color: #fff; background: rgba(255,255,255,0.15); }
+.lang-switcher--mobile .lang-divider { color: rgba(255,255,255,0.3); }
+
 /* Hamburger button */
 .hamburger {
   display: flex;
