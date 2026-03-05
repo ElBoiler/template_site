@@ -10,6 +10,7 @@ const CONTENT_KEY = 'bds_content';
 
 const DEFAULT_CONTENT = {
   companyName: 'Boyle Digital Services',  // language-neutral
+  referencesVisible: true,                // language-neutral toggle
 
   contact: {                               // language-neutral
     address:  '123 Digital Avenue, Dublin, Ireland',
@@ -209,36 +210,62 @@ function applyContent(data, lang) {
   setText('[data-content="about.heading"]', ld.about.heading);
   ld.about.paragraphs.forEach((p, i) => setText(`[data-content="about.p${i}"]`, p));
 
-  /* Stats */
-  ld.about.stats.forEach((stat, i) => {
-    const card = document.querySelector(`[data-stat="${i}"]`);
-    if (!card) return;
-    const numEl = card.querySelector('[data-field="number"]');
-    const sufEl = card.querySelector('[data-field="suffix"]');
-    const lblEl = card.querySelector('[data-field="label"]');
-    if (numEl) { numEl.textContent = stat.number; numEl.setAttribute('data-target', stat.number); }
-    if (sufEl) sufEl.textContent = stat.suffix;
-    if (lblEl) lblEl.textContent = stat.label;
-  });
+  /* Stats — rebuild dynamically (supports 1–6 items) */
+  const statsWrap = document.querySelector('.about-stats');
+  if (statsWrap) {
+    statsWrap.innerHTML = '';
+    (ld.about.stats || []).forEach((s, i) => {
+      statsWrap.insertAdjacentHTML('beforeend',
+        `<div class="stat-card reveal" data-stat="${i}">` +
+          `<div class="stat-value">` +
+            `<span class="stat-number counter" data-target="${Number(s.number) || 0}" data-field="number">${Number(s.number) || 0}</span>` +
+            `<span class="stat-suffix" data-field="suffix">${esc(s.suffix)}</span>` +
+          `</div>` +
+          `<p class="stat-label" data-field="label">${esc(s.label)}</p>` +
+        `</div>`
+      );
+    });
+  }
 
-  /* Services */
-  ld.services.forEach((svc, i) => {
-    const card = document.querySelector(`[data-service="${i}"]`);
-    if (!card) return;
-    setFieldText(card, 'icon',  svc.icon);
-    setFieldText(card, 'title', svc.title);
-    setFieldText(card, 'desc',  svc.desc);
-  });
+  /* Services — rebuild dynamically (supports 1–9 items) */
+  const svcGrid = document.querySelector('.services-grid');
+  if (svcGrid) {
+    svcGrid.innerHTML = '';
+    (ld.services || []).forEach((s, i) => {
+      svcGrid.insertAdjacentHTML('beforeend',
+        `<div class="service-card reveal" data-service="${i}">` +
+          `<span class="service-icon" aria-hidden="true" data-field="icon">${esc(s.icon)}</span>` +
+          `<h3 data-field="title">${esc(s.title)}</h3>` +
+          `<p data-field="desc">${esc(s.desc)}</p>` +
+        `</div>`
+      );
+    });
+  }
 
-  /* Gallery */
-  ld.gallery.forEach((item, i) => {
-    const fig = document.querySelector(`.gallery-item[data-index="${i}"]`);
-    if (!fig) return;
-    const img = fig.querySelector('img');
-    const cap = fig.querySelector('figcaption');
-    if (img) { img.src = item.src; img.alt = item.alt; }
-    if (cap) cap.textContent = item.caption;
-  });
+  /* Gallery — optional section + dynamic items (0–12) */
+  const gallerySection = document.getElementById('gallery');
+  if (gallerySection) {
+    gallerySection.hidden = (data.referencesVisible === false);
+  }
+  const galleryGrid = document.querySelector('.gallery-grid');
+  if (galleryGrid) {
+    galleryGrid.innerHTML = '';
+    (ld.gallery || []).forEach((item, i) => {
+      const src = safeUrl(item.src);
+      if (!src) return;
+      galleryGrid.insertAdjacentHTML('beforeend',
+        `<figure class="gallery-item reveal" data-index="${i}" tabindex="0" role="button">` +
+          `<img src="${esc(src)}" alt="${esc(item.alt)}" loading="lazy">` +
+          `<figcaption>${esc(item.caption)}</figcaption>` +
+          `<div class="gallery-overlay" aria-hidden="true"><span class="zoom-icon">⊕</span></div>` +
+        `</figure>`
+      );
+    });
+  }
+
+  /* Re-register newly built .reveal and .counter elements with main.js observers */
+  if (typeof window.observeRevealEls === 'function') window.observeRevealEls();
+  if (typeof window.observeCounterEls === 'function') window.observeCounterEls();
 
   /* Contact — hide any item whose field is blank */
   toggleContactItem('address', !!data.contact.address);

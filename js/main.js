@@ -106,6 +106,11 @@ const revealObserver = new IntersectionObserver(entries => {
 
 revealEls.forEach(el => revealObserver.observe(el));
 
+/** Re-registers any new .reveal elements added after initial page load (called by content.js). */
+window.observeRevealEls = function () {
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => revealObserver.observe(el));
+};
+
 
 /* ============================================================
    6. COUNTER ANIMATION
@@ -140,29 +145,42 @@ const counterObserver = new IntersectionObserver(entries => {
 
 counterEls.forEach(el => counterObserver.observe(el));
 
+/** Re-registers any new .counter elements added after initial page load (called by content.js). */
+window.observeCounterEls = function () {
+  document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+};
+
 
 /* ============================================================
    7. GALLERY LIGHTBOX
+   Uses event delegation on .gallery-grid so dynamically built
+   gallery items are handled without re-binding listeners.
    ============================================================ */
-const galleryItems   = Array.from(document.querySelectorAll('.gallery-item'));
-const lightbox       = document.getElementById('lightbox');
-const lightboxImg    = document.getElementById('lightboxImg');
+const lightbox        = document.getElementById('lightbox');
+const lightboxImg     = document.getElementById('lightboxImg');
 const lightboxCaption = document.getElementById('lightboxCaption');
-const lightboxClose  = document.getElementById('lightboxClose');
-const lightboxPrev   = document.getElementById('lightboxPrev');
-const lightboxNext   = document.getElementById('lightboxNext');
+const lightboxClose   = document.getElementById('lightboxClose');
+const lightboxPrev    = document.getElementById('lightboxPrev');
+const lightboxNext    = document.getElementById('lightboxNext');
 
 let currentLightboxIndex = 0;
 
+/** Returns a live snapshot of all .gallery-item elements. */
+function getGalleryItems() {
+  return [...document.querySelectorAll('.gallery-item')];
+}
+
 function openLightbox(index) {
+  const items = getGalleryItems();
+  if (!items[index]) return;
   currentLightboxIndex = index;
-  const item = galleryItems[index];
+  const item = items[index];
   const img  = item.querySelector('img');
   const cap  = item.querySelector('figcaption');
 
-  lightboxImg.src        = img.src;
-  lightboxImg.alt        = img.alt;
-  lightboxCaption.textContent = cap ? cap.textContent : '';
+  lightboxImg.src              = img ? img.src : '';
+  lightboxImg.alt              = img ? img.alt : '';
+  lightboxCaption.textContent  = cap ? cap.textContent : '';
 
   lightbox.classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -177,27 +195,34 @@ function closeLightbox() {
 }
 
 function showPrev() {
-  const newIndex = (currentLightboxIndex - 1 + galleryItems.length) % galleryItems.length;
-  openLightbox(newIndex);
+  const items = getGalleryItems();
+  if (!items.length) return;
+  openLightbox((currentLightboxIndex - 1 + items.length) % items.length);
 }
 
 function showNext() {
-  const newIndex = (currentLightboxIndex + 1) % galleryItems.length;
-  openLightbox(newIndex);
+  const items = getGalleryItems();
+  if (!items.length) return;
+  openLightbox((currentLightboxIndex + 1) % items.length);
 }
 
-galleryItems.forEach((item, i) => {
-  item.addEventListener('click', () => openLightbox(i));
-  // Keyboard: activate on Enter/Space
-  item.setAttribute('tabindex', '0');
-  item.setAttribute('role', 'button');
-  item.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      openLightbox(i);
-    }
+// Event delegation — handles dynamically built gallery items
+const galleryGrid = document.querySelector('.gallery-grid');
+if (galleryGrid) {
+  galleryGrid.addEventListener('click', e => {
+    const item = e.target.closest('.gallery-item');
+    if (!item) return;
+    openLightbox(getGalleryItems().indexOf(item));
   });
-});
+
+  galleryGrid.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const item = e.target.closest('.gallery-item');
+    if (!item) return;
+    e.preventDefault();
+    openLightbox(getGalleryItems().indexOf(item));
+  });
+}
 
 lightboxClose.addEventListener('click', closeLightbox);
 lightboxPrev.addEventListener('click', showPrev);

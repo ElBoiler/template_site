@@ -431,44 +431,63 @@ textarea, input, select { font-family: var(--font); }
 
 
 /* ============================================================
-   STATS EDITOR
+   STATS EDITOR — dynamic rows
    ============================================================ */
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-@media (max-width: 700px) {
-  .stats-grid { grid-template-columns: 1fr; }
-}
-
-.stat-editor {
+.stat-row {
   background: var(--a-bg);
   border: 1px solid var(--a-border);
   border-radius: var(--radius);
-  padding: 1rem;
+  padding: 0.875rem 1rem;
+  margin-bottom: 0.75rem;
+}
+.stat-row:last-child { margin-bottom: 0; }
+
+.stat-row-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
 }
 
-.stat-editor-label {
+.stat-row-label {
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--a-muted);
-  margin-bottom: 0.75rem;
 }
 
-.stat-editor-row {
+.stat-row-fields {
   display: flex;
   gap: 0.75rem;
   align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 
 /* ============================================================
-   SERVICES EDITOR
+   SERVICES EDITOR — dynamic cards
    ============================================================ */
+.service-card-editor {
+  margin-bottom: 1rem;
+}
+.service-card-editor:last-child { margin-bottom: 0; }
+
+.service-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.service-card-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--a-teal);
+}
+
 .service-editor-row {
   display: flex;
   gap: 1rem;
@@ -537,15 +556,37 @@ textarea, input, select { font-family: var(--font); }
   box-shadow: 0 0 0 2px rgba(8,145,178,0.1);
 }
 
+/* Gallery item header: badge + remove button side by side */
+.gallery-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .gallery-item-badge {
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--a-teal);
-  margin-bottom: 0.25rem;
   display: block;
 }
+
+/* ── Shared remove button for stats / services / gallery ── */
+.item-remove-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--a-border);
+  color: var(--a-muted);
+  border-radius: var(--radius);
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: color var(--trans), border-color var(--trans);
+  white-space: nowrap;
+}
+.item-remove-btn:hover { color: var(--a-danger); border-color: var(--a-danger); }
 
 
 /* ============================================================
@@ -634,6 +675,56 @@ textarea, input, select { font-family: var(--font); }
 }
 .btn-add-subject:hover { border-color: var(--a-teal); background: var(--a-teal-light); }
 .btn-add-subject:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Shared "+ Add …" button for stats / services / gallery ── */
+.btn-add-item {
+  display: block;
+  width: 100%;
+  margin-top: 0.75rem;
+  background: none;
+  border: 1px dashed var(--a-border);
+  color: var(--a-teal);
+  border-radius: var(--radius);
+  padding: 0.55rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color var(--trans), background var(--trans);
+}
+.btn-add-item:hover  { border-color: var(--a-teal); background: var(--a-teal-light); }
+.btn-add-item:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Subject language visibility (per-language content tabs) ── */
+#subjectsList.showing-de .subject-lang--en { display: none; }
+#subjectsList.showing-en .subject-lang--de { display: none; }
+
+/* ── References visibility toggle card ── */
+.toggle-card {
+  padding: 1rem 1.5rem;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--a-text);
+  user-select: none;
+}
+
+.toggle-label input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--a-teal);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.toggle-card .field-hint { margin-top: 0.5rem; margin-bottom: 0; }
 
 @media (max-width: 600px) {
   .subject-fields { grid-template-columns: 1fr; }

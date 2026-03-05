@@ -151,80 +151,10 @@
 
           <div class="card">
             <div class="card-subheading" data-i18n="sec_about_stats">Statistik-Zähler</div>
-            <div class="stats-grid">
-              <!-- Stat 0 -->
-              <div class="stat-editor">
-                <p class="stat-editor-label"><span data-i18n="sec_stat_prefix">Statistik</span> 1</p>
-                <div class="stat-editor-row">
-                  <div class="field-group field-group--sm">
-                    <label for="f-stat-0-number" data-i18n="sec_about_number">Zahl</label>
-                    <input type="number" id="f-stat-0-number" min="0">
-                  </div>
-                  <div class="field-group field-group--sm">
-                    <label for="f-stat-0-suffix" data-i18n="sec_about_suffix">Suffix</label>
-                    <input type="text" id="f-stat-0-suffix" placeholder="+" maxlength="5">
-                  </div>
-                  <div class="field-group field-grow">
-                    <label for="f-stat-0-label" data-i18n="sec_about_stat_lbl">Beschriftung</label>
-                    <input type="text" id="f-stat-0-label" placeholder="Zufriedene Kunden">
-                  </div>
-                </div>
-              </div>
-              <!-- Stat 1 -->
-              <div class="stat-editor">
-                <p class="stat-editor-label"><span data-i18n="sec_stat_prefix">Statistik</span> 2</p>
-                <div class="stat-editor-row">
-                  <div class="field-group field-group--sm">
-                    <label for="f-stat-1-number" data-i18n="sec_about_number">Zahl</label>
-                    <input type="number" id="f-stat-1-number" min="0">
-                  </div>
-                  <div class="field-group field-group--sm">
-                    <label for="f-stat-1-suffix" data-i18n="sec_about_suffix">Suffix</label>
-                    <input type="text" id="f-stat-1-suffix" placeholder="+" maxlength="5">
-                  </div>
-                  <div class="field-group field-grow">
-                    <label for="f-stat-1-label" data-i18n="sec_about_stat_lbl">Beschriftung</label>
-                    <input type="text" id="f-stat-1-label" placeholder="Abgeschlossene Projekte">
-                  </div>
-                </div>
-              </div>
-              <!-- Stat 2 -->
-              <div class="stat-editor">
-                <p class="stat-editor-label"><span data-i18n="sec_stat_prefix">Statistik</span> 3</p>
-                <div class="stat-editor-row">
-                  <div class="field-group field-group--sm">
-                    <label for="f-stat-2-number" data-i18n="sec_about_number">Zahl</label>
-                    <input type="number" id="f-stat-2-number" min="0">
-                  </div>
-                  <div class="field-group field-group--sm">
-                    <label for="f-stat-2-suffix" data-i18n="sec_about_suffix">Suffix</label>
-                    <input type="text" id="f-stat-2-suffix" placeholder=" J." maxlength="5">
-                  </div>
-                  <div class="field-group field-grow">
-                    <label for="f-stat-2-label" data-i18n="sec_about_stat_lbl">Beschriftung</label>
-                    <input type="text" id="f-stat-2-label" placeholder="Jahre Erfahrung">
-                  </div>
-                </div>
-              </div>
-              <!-- Stat 3 -->
-              <div class="stat-editor">
-                <p class="stat-editor-label"><span data-i18n="sec_stat_prefix">Statistik</span> 4</p>
-                <div class="stat-editor-row">
-                  <div class="field-group field-group--sm">
-                    <label for="f-stat-3-number" data-i18n="sec_about_number">Zahl</label>
-                    <input type="number" id="f-stat-3-number" min="0">
-                  </div>
-                  <div class="field-group field-group--sm">
-                    <label for="f-stat-3-suffix" data-i18n="sec_about_suffix">Suffix</label>
-                    <input type="text" id="f-stat-3-suffix" placeholder="%" maxlength="5">
-                  </div>
-                  <div class="field-group field-grow">
-                    <label for="f-stat-3-label" data-i18n="sec_about_stat_lbl">Beschriftung</label>
-                    <input type="text" id="f-stat-3-label" placeholder="Kundenzufriedenheit">
-                  </div>
-                </div>
-              </div>
-            </div>
+            <p class="field-hint" data-i18n="sec_about_stats_desc">Bis zu 6 Statistiken hinzufügen. Zahl und Suffix gelten für beide Sprachen.</p>
+            <!-- Stat rows built dynamically by admin.js -->
+            <div id="statsList"></div>
+            <button type="button" class="btn-add-item" id="addStatBtn" data-i18n="sec_stat_add">+ Statistik hinzufügen</button>
           </div>
         </section>
 
@@ -232,76 +162,32 @@
         <section class="admin-section" id="sec-services">
           <div class="section-title">
             <h2 data-i18n="sec_services_h2">Leistungen</h2>
-            <p data-i18n="sec_services_desc">Die drei Leistungskarten auf der Website bearbeiten.</p>
+            <p data-i18n="sec_services_desc">Leistungskarten auf der Website hinzufügen, entfernen oder bearbeiten (bis zu 9).</p>
           </div>
-
-          <!-- Service 0 -->
-          <div class="card">
-            <div class="card-subheading"><span data-i18n="sec_svc_card">Karte</span> 1</div>
-            <div class="service-editor-row">
-              <div class="field-group field-group--icon">
-                <label for="f-service-0-icon" data-i18n="sec_svc_icon">Symbol (Emoji)</label>
-                <input type="text" id="f-service-0-icon" placeholder="📋" maxlength="4">
-              </div>
-              <div class="field-group field-grow">
-                <label for="f-service-0-title" data-i18n="sec_svc_title">Titel</label>
-                <input type="text" id="f-service-0-title" placeholder="Produktmanagement">
-              </div>
-            </div>
-            <div class="field-group">
-              <label for="f-service-0-desc" data-i18n="sec_svc_desc">Beschreibung</label>
-              <textarea id="f-service-0-desc" rows="3"></textarea>
-            </div>
-          </div>
-
-          <!-- Service 1 -->
-          <div class="card">
-            <div class="card-subheading"><span data-i18n="sec_svc_card">Karte</span> 2</div>
-            <div class="service-editor-row">
-              <div class="field-group field-group--icon">
-                <label for="f-service-1-icon" data-i18n="sec_svc_icon">Symbol (Emoji)</label>
-                <input type="text" id="f-service-1-icon" placeholder="💻" maxlength="4">
-              </div>
-              <div class="field-group field-grow">
-                <label for="f-service-1-title" data-i18n="sec_svc_title">Titel</label>
-                <input type="text" id="f-service-1-title" placeholder="Webentwicklung">
-              </div>
-            </div>
-            <div class="field-group">
-              <label for="f-service-1-desc" data-i18n="sec_svc_desc">Beschreibung</label>
-              <textarea id="f-service-1-desc" rows="3"></textarea>
-            </div>
-          </div>
-
-          <!-- Service 2 -->
-          <div class="card">
-            <div class="card-subheading"><span data-i18n="sec_svc_card">Karte</span> 3</div>
-            <div class="service-editor-row">
-              <div class="field-group field-group--icon">
-                <label for="f-service-2-icon" data-i18n="sec_svc_icon">Symbol (Emoji)</label>
-                <input type="text" id="f-service-2-icon" placeholder="🔍" maxlength="4">
-              </div>
-              <div class="field-group field-grow">
-                <label for="f-service-2-title" data-i18n="sec_svc_title">Titel</label>
-                <input type="text" id="f-service-2-title" placeholder="SEO &amp; Analytics">
-              </div>
-            </div>
-            <div class="field-group">
-              <label for="f-service-2-desc" data-i18n="sec_svc_desc">Beschreibung</label>
-              <textarea id="f-service-2-desc" rows="3"></textarea>
-            </div>
-          </div>
+          <!-- Service cards built dynamically by admin.js -->
+          <div id="servicesList"></div>
+          <button type="button" class="btn-add-item" id="addServiceBtn" data-i18n="sec_svc_add">+ Karte hinzufügen</button>
         </section>
 
         <!-- ── GALLERY ────────────────────────────── -->
         <section class="admin-section" id="sec-gallery">
           <div class="section-title">
             <h2 data-i18n="sec_gallery_h2">Referenzen</h2>
-            <p data-i18n="sec_gallery_desc">Bild-URLs, Alt-Texte und Bildunterschriften für alle 12 Galeriefotos aktualisieren.</p>
+            <p data-i18n="sec_gallery_desc">Galeriefotos hinzufügen, entfernen oder bearbeiten (bis zu 12).</p>
           </div>
+          <!-- Visibility toggle -->
+          <div class="card toggle-card">
+            <label class="toggle-label">
+              <input type="checkbox" id="f-references-visible" checked>
+              <span data-i18n="sec_gallery_visible_lbl">Abschnitt anzeigen</span>
+            </label>
+            <p class="field-hint" data-i18n="sec_gallery_visible_desc">Blendet den gesamten Referenzen-Abschnitt auf der Website aus, wenn deaktiviert.</p>
+          </div>
+          <!-- Gallery editor items built dynamically by admin.js -->
           <div class="gallery-editor-grid" id="galleryEditorGrid">
             <!-- Populated by admin.js -->
           </div>
+          <button type="button" class="btn-add-item" id="addGalleryBtn" data-i18n="sec_gallery_add">+ Foto hinzufügen</button>
         </section>
 
         <!-- ── CONTACT ────────────────────────────── -->

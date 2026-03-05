@@ -69,7 +69,6 @@ function showPanel() {
   pendingContent   = getContent();
   adminContentLang = (typeof getLang === 'function') ? getLang() : 'de';
 
-  buildGalleryEditor();
   loadFormData(adminContentLang, pendingContent);
 
   // Apply translations to any newly-visible admin panel elements
@@ -77,7 +76,6 @@ function showPanel() {
     applyTranslations((typeof getLang === 'function') ? getLang() : 'de');
   }
 
-  refreshGalleryBadges();
   syncContentLangTabs();
 }
 
@@ -105,69 +103,92 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
 
 
 /* ============================================================
-   GALLERY EDITOR — built once, labels use data-i18n for re-translation
+   GALLERY EDITOR — dynamic items (max 12)
    ============================================================ */
-function buildGalleryEditor() {
+
+/**
+ * Clears and rebuilds the gallery editor from an array of gallery items.
+ * @param {Array} galleryData - array of { src, caption, alt } objects
+ */
+function buildGalleryEditor(galleryData) {
   const grid = document.getElementById('galleryEditorGrid');
-  if (!grid || grid.children.length > 0) return; // already built
-
-  for (let i = 0; i < 12; i++) {
-    const item = document.createElement('div');
-    item.className = 'gallery-editor-item';
-    item.innerHTML = `
-      <img
-        class="gallery-editor-preview"
-        id="f-gallery-${i}-preview"
-        src=""
-        alt=""
-      >
-      <div class="gallery-editor-fields">
-        <span class="gallery-item-badge" data-gallery-badge="${i}"></span>
-        <div>
-          <label for="f-gallery-${i}-src" data-i18n="sec_gallery_url"></label>
-          <input
-            type="url"
-            id="f-gallery-${i}-src"
-            data-i18n-placeholder="sec_gallery_url_ph"
-            data-gallery-index="${i}"
-          >
-        </div>
-        <div>
-          <label for="f-gallery-${i}-caption" data-i18n="sec_gallery_caption"></label>
-          <input
-            type="text"
-            id="f-gallery-${i}-caption"
-            data-i18n-placeholder="sec_gallery_caption_ph"
-          >
-        </div>
-        <div>
-          <label for="f-gallery-${i}-alt" data-i18n="sec_gallery_alt"></label>
-          <input
-            type="text"
-            id="f-gallery-${i}-alt"
-            data-i18n-placeholder="sec_gallery_alt_ph"
-          >
-        </div>
-      </div>
-    `;
-    grid.appendChild(item);
-
-    // Live preview update on URL change
-    const srcInput = item.querySelector(`#f-gallery-${i}-src`);
-    const preview  = item.querySelector(`#f-gallery-${i}-preview`);
-
-    srcInput.addEventListener('input', debounce(() => {
-      updateGalleryPreview(preview, srcInput.value.trim());
-    }, 600));
-  }
+  if (!grid) return;
+  grid.innerHTML = '';
+  (galleryData || []).forEach(item => addGalleryEditorItem(item.src, item.caption, item.alt));
+  refreshGalleryBadges();
+  updateAddGalleryBtn();
 }
 
-/** Re-stamps "Photo N" / "Foto N" badge text after a language change. */
-function refreshGalleryBadges() {
-  document.querySelectorAll('[data-gallery-badge]').forEach(el => {
-    const n = parseInt(el.getAttribute('data-gallery-badge'), 10) + 1;
-    el.textContent = `${T('sec_gallery_photo')} ${n}`;
+/** Appends one gallery editor item (preview + URL / caption / alt fields + remove button). */
+function addGalleryEditorItem(src, caption, alt) {
+  const grid = document.getElementById('galleryEditorGrid');
+  if (!grid) return;
+  const item = document.createElement('div');
+  item.className = 'gallery-editor-item';
+  item.innerHTML = `
+    <img class="gallery-editor-preview" alt="">
+    <div class="gallery-editor-fields">
+      <div class="gallery-item-header">
+        <span class="gallery-item-badge"></span>
+        <button type="button" class="item-remove-btn gallery-remove-btn">${T('sec_gallery_remove')}</button>
+      </div>
+      <div>
+        <label>${T('sec_gallery_url')}</label>
+        <input type="url" class="gallery-src-input" placeholder="${T('sec_gallery_url_ph')}">
+      </div>
+      <div>
+        <label>${T('sec_gallery_caption')}</label>
+        <input type="text" class="gallery-caption-input" placeholder="${T('sec_gallery_caption_ph')}">
+      </div>
+      <div>
+        <label>${T('sec_gallery_alt')}</label>
+        <input type="text" class="gallery-alt-input" placeholder="${T('sec_gallery_alt_ph')}">
+      </div>
+    </div>
+  `;
+  // Set values safely
+  const preview  = item.querySelector('.gallery-editor-preview');
+  const srcInput = item.querySelector('.gallery-src-input');
+  const capInput = item.querySelector('.gallery-caption-input');
+  const altInput = item.querySelector('.gallery-alt-input');
+  srcInput.value = src     || '';
+  capInput.value = caption || '';
+  altInput.value = alt     || '';
+
+  // Initial preview state
+  if (src) {
+    preview.src = src;
+  } else {
+    preview.classList.add('broken');
+  }
+
+  // Live preview on URL input
+  srcInput.addEventListener('input', debounce(() => {
+    updateGalleryPreview(preview, srcInput.value.trim());
+  }, 600));
+
+  // Remove button
+  item.querySelector('.gallery-remove-btn').addEventListener('click', () => {
+    item.remove();
+    refreshGalleryBadges();
+    updateAddGalleryBtn();
   });
+
+  grid.appendChild(item);
+}
+
+/** Re-stamps "Photo N" / "Foto N" badge text after add/remove. */
+function refreshGalleryBadges() {
+  document.querySelectorAll('#galleryEditorGrid .gallery-item-badge').forEach((el, i) => {
+    el.textContent = `${T('sec_gallery_photo')} ${i + 1}`;
+  });
+}
+
+/** Disables the Add button when 12 gallery items exist. */
+function updateAddGalleryBtn() {
+  const btn   = document.getElementById('addGalleryBtn');
+  const count = document.querySelectorAll('#galleryEditorGrid .gallery-editor-item').length;
+  if (btn) btn.disabled = count >= 12;
 }
 
 function updateGalleryPreview(imgEl, src) {
@@ -204,36 +225,18 @@ function loadFormData(lang, contentObj) {
   val('f-about-heading', ld.about.heading);
   ld.about.paragraphs.forEach((p, i) => val(`f-about-p${i}`, p));
 
-  /* Stats */
-  ld.about.stats.forEach((stat, i) => {
-    val(`f-stat-${i}-number`, stat.number);
-    val(`f-stat-${i}-suffix`, stat.suffix);
-    val(`f-stat-${i}-label`,  stat.label);
-  });
+  /* Stats — dynamic editor */
+  renderStatsEditor(ld.about.stats || []);
 
-  /* Services */
-  ld.services.forEach((svc, i) => {
-    val(`f-service-${i}-icon`,  svc.icon);
-    val(`f-service-${i}-title`, svc.title);
-    val(`f-service-${i}-desc`,  svc.desc);
-  });
+  /* Services — dynamic editor */
+  renderServicesEditor(ld.services || []);
 
-  /* Gallery */
-  ld.gallery.forEach((item, i) => {
-    val(`f-gallery-${i}-src`,     item.src);
-    val(`f-gallery-${i}-caption`, item.caption);
-    val(`f-gallery-${i}-alt`,     item.alt);
-    const preview = document.getElementById(`f-gallery-${i}-preview`);
-    if (preview) {
-      if (item.src) {
-        preview.src = item.src;
-        preview.classList.remove('broken');
-      } else {
-        preview.src = '';
-        preview.classList.add('broken');
-      }
-    }
-  });
+  /* Gallery — dynamic editor */
+  buildGalleryEditor(ld.gallery || []);
+
+  /* References visibility toggle */
+  const refToggle = document.getElementById('f-references-visible');
+  if (refToggle) refToggle.checked = (data.referencesVisible !== false);
 
   /* Contact — language-neutral */
   val('f-contact-address', data.contact.address);
@@ -288,7 +291,15 @@ function captureFormIntoContent(lang, contentObj) {
     subtitle: get('f-hero-subtitle') || DEFAULT_CONTENT[l].hero.subtitle
   };
 
-  /* About */
+  /* About — paragraphs (lang-specific) */
+  /* Stats — number/suffix are language-neutral; label is language-specific */
+  const statRows = document.querySelectorAll('#statsList .stat-row');
+  const stats    = Array.from(statRows, row => ({
+    number: parseInt(row.querySelector('.stat-number-input')?.value || '0', 10) || 0,
+    suffix: row.querySelector('.stat-suffix-input')?.value ?? '',
+    label:  (row.querySelector('.stat-label-input')?.value || '').trim()
+  }));
+
   contentObj[l].about = {
     heading: get('f-about-heading') || DEFAULT_CONTENT[l].about.heading,
     paragraphs: [
@@ -296,35 +307,56 @@ function captureFormIntoContent(lang, contentObj) {
       get('f-about-p1') || DEFAULT_CONTENT[l].about.paragraphs[1],
       get('f-about-p2') || DEFAULT_CONTENT[l].about.paragraphs[2]
     ],
-    stats: [0, 1, 2, 3].map(i => ({
-      number: parseInt(get(`f-stat-${i}-number`), 10) || DEFAULT_CONTENT[l].about.stats[i].number,
-      suffix: document.getElementById(`f-stat-${i}-suffix`)?.value ?? DEFAULT_CONTENT[l].about.stats[i].suffix,
-      label:  get(`f-stat-${i}-label`) || DEFAULT_CONTENT[l].about.stats[i].label
-    }))
+    stats
   };
 
-  /* Services */
-  contentObj[l].services = [0, 1, 2].map(i => ({
-    icon:  get(`f-service-${i}-icon`)  || DEFAULT_CONTENT[l].services[i].icon,
-    title: get(`f-service-${i}-title`) || DEFAULT_CONTENT[l].services[i].title,
-    desc:  get(`f-service-${i}-desc`)  || DEFAULT_CONTENT[l].services[i].desc
+  // Sync number/suffix (language-neutral) to other lang block; preserve other lang's labels
+  if (!contentObj[other].about) contentObj[other].about = {};
+  const otherStats = contentObj[other].about.stats || [];
+  contentObj[other].about.stats = stats.map((s, i) => ({
+    number: s.number,
+    suffix: s.suffix,
+    label:  otherStats[i]?.label || ''
+  }));
+
+  /* Services — icon is language-neutral; title/desc are language-specific */
+  const svcCards = document.querySelectorAll('#servicesList .service-card-editor');
+  const services = Array.from(svcCards, card => ({
+    icon:  (card.querySelector('.svc-icon-input')?.value  || '').trim(),
+    title: (card.querySelector('.svc-title-input')?.value || '').trim(),
+    desc:  (card.querySelector('.svc-desc-input')?.value  || '').trim()
+  }));
+  contentObj[l].services = services;
+
+  // Sync icon (language-neutral) to other lang block; preserve other lang's title/desc
+  const otherSvcs = contentObj[other].services || [];
+  contentObj[other].services = services.map((s, i) => ({
+    icon:  s.icon,
+    title: otherSvcs[i]?.title || '',
+    desc:  otherSvcs[i]?.desc  || ''
   }));
 
   /* Gallery
-     - src (URL) is language-neutral → write to both lang blocks
-     - caption and alt are language-specific → write to [l] only         */
-  contentObj[l].gallery = Array.from({ length: 12 }, (_, i) => ({
-    src:     get(`f-gallery-${i}-src`)     || DEFAULT_CONTENT[l].gallery[i].src,
-    caption: get(`f-gallery-${i}-caption`) || DEFAULT_CONTENT[l].gallery[i].caption,
-    alt:     get(`f-gallery-${i}-alt`)     || DEFAULT_CONTENT[l].gallery[i].alt
+     - src (URL) is language-neutral → synced to other lang block
+     - caption and alt are language-specific → written to [l] only         */
+  const galleryItems = document.querySelectorAll('#galleryEditorGrid .gallery-editor-item');
+  contentObj[l].gallery = Array.from(galleryItems, item => ({
+    src:     (item.querySelector('.gallery-src-input')?.value     || '').trim(),
+    caption: (item.querySelector('.gallery-caption-input')?.value || '').trim(),
+    alt:     (item.querySelector('.gallery-alt-input')?.value     || '').trim()
   }));
 
-  // Sync src URL to other language block (same image for both languages)
-  contentObj[l].gallery.forEach((item, i) => {
-    if (contentObj[other].gallery && contentObj[other].gallery[i]) {
-      contentObj[other].gallery[i].src = item.src;
-    }
-  });
+  // Sync src to other lang block (same images for both languages)
+  const otherGallery = contentObj[other].gallery || [];
+  contentObj[other].gallery = contentObj[l].gallery.map((item, i) => ({
+    src:     item.src,
+    caption: otherGallery[i]?.caption || '',
+    alt:     otherGallery[i]?.alt     || ''
+  }));
+
+  /* References visibility — language-neutral */
+  const refToggle = document.getElementById('f-references-visible');
+  if (refToggle) contentObj.referencesVisible = refToggle.checked;
 }
 
 /* ============================================================
@@ -338,6 +370,7 @@ function renderSubjectsEditor(subjects) {
   list.innerHTML = '';
   (subjects || []).forEach(s => addSubjectRow(s.de || '', s.en || ''));
   updateAddSubjectBtn();
+  updateSubjectLangVisibility();
 }
 
 /** Appends one editable subject row (DE + EN inputs). */
@@ -351,11 +384,11 @@ function addSubjectRow(deVal, enVal) {
   const rmLabel = T('sec_subjects_remove');
   row.innerHTML = `
     <div class="subject-fields">
-      <div class="subject-lang">
+      <div class="subject-lang subject-lang--de">
         <span class="subject-lang-badge">🇩🇪</span>
         <input type="text" class="subject-de" placeholder="${dePh}">
       </div>
-      <div class="subject-lang">
+      <div class="subject-lang subject-lang--en">
         <span class="subject-lang-badge">🇬🇧</span>
         <input type="text" class="subject-en" placeholder="${enPh}">
       </div>
@@ -378,6 +411,14 @@ function updateAddSubjectBtn() {
   const btn   = document.getElementById('addSubjectBtn');
   const count = document.querySelectorAll('.subject-row').length;
   if (btn) btn.disabled = count >= 5;
+}
+
+/** Shows only the current content-language's subject inputs, hides the other. */
+function updateSubjectLangVisibility() {
+  const list = document.getElementById('subjectsList');
+  if (!list) return;
+  list.classList.toggle('showing-de', adminContentLang === 'de');
+  list.classList.toggle('showing-en', adminContentLang === 'en');
 }
 
 /** Reads the contact form fields into a plain object. */
@@ -405,6 +446,148 @@ function buildContactFromForm() {
 
 
 /* ============================================================
+   STATS EDITOR — dynamic rows (max 6)
+   ============================================================ */
+
+/** Fully rebuilds the stats editor from a stats array. */
+function renderStatsEditor(stats) {
+  const list = document.getElementById('statsList');
+  if (!list) return;
+  list.innerHTML = '';
+  (stats || []).forEach(s => addStatRow(s.number, s.suffix, s.label));
+  updateAddStatBtn();
+}
+
+/** Appends one stat row with number / suffix / label inputs + remove button. */
+function addStatRow(num, suf, lbl) {
+  const list = document.getElementById('statsList');
+  if (!list) return;
+  const n   = list.querySelectorAll('.stat-row').length + 1;
+  const row = document.createElement('div');
+  row.className = 'stat-row';
+  row.innerHTML = `
+    <div class="stat-row-header">
+      <span class="stat-row-label">${T('sec_stat_prefix')} ${n}</span>
+      <button type="button" class="item-remove-btn stat-remove-btn">${T('sec_subjects_remove')}</button>
+    </div>
+    <div class="stat-row-fields">
+      <div class="field-group field-group--sm">
+        <label>${T('sec_about_number')}</label>
+        <input type="number" class="stat-number-input" min="0">
+      </div>
+      <div class="field-group field-group--sm">
+        <label>${T('sec_about_suffix')}</label>
+        <input type="text" class="stat-suffix-input" maxlength="5">
+      </div>
+      <div class="field-group field-grow">
+        <label>${T('sec_about_stat_lbl')}</label>
+        <input type="text" class="stat-label-input">
+      </div>
+    </div>
+  `;
+  // Set values safely
+  row.querySelector('.stat-number-input').value = (num !== undefined && num !== null) ? num : '';
+  row.querySelector('.stat-suffix-input').value  = (suf !== undefined && suf !== null) ? suf : '';
+  row.querySelector('.stat-label-input').value   = (lbl !== undefined && lbl !== null) ? lbl : '';
+
+  // Remove button
+  row.querySelector('.stat-remove-btn').addEventListener('click', () => {
+    row.remove();
+    renumberStatRows();
+    updateAddStatBtn();
+  });
+  list.appendChild(row);
+  updateAddStatBtn();
+}
+
+/** Re-numbers stat row header labels after a removal. */
+function renumberStatRows() {
+  document.querySelectorAll('#statsList .stat-row').forEach((row, i) => {
+    const lbl = row.querySelector('.stat-row-label');
+    if (lbl) lbl.textContent = `${T('sec_stat_prefix')} ${i + 1}`;
+  });
+}
+
+/** Disables the Add button when 6 stat rows exist. */
+function updateAddStatBtn() {
+  const btn   = document.getElementById('addStatBtn');
+  const count = document.querySelectorAll('#statsList .stat-row').length;
+  if (btn) btn.disabled = count >= 6;
+}
+
+
+/* ============================================================
+   SERVICES EDITOR — dynamic cards (max 9)
+   ============================================================ */
+
+/** Fully rebuilds the services editor from a services array. */
+function renderServicesEditor(svcs) {
+  const list = document.getElementById('servicesList');
+  if (!list) return;
+  list.innerHTML = '';
+  (svcs || []).forEach(s => addServiceCard(s.icon, s.title, s.desc));
+  updateAddServiceBtn();
+}
+
+/** Appends one service card editor. */
+function addServiceCard(icon, title, desc) {
+  const list = document.getElementById('servicesList');
+  if (!list) return;
+  const n    = list.querySelectorAll('.service-card-editor').length + 1;
+  const card = document.createElement('div');
+  card.className = 'service-card-editor card';
+  card.innerHTML = `
+    <div class="service-card-header">
+      <span class="service-card-label">${T('sec_svc_card')} ${n}</span>
+      <button type="button" class="item-remove-btn svc-remove-btn">${T('sec_svc_remove')}</button>
+    </div>
+    <div class="service-editor-row">
+      <div class="field-group field-group--icon">
+        <label>${T('sec_svc_icon')}</label>
+        <input type="text" class="svc-icon-input" maxlength="4">
+      </div>
+      <div class="field-group field-grow">
+        <label>${T('sec_svc_title')}</label>
+        <input type="text" class="svc-title-input">
+      </div>
+    </div>
+    <div class="field-group">
+      <label>${T('sec_svc_desc')}</label>
+      <textarea class="svc-desc-input" rows="3"></textarea>
+    </div>
+  `;
+  // Set values safely
+  card.querySelector('.svc-icon-input').value  = icon  || '';
+  card.querySelector('.svc-title-input').value = title || '';
+  card.querySelector('.svc-desc-input').value  = desc  || '';
+
+  // Remove button
+  card.querySelector('.svc-remove-btn').addEventListener('click', () => {
+    card.remove();
+    renumberServiceCards();
+    updateAddServiceBtn();
+  });
+  list.appendChild(card);
+  updateAddServiceBtn();
+}
+
+/** Re-numbers service card header labels after a removal. */
+function renumberServiceCards() {
+  document.querySelectorAll('#servicesList .service-card-editor').forEach((card, i) => {
+    const lbl = card.querySelector('.service-card-label');
+    if (lbl) lbl.textContent = `${T('sec_svc_card')} ${i + 1}`;
+  });
+}
+
+/** Disables the Add button when 9 service cards exist. */
+function updateAddServiceBtn() {
+  const btn   = document.getElementById('addServiceBtn');
+  const count = document.querySelectorAll('#servicesList .service-card-editor').length;
+  if (btn) btn.disabled = count >= 9;
+}
+
+
+/* ============================================================
    CONTENT LANGUAGE SWITCHER (admin form tabs: 🇩🇪 / 🇬🇧)
    ============================================================ */
 
@@ -428,8 +611,8 @@ function switchAdminContentLang(newLang) {
   // Reload form with the new language's data
   loadFormData(adminContentLang, pendingContent);
 
-  // Refresh dynamic labels that aren't covered by data-i18n
-  refreshGalleryBadges();
+  // Refresh subject language visibility after reload
+  updateSubjectLangVisibility();
 
   // Update tab active states
   syncContentLangTabs();
@@ -583,6 +766,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // Wire Add Subject button
   document.getElementById('addSubjectBtn')?.addEventListener('click', () => {
     if (document.querySelectorAll('.subject-row').length < 5) addSubjectRow('', '');
+  });
+
+  // Wire Add Stat button
+  document.getElementById('addStatBtn')?.addEventListener('click', () => {
+    if (document.querySelectorAll('#statsList .stat-row').length < 6) addStatRow('', '', '');
+  });
+
+  // Wire Add Service button
+  document.getElementById('addServiceBtn')?.addEventListener('click', () => {
+    if (document.querySelectorAll('#servicesList .service-card-editor').length < 9) addServiceCard('', '', '');
+  });
+
+  // Wire Add Gallery Photo button
+  document.getElementById('addGalleryBtn')?.addEventListener('click', () => {
+    if (document.querySelectorAll('#galleryEditorGrid .gallery-editor-item').length < 12) {
+      addGalleryEditorItem('', '', '');
+      refreshGalleryBadges();
+      updateAddGalleryBtn();
+    }
   });
 
   if (isAuthed()) {
