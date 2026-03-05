@@ -219,8 +219,7 @@ document.addEventListener('keydown', e => {
 /* ============================================================
    8. CONTACT FORM VALIDATION
    ============================================================ */
-const contactForm     = document.getElementById('contactForm');
-const successMessage  = document.getElementById('successMessage');
+const contactForm = document.getElementById('contactForm');
 
 function setFieldError(fieldId, errorId, message) {
   const field = document.getElementById(fieldId);
@@ -292,14 +291,25 @@ contactForm.addEventListener('submit', e => {
   }
 
   if (isValid) {
-    // Fade out form, show success
-    contactForm.style.transition = 'opacity 0.35s ease';
-    contactForm.style.opacity    = '0';
-    setTimeout(() => {
-      contactForm.style.display = 'none';
-      successMessage.classList.add('show');
-      successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 350);
+    // Build and open mailto link
+    const content     = (typeof getContent === 'function') ? getContent() : {};
+    const recipient   = (content.contact && content.contact.email) || '';
+    const subjectEl   = document.getElementById('subject');
+    const subjectText = subjectEl.options[subjectEl.selectedIndex]?.text || subjectVal;
+
+    const body = [
+      `${T('form_label_name')}: ${nameVal}`,
+      `${T('form_label_email')}: ${emailVal}`,
+      '',
+      `${T('form_label_message')}:`,
+      msgVal
+    ].join('\n');
+
+    window.location.href = `mailto:${encodeURIComponent(recipient)}`
+      + `?subject=${encodeURIComponent(subjectText)}`
+      + `&body=${encodeURIComponent(body)}`;
+
+    contactForm.reset();
   } else {
     // Scroll to first error
     const firstError = contactForm.querySelector('.error');

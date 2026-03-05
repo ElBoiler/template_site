@@ -161,10 +161,6 @@ const TRANSLATIONS = {
 
     /* ── Subject dropdown ───────────────────────────────── */
     subject_default:  'Betreff auswählen …',
-    subject_general:  'Allgemeine Anfrage',
-    subject_proposal: 'Projektangebot',
-    subject_support:  'Support',
-    subject_other:    'Sonstiges',
 
     /* ── Form submit & success ──────────────────────────── */
     form_submit:     'Nachricht senden',
@@ -319,6 +315,14 @@ const TRANSLATIONS = {
     /* ── Admin content-language tabs ────────────────────── */
     admin_lang_tab_de: '🇩🇪 Deutsch',
     admin_lang_tab_en: '🇬🇧 Englisch',
+
+    /* ── Subjects editor (admin) ─────────────────────── */
+    sec_subjects_h:       'Betreff-Optionen',
+    sec_subjects_desc:    'Bis zu 5 Betreff-Optionen für das Kontaktformular definieren.',
+    sec_subjects_add:     '+ Betreff hinzufügen',
+    sec_subjects_remove:  'Entfernen',
+    sec_subjects_de_ph:   'z. B. Allgemeine Anfrage',
+    sec_subjects_en_ph:   'e.g. General Inquiry',
   },
 
 
@@ -370,10 +374,6 @@ const TRANSLATIONS = {
 
     /* ── Subject dropdown ───────────────────────────────── */
     subject_default:  'Select a subject…',
-    subject_general:  'General Inquiry',
-    subject_proposal: 'Project Proposal',
-    subject_support:  'Support',
-    subject_other:    'Other',
 
     /* ── Form submit & success ──────────────────────────── */
     form_submit:     'Send Message',
@@ -528,5 +528,13 @@ const TRANSLATIONS = {
     /* ── Admin content-language tabs ────────────────────── */
     admin_lang_tab_de: '🇩🇪 Deutsch',
     admin_lang_tab_en: '🇬🇧 English',
+
+    /* ── Subjects editor (admin) ─────────────────────── */
+    sec_subjects_h:       'Subject Options',
+    sec_subjects_desc:    'Define up to 5 subject options for the contact form.',
+    sec_subjects_add:     '+ Add Subject',
+    sec_subjects_remove:  'Remove',
+    sec_subjects_de_ph:   'e.g. Allgemeine Anfrage',
+    sec_subjects_en_ph:   'e.g. General Inquiry',
   }
 };

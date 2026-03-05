@@ -1084,4 +1084,5 @@ h3 {
   .about-stats { grid-template-columns: 1fr 1fr; gap: 1rem; }
   .stat-number { font-size: 1.9rem; }
   .stat-suffix { font-size: 1rem; }
+  .hero .container { padding-left: 2rem; padding-right: 2rem; }
 }
