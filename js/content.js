@@ -332,3 +332,46 @@ document.addEventListener('DOMContentLoaded', () => {
   const lang = typeof getLang === 'function' ? getLang() : 'de';
   applyContent(getContent(), lang);
 });
+
+
+/* ============================================================
+   THEME — apply stored colour scheme from localStorage
+   ============================================================ */
+
+const THEME_KEY = 'bds_theme';
+
+/**
+ * Reads bds_theme from localStorage and sets each CSS custom
+ * property directly on :root (document.documentElement.style).
+ * Called on every page load. No-ops if no theme is stored.
+ */
+function applyStoredTheme() {
+  try {
+    const raw = localStorage.getItem(THEME_KEY);
+    if (!raw) return;
+    const theme = JSON.parse(raw);
+    Object.entries(theme).forEach(([prop, value]) => {
+      document.documentElement.style.setProperty(prop, value);
+    });
+  } catch (e) {
+    // Corrupt data — silently clear it
+    localStorage.removeItem(THEME_KEY);
+  }
+}
+
+/**
+ * Removes all inline CSS custom properties previously set by
+ * applyStoredTheme, restoring the stylesheet defaults.
+ */
+function removeStoredTheme() {
+  const THEME_PROPS = [
+    '--clr-primary', '--clr-accent', '--clr-accent-hover',
+    '--clr-accent-light', '--clr-text', '--gradient-hero',
+  ];
+  THEME_PROPS.forEach(prop => {
+    document.documentElement.style.removeProperty(prop);
+  });
+}
+
+// Apply on load (runs on both index.html and admin.html)
+applyStoredTheme();
