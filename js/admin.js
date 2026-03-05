@@ -239,6 +239,7 @@ function loadFormData(lang, contentObj) {
   val('f-contact-address', data.contact.address);
   val('f-contact-phone',   data.contact.phone);
   val('f-contact-email',   data.contact.email);
+  renderSubjectsEditor((data.contact && data.contact.subjects) || []);
 
   /* Social — language-neutral */
   const social = data.contact.social || {};
@@ -326,12 +327,73 @@ function captureFormIntoContent(lang, contentObj) {
   });
 }
 
+/* ============================================================
+   SUBJECTS EDITOR
+   ============================================================ */
+
+/** Fully rebuilds the subjects list from a subjects array. */
+function renderSubjectsEditor(subjects) {
+  const list = document.getElementById('subjectsList');
+  if (!list) return;
+  list.innerHTML = '';
+  (subjects || []).forEach(s => addSubjectRow(s.de || '', s.en || ''));
+  updateAddSubjectBtn();
+}
+
+/** Appends one editable subject row (DE + EN inputs). */
+function addSubjectRow(deVal, enVal) {
+  const list = document.getElementById('subjectsList');
+  if (!list) return;
+  const row = document.createElement('div');
+  row.className = 'subject-row';
+  const dePh = T('sec_subjects_de_ph');
+  const enPh = T('sec_subjects_en_ph');
+  const rmLabel = T('sec_subjects_remove');
+  row.innerHTML = `
+    <div class="subject-fields">
+      <div class="subject-lang">
+        <span class="subject-lang-badge">🇩🇪</span>
+        <input type="text" class="subject-de" placeholder="${dePh}">
+      </div>
+      <div class="subject-lang">
+        <span class="subject-lang-badge">🇬🇧</span>
+        <input type="text" class="subject-en" placeholder="${enPh}">
+      </div>
+    </div>
+    <button type="button" class="subject-remove-btn">${rmLabel}</button>
+  `;
+  // Set values safely (avoid innerHTML injection)
+  row.querySelector('.subject-de').value = deVal || '';
+  row.querySelector('.subject-en').value = enVal || '';
+  row.querySelector('.subject-remove-btn').addEventListener('click', () => {
+    row.remove();
+    updateAddSubjectBtn();
+  });
+  list.appendChild(row);
+  updateAddSubjectBtn();
+}
+
+/** Disables the Add button when 5 rows exist. */
+function updateAddSubjectBtn() {
+  const btn   = document.getElementById('addSubjectBtn');
+  const count = document.querySelectorAll('.subject-row').length;
+  if (btn) btn.disabled = count >= 5;
+}
+
 /** Reads the contact form fields into a plain object. */
 function buildContactFromForm() {
+  const subjects = [];
+  document.querySelectorAll('.subject-row').forEach(row => {
+    const de = (row.querySelector('.subject-de')?.value || '').trim();
+    const en = (row.querySelector('.subject-en')?.value || '').trim();
+    if (de || en) subjects.push({ de, en });
+  });
+
   return {
-    address: get('f-contact-address'),
-    phone:   get('f-contact-phone'),
-    email:   get('f-contact-email'),
+    address:  get('f-contact-address'),
+    phone:    get('f-contact-phone'),
+    email:    get('f-contact-email'),
+    subjects,
     social: {
       linkedin:  get('f-social-linkedin'),
       twitter:   get('f-social-twitter'),
@@ -516,6 +578,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Wire content-language tab clicks
   document.querySelectorAll('#adminLangTabs .admin-lang-tab').forEach(tab => {
     tab.addEventListener('click', () => switchAdminContentLang(tab.dataset.lang));
+  });
+
+  // Wire Add Subject button
+  document.getElementById('addSubjectBtn')?.addEventListener('click', () => {
+    if (document.querySelectorAll('.subject-row').length < 5) addSubjectRow('', '');
   });
 
   if (isAuthed()) {

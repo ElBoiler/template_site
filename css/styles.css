@@ -970,36 +970,6 @@ h3 {
   min-height: 1.1em;
 }
 
-/* Success message */
-.success-message {
-  display: none;
-  text-align: center;
-  padding: 3rem 2rem;
-  background: var(--clr-teal-light);
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(8, 145, 178, 0.2);
-}
-
-.success-message.show {
-  display: block;
-  animation: fadeScaleIn 0.45s ease;
-}
-
-.success-icon {
-  display: block;
-  font-size: 2.75rem;
-  color: var(--clr-success);
-  margin-bottom: 1rem;
-}
-
-.success-message h3 { margin-bottom: 0.75rem; font-size: 1.5rem; color: var(--clr-brand); }
-.success-message p  { color: var(--clr-muted); }
-
-@keyframes fadeScaleIn {
-  from { opacity: 0; transform: scale(0.96); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
 
 /* ============================================================
    14. FOOTER

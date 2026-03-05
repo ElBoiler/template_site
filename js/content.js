@@ -15,6 +15,12 @@ const DEFAULT_CONTENT = {
     address:  '123 Digital Avenue, Dublin, Ireland',
     phone:    '+353 1 234 5678',
     email:    'hello@boyledigital.ie',
+    subjects: [
+      { de: 'Allgemeine Anfrage',  en: 'General Inquiry'   },
+      { de: 'Projektangebot',      en: 'Project Proposal'  },
+      { de: 'Support',             en: 'Support'           },
+      { de: 'Sonstiges',           en: 'Other'             }
+    ],
     social: {
       linkedin:  '',
       twitter:   '',
@@ -251,6 +257,21 @@ function applyContent(data, lang) {
     document.querySelectorAll('[data-content="contact.email"]').forEach(el => {
       el.textContent = data.contact.email;
       el.href = `mailto:${data.contact.email}`;
+    });
+  }
+
+  /* Subject dropdown — rebuild from admin-configured subjects */
+  const subjectSelect = document.getElementById('subject');
+  if (subjectSelect) {
+    const subjects = (data.contact && data.contact.subjects) || [];
+    while (subjectSelect.options.length > 1) subjectSelect.remove(1);
+    subjects.forEach(s => {
+      const label = s[l] || s.de || s.en || '';
+      if (!label) return;
+      const opt = document.createElement('option');
+      opt.value = label;
+      opt.textContent = label;
+      subjectSelect.appendChild(opt);
     });
   }
 
