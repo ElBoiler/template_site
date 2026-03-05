@@ -262,7 +262,7 @@ const TRANSLATIONS = {
 
     /* ── Services section ───────────────────────────────── */
     sec_services_h2:   'Leistungen',
-    sec_services_desc: 'Die drei Leistungskarten auf der Website bearbeiten.',
+    sec_services_desc: 'Leistungskarten auf der Website hinzufügen, entfernen oder bearbeiten (bis zu 9).',
     sec_svc_card:      'Karte',
     sec_svc_icon:      'Symbol (Emoji)',
     sec_svc_title:     'Titel',
@@ -270,7 +270,7 @@ const TRANSLATIONS = {
 
     /* ── Gallery section ────────────────────────────────── */
     sec_gallery_h2:         'Referenzen',
-    sec_gallery_desc:       'Bild-URLs, Alt-Texte und Bildunterschriften für alle 12 Galeriefotos aktualisieren.',
+    sec_gallery_desc:       'Galeriefotos hinzufügen, entfernen oder bearbeiten (bis zu 12).',
     sec_gallery_photo:      'Foto',
     sec_gallery_url:        'Bild-URL',
     sec_gallery_caption:    'Bildunterschrift',
@@ -323,6 +323,20 @@ const TRANSLATIONS = {
     sec_subjects_remove:  'Entfernen',
     sec_subjects_de_ph:   'z. B. Allgemeine Anfrage',
     sec_subjects_en_ph:   'e.g. General Inquiry',
+
+    /* ── Stats editor (admin) ────────────────────────── */
+    sec_about_stats_desc:   'Bis zu 6 Statistiken hinzufügen. Zahl und Suffix gelten für beide Sprachen.',
+    sec_stat_add:           '+ Statistik hinzufügen',
+
+    /* ── Services editor (admin) ─────────────────────── */
+    sec_svc_add:            '+ Karte hinzufügen',
+    sec_svc_remove:         'Entfernen',
+
+    /* ── Gallery / References editor (admin) ─────────── */
+    sec_gallery_remove:     'Entfernen',
+    sec_gallery_add:        '+ Foto hinzufügen',
+    sec_gallery_visible_lbl:  'Abschnitt anzeigen',
+    sec_gallery_visible_desc: 'Blendet den gesamten Referenzen-Abschnitt auf der Website aus, wenn deaktiviert.',
   },
 
 
@@ -475,7 +489,7 @@ const TRANSLATIONS = {
 
     /* ── Services section ───────────────────────────────── */
     sec_services_h2:   'Services',
-    sec_services_desc: 'Edit the three service cards displayed on the site.',
+    sec_services_desc: 'Add, remove, or edit service cards displayed on the site (up to 9).',
     sec_svc_card:      'Card',
     sec_svc_icon:      'Icon (emoji)',
     sec_svc_title:     'Title',
@@ -483,7 +497,7 @@ const TRANSLATIONS = {
 
     /* ── Gallery section ────────────────────────────────── */
     sec_gallery_h2:         'Gallery',
-    sec_gallery_desc:       'Update image URLs, alt text, and captions for all 12 gallery photos.',
+    sec_gallery_desc:       'Add, remove, or edit gallery photos (up to 12).',
     sec_gallery_photo:      'Photo',
     sec_gallery_url:        'Image URL',
     sec_gallery_caption:    'Caption',
@@ -536,5 +550,19 @@ const TRANSLATIONS = {
     sec_subjects_remove:  'Remove',
     sec_subjects_de_ph:   'e.g. Allgemeine Anfrage',
     sec_subjects_en_ph:   'e.g. General Inquiry',
+
+    /* ── Stats editor (admin) ────────────────────────── */
+    sec_about_stats_desc:   'Add up to 6 statistics. Number and suffix apply to both languages.',
+    sec_stat_add:           '+ Add Statistic',
+
+    /* ── Services editor (admin) ─────────────────────── */
+    sec_svc_add:            '+ Add Card',
+    sec_svc_remove:         'Remove',
+
+    /* ── Gallery / References editor (admin) ─────────── */
+    sec_gallery_remove:     'Remove',
+    sec_gallery_add:        '+ Add Photo',
+    sec_gallery_visible_lbl:  'Show Section',
+    sec_gallery_visible_desc: 'Hides the entire references section on the website when unchecked.',
   }
 };
