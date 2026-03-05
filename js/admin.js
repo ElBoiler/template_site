@@ -525,3 +525,281 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('passwordInput').focus();
   }
 });
+
+
+/* ============================================================
+   COLOUR SCHEME SECTION
+   ============================================================ */
+
+const colorThief       = new ColorThief();
+let extractedSwatches  = [];   // Array of { hex, r, g, b }
+let pendingPrimary     = null; // hex string
+let pendingAccent      = null; // hex string
+
+/* ── Colour utilities ───────────────────────────────────── */
+
+function rgbToHex(r, g, b) {
+  return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+}
+
+function hexToRgb(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+}
+
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+      case g: h = ((b - r) / d + 2) / 6; break;
+      case b: h = ((r - g) / d + 4) / 6; break;
+    }
+  }
+  return { h: h * 360, s: s * 100, l: l * 100 };
+}
+
+function hslToHex(h, s, l) {
+  h /= 360; s /= 100; l /= 100;
+  let r, g, b;
+  if (s === 0) {
+    r = g = b = l;
+  } else {
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q - p) * 6 * t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      return p;
+    };
+    r = hue2rgb(p, q, h + 1/3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1/3);
+  }
+  return rgbToHex(Math.round(r * 255), Math.round(g * 255), Math.round(b * 255));
+}
+
+/**
+ * Given primary and accent hex values, compute the full
+ * bds_theme object with all derived colour vars.
+ */
+function computeTheme(primaryHex, accentHex) {
+  const aRgb = hexToRgb(accentHex);
+  const aHsl = rgbToHsl(aRgb.r, aRgb.g, aRgb.b);
+
+  const pRgb = hexToRgb(primaryHex);
+  const pHsl = rgbToHsl(pRgb.r, pRgb.g, pRgb.b);
+
+  // Ensure primary is dark enough for a readable dark background
+  const primary = pHsl.l > 30
+    ? hslToHex(pHsl.h, Math.min(pHsl.s, 60), 12)
+    : primaryHex;
+
+  // Accent hover: darken by ~15 lightness units
+  const accentHover = hslToHex(aHsl.h, aHsl.s, Math.max(aHsl.l - 15, 5));
+
+  // Accent light: very pale tint (high L, capped S)
+  const accentLight = hslToHex(aHsl.h, Math.min(aHsl.s, 40), 95);
+
+  // Text: very dark, slight hue from primary
+  const text = hslToHex(pHsl.h, Math.min(pHsl.s, 25), 13);
+
+  return {
+    '--clr-primary':      primary,
+    '--clr-accent':       accentHex,
+    '--clr-accent-hover': accentHover,
+    '--clr-accent-light': accentLight,
+    '--clr-text':         text,
+    '--gradient-hero':    `linear-gradient(135deg, ${primary} 0%, ${accentHex} 100%)`,
+  };
+}
+
+/* ── DOM helpers ───────────────────────────────────────── */
+
+function previewTheme(primaryHex, accentHex) {
+  const theme = computeTheme(primaryHex, accentHex);
+  Object.entries(theme).forEach(([prop, value]) => {
+    document.documentElement.style.setProperty(prop, value);
+  });
+  // Sync role picker displays
+  updateRolePickerUI('Primary', primaryHex);
+  updateRolePickerUI('Accent',  accentHex);
+}
+
+function updateRolePickerUI(role, hex) {
+  document.getElementById(`roleDot${role}`).style.background = hex;
+  document.getElementById(`roleHex${role}`).textContent      = hex;
+}
+
+function buildSwatchPopup(popupEl, onPick) {
+  popupEl.innerHTML = '';
+  extractedSwatches.forEach(sw => {
+    const btn = document.createElement('button');
+    btn.type             = 'button';
+    btn.className        = 'theme-swatch';
+    btn.style.background = sw.hex;
+    btn.title            = sw.hex;
+    btn.setAttribute('role', 'option');
+    btn.addEventListener('click', () => {
+      onPick(sw.hex);
+      popupEl.classList.add('hidden');
+    });
+    popupEl.appendChild(btn);
+  });
+}
+
+function renderExtractedSwatches() {
+  const container = document.getElementById('themeSwatches');
+  container.innerHTML = '';
+  extractedSwatches.forEach(sw => {
+    const div = document.createElement('div');
+    div.className        = 'theme-swatch';
+    div.style.background = sw.hex;
+    div.title            = sw.hex;
+    container.appendChild(div);
+  });
+}
+
+/* ── Auto role assignment ──────────────────────────────── */
+
+function autoAssignRoles(swatches) {
+  // Sort by lightness ascending — darkest first
+  const sorted = [...swatches].sort((a, b) => {
+    return rgbToHsl(a.r, a.g, a.b).l - rgbToHsl(b.r, b.g, b.b).l;
+  });
+
+  const primary = sorted[0];
+
+  // Most saturated among the non-darkest
+  const candidates = swatches.filter(s => s !== primary);
+  const accent = candidates.reduce((best, s) => {
+    return rgbToHsl(s.r, s.g, s.b).s > rgbToHsl(best.r, best.g, best.b).s ? s : best;
+  }, candidates[0] || primary);
+
+  return { primary: primary.hex, accent: accent.hex };
+}
+
+/* ── Image upload & extraction ─────────────────────────── */
+
+function handleImageFile(file) {
+  if (!file || !file.type.match(/^image\/(jpeg|png|svg\+xml|gif)$/)) return;
+
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+
+  img.onload = () => {
+    try {
+      const palette = colorThief.getPalette(img, 6);
+      extractedSwatches = palette.map(([r, g, b]) => ({
+        r, g, b, hex: rgbToHex(r, g, b)
+      }));
+    } catch (e) {
+      // SVGs may fail canvas tainting — fall back to 1-colour
+      extractedSwatches = [{ r: 8, g: 145, b: 178, hex: '#0891b2' }];
+    }
+
+    const { primary, accent } = autoAssignRoles(extractedSwatches);
+    pendingPrimary = primary;
+    pendingAccent  = accent;
+
+    // Show thumbnail
+    document.getElementById('themeImgThumbnail').src = url;
+
+    // Render swatches & update role pickers
+    renderExtractedSwatches();
+
+    buildSwatchPopup(
+      document.getElementById('rolePopupPrimary'),
+      hex => { pendingPrimary = hex; previewTheme(pendingPrimary, pendingAccent); }
+    );
+    buildSwatchPopup(
+      document.getElementById('rolePopupAccent'),
+      hex => { pendingAccent = hex; previewTheme(pendingPrimary, pendingAccent); }
+    );
+
+    previewTheme(pendingPrimary, pendingAccent);
+
+    // Reveal palette card
+    document.getElementById('themePaletteCard').classList.remove('hidden');
+    URL.revokeObjectURL(url);
+  };
+
+  img.crossOrigin = 'anonymous';
+  img.src = url;
+}
+
+/* ── Event wiring ──────────────────────────────────────── */
+
+// File input
+document.getElementById('themeImageInput').addEventListener('change', e => {
+  handleImageFile(e.target.files[0]);
+});
+
+// Drag and drop
+const dropZone = document.getElementById('themeDropZone');
+
+dropZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropZone.classList.add('drag-over');
+});
+
+dropZone.addEventListener('dragleave', () => {
+  dropZone.classList.remove('drag-over');
+});
+
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  handleImageFile(e.dataTransfer.files[0]);
+});
+
+// Keyboard activation for drop zone (Enter/Space)
+dropZone.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    document.getElementById('themeImageInput').click();
+  }
+});
+
+// Role picker toggles
+['Primary', 'Accent'].forEach(role => {
+  const btn   = document.getElementById(`rolePicker${role}`);
+  const popup = document.getElementById(`rolePopup${role}`);
+
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    // Close the other popup first
+    const other = role === 'Primary' ? 'Accent' : 'Primary';
+    document.getElementById(`rolePopup${other}`).classList.add('hidden');
+    popup.classList.toggle('hidden');
+  });
+});
+
+// Close popups on outside click
+document.addEventListener('click', () => {
+  document.getElementById('rolePopupPrimary').classList.add('hidden');
+  document.getElementById('rolePopupAccent').classList.add('hidden');
+});
+
+// Apply button
+document.getElementById('themeApplyBtn').addEventListener('click', () => {
+  if (!pendingPrimary || !pendingAccent) return;
+  const theme = computeTheme(pendingPrimary, pendingAccent);
+  localStorage.setItem(THEME_KEY, JSON.stringify(theme));
+  showToast(T('toast_theme_applied'), 'success');
+});
+
+// Reset button
+document.getElementById('themeResetBtn').addEventListener('click', () => {
+  localStorage.removeItem(THEME_KEY);
+  if (typeof removeStoredTheme === 'function') removeStoredTheme();
+  showToast(T('toast_theme_reset'), '');
+});
