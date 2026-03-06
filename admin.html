@@ -76,8 +76,9 @@
           <li><a href="#sec-hero"     class="sidebar-link" data-i18n="admin_nav_hero">🚀 Hero</a></li>
           <li><a href="#sec-about"    class="sidebar-link" data-i18n="admin_nav_about">💼 Über uns</a></li>
           <li><a href="#sec-services" class="sidebar-link" data-i18n="admin_nav_services">🛠 Leistungen</a></li>
-          <li><a href="#sec-gallery"  class="sidebar-link" data-i18n="admin_nav_gallery">🖼 Referenzen</a></li>
-          <li><a href="#sec-contact"  class="sidebar-link" data-i18n="admin_nav_contact">✉ Kontakt</a></li>
+          <li><a href="#sec-gallery"   class="sidebar-link" data-i18n="admin_nav_gallery">🖼 Referenzen</a></li>
+          <li><a href="#sec-locations" class="sidebar-link" data-i18n="sec_locations_h2">📍 Standorte</a></li>
+          <li><a href="#sec-contact"   class="sidebar-link" data-i18n="admin_nav_contact">✉ Kontakt</a></li>
           <li class="sidebar-divider"></li>
           <li><a href="#sec-security" class="sidebar-link" data-i18n="admin_nav_security">🔒 Sicherheit</a></li>
         </ul>
@@ -188,6 +189,25 @@
             <!-- Populated by admin.js -->
           </div>
           <button type="button" class="btn-add-item" id="addGalleryBtn" data-i18n="sec_gallery_add">+ Foto hinzufügen</button>
+        </section>
+
+        <!-- ── LOCATIONS ─────────────────────────── -->
+        <section class="admin-section" id="sec-locations">
+          <div class="section-title">
+            <h2 data-i18n="sec_locations_h2">Standorte</h2>
+            <p class="field-hint" data-i18n="sec_locations_desc">Standorte verwalten – bis zu 12 Einträge.</p>
+          </div>
+          <!-- Visibility toggle -->
+          <div class="card toggle-card">
+            <label class="toggle-label">
+              <input type="checkbox" id="f-locations-visible" checked>
+              <span data-i18n="sec_locations_visible_lbl">Abschnitt anzeigen</span>
+            </label>
+            <p class="field-hint" data-i18n="sec_locations_visible_desc">Blendet den Standorte-Abschnitt auf der Website aus, wenn deaktiviert.</p>
+          </div>
+          <!-- Location editor items built dynamically by admin.js -->
+          <div id="locationsList"></div>
+          <button type="button" class="btn-add-item" id="addLocationBtn" data-i18n="sec_location_add">+ Standort hinzufügen</button>
         </section>
 
         <!-- ── CONTACT ────────────────────────────── -->

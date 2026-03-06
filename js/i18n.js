@@ -322,6 +322,29 @@ const TRANSLATIONS = {
     sec_gallery_add:        '+ Foto hinzufügen',
     sec_gallery_visible_lbl:  'Abschnitt anzeigen',
     sec_gallery_visible_desc: 'Blendet den gesamten Referenzen-Abschnitt auf der Website aus, wenn deaktiviert.',
+
+    /* ── Locations section (public) ──────────────────── */
+    nav_locations:       'Standorte',
+    eyebrow_locations:   'Standorte',
+    locations_h2:        'Unsere Standorte',
+    locations_subtitle:  'Besuchen Sie uns an einem unserer Standorte.',
+
+    /* ── Locations editor (admin) ────────────────────── */
+    sec_locations_h2:           'Standorte',
+    sec_locations_desc:         'Standorte verwalten – bis zu 12 Einträge.',
+    sec_locations_visible_lbl:  'Abschnitt anzeigen',
+    sec_locations_visible_desc: 'Blendet den Standorte-Abschnitt auf der Website aus, wenn deaktiviert.',
+    sec_location_name_lbl:      'Name',
+    sec_location_address_lbl:   'Adresse',
+    sec_location_phone_lbl:     'Telefon',
+    sec_location_email_lbl:     'E-Mail',
+    sec_location_hours_lbl:     'Öffnungszeiten',
+    sec_location_note_lbl:      'Notiz',
+    sec_location_geocode_btn:   'Auf Karte finden',
+    sec_location_geocode_ok:    'Gefunden',
+    sec_location_geocode_err:   'Nicht gefunden',
+    sec_location_add:           '+ Standort hinzufügen',
+    sec_location_remove:        'Entfernen',
   },
 
 
@@ -534,5 +557,28 @@ const TRANSLATIONS = {
     sec_gallery_add:        '+ Add Photo',
     sec_gallery_visible_lbl:  'Show Section',
     sec_gallery_visible_desc: 'Hides the entire references section on the website when unchecked.',
+
+    /* ── Locations section (public) ──────────────────── */
+    nav_locations:       'Locations',
+    eyebrow_locations:   'Locations',
+    locations_h2:        'Our Locations',
+    locations_subtitle:  'Visit us at one of our locations.',
+
+    /* ── Locations editor (admin) ────────────────────── */
+    sec_locations_h2:           'Locations',
+    sec_locations_desc:         'Manage locations – up to 12 entries.',
+    sec_locations_visible_lbl:  'Show section',
+    sec_locations_visible_desc: 'Hides the locations section on the website when unchecked.',
+    sec_location_name_lbl:      'Name',
+    sec_location_address_lbl:   'Address',
+    sec_location_phone_lbl:     'Phone',
+    sec_location_email_lbl:     'Email',
+    sec_location_hours_lbl:     'Opening hours',
+    sec_location_note_lbl:      'Note',
+    sec_location_geocode_btn:   'Find on map',
+    sec_location_geocode_ok:    'Found',
+    sec_location_geocode_err:   'Not found',
+    sec_location_add:           '+ Add location',
+    sec_location_remove:        'Remove',
   }
 };

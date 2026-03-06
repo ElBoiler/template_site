@@ -732,6 +732,70 @@ textarea, input, select { font-family: var(--font); }
 
 
 /* ============================================================
+   LOCATIONS EDITOR
+   ============================================================ */
+
+.location-editor-item {
+  background: var(--a-bg);
+  border: 1px solid var(--a-border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.location-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.location-item-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--a-brand);
+}
+
+.loc-neutral-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+@media (max-width: 500px) {
+  .loc-neutral-row { grid-template-columns: 1fr; }
+}
+
+.loc-geocode-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.loc-geocode-btn {
+  padding: 0.4rem 0.8rem;
+  background: var(--a-teal);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--trans);
+  white-space: nowrap;
+}
+
+.loc-geocode-btn:hover:not(:disabled) { background: #0E7490; }
+.loc-geocode-btn:disabled              { opacity: 0.5; cursor: not-allowed; }
+
+.loc-geocode-badge         { font-size: 0.8rem; color: var(--a-muted); }
+.loc-geocode-badge.geocode-ok  { color: #059669; }
+.loc-geocode-badge.geocode-err { color: var(--a-danger); }
+
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width: 768px) {
