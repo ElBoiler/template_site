@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Boyle Digital Services — Produktmanagement, digitales Marketing, Webentwicklung und mehr. Ihr vertrauensvoller Partner für digitales Wachstum.">
   <title>Boyle Digital Services</title>
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
@@ -24,6 +26,8 @@
         <li><a href="#services" data-i18n="nav_services">Leistungen</a></li>
         <li><a href="#gallery" data-i18n="nav_gallery">Referenzen</a></li>
         <li><a href="#locations" data-i18n="nav_locations">Standorte</a></li>
+        <li><a href="#jobs"         data-i18n="nav_jobs">Stellen</a></li>
+        <li><a href="#appointments" data-i18n="nav_appointments">Termine</a></li>
         <li><a href="#contact" class="nav-cta" data-i18n="nav_contact">Kontakt</a></li>
       </ul>
       <!-- Language switcher -->
@@ -51,6 +55,8 @@
     <a href="#services" data-i18n="nav_services">Leistungen</a>
     <a href="#gallery"   data-i18n="nav_gallery">Referenzen</a>
     <a href="#locations" data-i18n="nav_locations">Standorte</a>
+    <a href="#jobs"         data-i18n="nav_jobs">Stellen</a>
+    <a href="#appointments" data-i18n="nav_appointments">Termine</a>
     <a href="#contact"   data-i18n="nav_contact">Kontakt</a>
   </div>
 
@@ -180,6 +186,42 @@
   </section>
 
   <!-- ==============================
+       JOBS
+  ============================== -->
+  <section id="jobs" class="jobs section-pad">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-eyebrow" data-i18n="eyebrow_jobs">Karriere</p>
+        <h2 class="jobs-title"></h2>
+      </div>
+      <div class="jobs-content reveal">
+        <p class="jobs-body"></p>
+        <div class="jobs-cta">
+          <a href="#" class="btn btn-primary jobs-btn" target="_blank" rel="noopener noreferrer" style="display:none"></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       APPOINTMENTS
+  ============================== -->
+  <section id="appointments" class="appointments section-pad bg-surface">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-eyebrow" data-i18n="eyebrow_appointments">Terminvereinbarung</p>
+        <h2 class="appointments-title"></h2>
+      </div>
+      <div class="appointments-content reveal">
+        <p class="appointments-body"></p>
+        <div class="appointments-cta">
+          <a href="#" class="btn btn-primary appointments-btn" target="_blank" rel="noopener noreferrer" style="display:none"></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
        CONTACT
   ============================== -->
   <section id="contact" class="contact section-pad bg-surface">
@@ -194,6 +236,7 @@
       <div class="contact-grid">
         <div class="contact-info reveal">
           <h3 data-i18n="contact_info_heading">Kontaktinformationen</h3>
+          <address>
           <ul class="contact-details">
             <li data-contact-item="address">
               <span class="contact-icon" aria-hidden="true">📍</span>
@@ -207,7 +250,12 @@
               <span class="contact-icon" aria-hidden="true">✉️</span>
               <a href="mailto:hello@boyledigital.ie" data-content="contact.email">hello@boyledigital.ie</a>
             </li>
+            <li data-contact-item="hours">
+              <span class="contact-icon" aria-hidden="true">🕐</span>
+              <span data-content="contact.hours"></span>
+            </li>
           </ul>
+          </address>
           <!-- Social links rebuilt dynamically by content.js -->
           <div class="social-links" id="socialLinksContainer"></div>
         </div>
@@ -292,9 +340,12 @@
         </div>
         <div class="footer-col footer-contact-col">
           <h4 data-i18n="footer_contact">Kontakt</h4>
+          <address>
           <p data-contact-item="address" data-content="contact.address">123 Digital Avenue, Dublin, Ireland</p>
           <p data-contact-item="phone"><a href="tel:+35312345678" data-content="contact.phone">+353 1 234 5678</a></p>
           <p data-contact-item="email"><a href="mailto:hello@boyledigital.ie" data-content="contact.email">hello@boyledigital.ie</a></p>
+          <p data-contact-item="hours"><span data-content="contact.hours"></span></p>
+          </address>
         </div>
       </div>
       <div class="footer-bottom">

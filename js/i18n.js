@@ -360,6 +360,64 @@ const TRANSLATIONS = {
     sec_location_geocode_err:   'Nicht gefunden',
     sec_location_add:           '+ Standort hinzufügen',
     sec_location_remove:        'Entfernen',
+
+    /* ── Contact opening hours ───────────────────────── */
+    sec_contact_hours:   'Öffnungszeiten',
+
+    /* ── Jobs ────────────────────────────────────────── */
+    nav_jobs:            'Stellen',
+    eyebrow_jobs:        'Karriere',
+    jobs_h2:             'Offene Stellen',
+    sec_jobs_h2:         'Stellen',
+    sec_jobs_desc:       'Stellenangebote verwalten.',
+    sec_jobs_visible_lbl:  'Abschnitt anzeigen',
+    sec_jobs_visible_desc: 'Blendet den Stellen-Abschnitt aus, wenn deaktiviert.',
+    sec_jobs_title_lbl:    'Titel',
+    sec_jobs_body_lbl:     'Beschreibung',
+    sec_jobs_btn_text_lbl: 'Button-Beschriftung',
+    sec_jobs_btn_url_lbl:  'Button-URL (sprachunabhängig)',
+
+    /* ── Appointments ────────────────────────────────── */
+    nav_appointments:            'Termine',
+    eyebrow_appointments:        'Terminvereinbarung',
+    appointments_h2:             'Termin vereinbaren',
+    sec_appointments_h2:         'Termine',
+    sec_appointments_desc:       'Terminbuchungs-Abschnitt verwalten.',
+    sec_appointments_visible_lbl:  'Abschnitt anzeigen',
+    sec_appointments_visible_desc: 'Blendet den Terminbereich aus, wenn deaktiviert.',
+    sec_appointments_title_lbl:    'Titel',
+    sec_appointments_body_lbl:     'Beschreibung',
+    sec_appointments_btn_text_lbl: 'Button-Beschriftung',
+    sec_appointments_btn_url_lbl:  'Button-URL (sprachunabhängig)',
+
+    /* ── Layout ──────────────────────────────────────── */
+    sec_layout_h2:       'Seitenstruktur',
+    sec_layout_desc:     'Reihenfolge der Abschnitte auf der Website festlegen.',
+    sec_layout_up:       '↑',
+    sec_layout_down:     '↓',
+    layout_about:        'Über uns',
+    layout_services:     'Leistungen',
+    layout_gallery:      'Referenzen',
+    layout_locations:    'Standorte',
+    layout_jobs:         'Stellen',
+    layout_appointments: 'Termine',
+    layout_contact:      'Kontakt',
+    admin_nav_layout:    '⊞ Struktur',
+
+    /* ── SEO ──────────────────────────────────────────── */
+    sec_seo_h2:                'SEO & AEO',
+    sec_seo_desc:              'Suchmaschinen-Einstellungen und strukturierte Daten verwalten.',
+    sec_seo_title_lbl:         'Seitentitel',
+    sec_seo_metadesc_lbl:      'Meta-Beschreibung',
+    sec_seo_chars_hint:        'Zeichen (Ziel: ≤ 155)',
+    sec_seo_canonical_lbl:     'Kanonische URL',
+    sec_seo_ogimage_lbl:       'OG-Bild-URL',
+    sec_seo_twitter_lbl:       'Twitter/X-Handle',
+    sec_seo_biztype_lbl:       'Unternehmenstyp (Schema)',
+    sec_seo_biztype_professional: 'ProfessionalService',
+    sec_seo_biztype_local:     'LocalBusiness',
+    sec_seo_biztype_org:       'Organization',
+    admin_nav_seo:             '🔍 SEO',
   },
 
 
@@ -610,5 +668,63 @@ const TRANSLATIONS = {
     sec_location_geocode_err:   'Not found',
     sec_location_add:           '+ Add location',
     sec_location_remove:        'Remove',
+
+    /* ── Contact opening hours ───────────────────────── */
+    sec_contact_hours:   'Opening Hours',
+
+    /* ── Jobs ────────────────────────────────────────── */
+    nav_jobs:            'Jobs',
+    eyebrow_jobs:        'Careers',
+    jobs_h2:             'Open Positions',
+    sec_jobs_h2:         'Jobs',
+    sec_jobs_desc:       'Manage job listings.',
+    sec_jobs_visible_lbl:  'Show Section',
+    sec_jobs_visible_desc: 'Hides the jobs section on the website when unchecked.',
+    sec_jobs_title_lbl:    'Title',
+    sec_jobs_body_lbl:     'Body Text',
+    sec_jobs_btn_text_lbl: 'Button Label',
+    sec_jobs_btn_url_lbl:  'Button URL (language-neutral)',
+
+    /* ── Appointments ────────────────────────────────── */
+    nav_appointments:            'Appointments',
+    eyebrow_appointments:        'Book an Appointment',
+    appointments_h2:             'Book an Appointment',
+    sec_appointments_h2:         'Appointments',
+    sec_appointments_desc:       'Manage the appointments booking section.',
+    sec_appointments_visible_lbl:  'Show Section',
+    sec_appointments_visible_desc: 'Hides the appointments section on the website when unchecked.',
+    sec_appointments_title_lbl:    'Title',
+    sec_appointments_body_lbl:     'Body Text',
+    sec_appointments_btn_text_lbl: 'Button Label',
+    sec_appointments_btn_url_lbl:  'Button URL (language-neutral)',
+
+    /* ── Layout ──────────────────────────────────────── */
+    sec_layout_h2:       'Page Structure',
+    sec_layout_desc:     'Set the order of sections on the website.',
+    sec_layout_up:       '↑',
+    sec_layout_down:     '↓',
+    layout_about:        'About',
+    layout_services:     'Services',
+    layout_gallery:      'Gallery',
+    layout_locations:    'Locations',
+    layout_jobs:         'Jobs',
+    layout_appointments: 'Appointments',
+    layout_contact:      'Contact',
+    admin_nav_layout:    '⊞ Structure',
+
+    /* ── SEO ──────────────────────────────────────────── */
+    sec_seo_h2:                'SEO & AEO',
+    sec_seo_desc:              'Manage search engine settings and structured data.',
+    sec_seo_title_lbl:         'Page Title',
+    sec_seo_metadesc_lbl:      'Meta Description',
+    sec_seo_chars_hint:        'characters (target: ≤ 155)',
+    sec_seo_canonical_lbl:     'Canonical URL',
+    sec_seo_ogimage_lbl:       'OG Image URL',
+    sec_seo_twitter_lbl:       'Twitter/X Handle',
+    sec_seo_biztype_lbl:       'Business Type (Schema)',
+    sec_seo_biztype_professional: 'ProfessionalService',
+    sec_seo_biztype_local:     'LocalBusiness',
+    sec_seo_biztype_org:       'Organization',
+    admin_nav_seo:             '🔍 SEO',
   }
 };

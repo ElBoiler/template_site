@@ -1160,3 +1160,25 @@ h3 {
   .stat-suffix { font-size: 1rem; }
   .hero .container { padding-left: 2rem; padding-right: 2rem; }
 }
+
+/* ── Jobs & Appointments ────────────────────── */
+#appointments { background: var(--clr-surface); }
+
+.jobs-content,
+.appointments-content {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+.jobs-body,
+.appointments-body {
+  color: var(--clr-muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+.jobs-cta,
+.appointments-cta {
+  display: flex;
+  justify-content: center;
+}
