@@ -79,6 +79,7 @@
           <li><a href="#sec-gallery"   class="sidebar-link" data-i18n="admin_nav_gallery">🖼 Referenzen</a></li>
           <li><a href="#sec-locations" class="sidebar-link" data-i18n="sec_locations_h2">📍 Standorte</a></li>
           <li><a href="#sec-contact"   class="sidebar-link" data-i18n="admin_nav_contact">✉ Kontakt</a></li>
+          <li><a href="#sec-theme"    class="sidebar-link" data-i18n="admin_nav_theme">🎨 Farbschema</a></li>
           <li class="sidebar-divider"></li>
           <li><a href="#sec-security" class="sidebar-link" data-i18n="admin_nav_security">🔒 Sicherheit</a></li>
         </ul>
@@ -286,6 +287,115 @@
           </div>
         </section>
 
+        <!-- ── COLOUR SCHEME ────────────────────────────── -->
+        <section class="admin-section" id="sec-theme">
+          <div class="section-title">
+            <h2 data-i18n="sec_theme_h2">Farbschema</h2>
+            <p data-i18n="sec_theme_desc">Extrahieren Sie ein Farbschema aus einem Bild und wenden Sie es auf die Website an.</p>
+          </div>
+
+          <!-- Upload zone -->
+          <div class="card">
+            <div class="theme-drop-zone" id="themeDropZone" role="button" tabindex="0"
+                 aria-label="Upload image">
+              <input type="file" id="themeImageInput" accept=".jpg,.jpeg,.png,.svg,.gif"
+                     class="theme-file-input" aria-hidden="true">
+              <div class="theme-drop-inner" id="themeDropPrompt">
+                <span class="theme-drop-icon">🖼</span>
+                <span class="theme-drop-label" data-i18n="sec_theme_drop">Bild hier ablegen oder klicken zum Hochladen</span>
+                <span class="theme-drop-formats" data-i18n="sec_theme_formats">JPG · PNG · SVG · GIF</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Palette (hidden until image uploaded) -->
+          <div class="card hidden" id="themePaletteCard">
+
+            <!-- Image thumbnail + swatches -->
+            <div class="theme-palette-row">
+              <img id="themeImgThumbnail" class="theme-thumbnail" alt="Uploaded image">
+              <div class="theme-swatches" id="themeSwatches" aria-label="Extracted colours"></div>
+            </div>
+
+            <!-- Role assignment -->
+            <div class="theme-roles">
+              <p class="theme-roles-label" data-i18n="sec_theme_roles">Rollen zuweisen</p>
+              <div class="theme-role-row">
+                <span class="theme-role-name" data-i18n="sec_theme_primary">Primär</span>
+                <button class="theme-role-swatch" id="rolePickerPrimary" aria-haspopup="true"
+                        aria-label="Pick primary colour">
+                  <span class="theme-role-dot" id="roleDotPrimary"></span>
+                  <span class="theme-role-hex" id="roleHexPrimary">#000000</span>
+                  <span class="theme-role-arrow">▾</span>
+                </button>
+                <div class="theme-role-popup hidden" id="rolePopupPrimary" role="listbox"
+                     aria-label="Choose primary colour"></div>
+              </div>
+              <div class="theme-role-row">
+                <span class="theme-role-name" data-i18n="sec_theme_accent">Akzent</span>
+                <button class="theme-role-swatch" id="rolePickerAccent" aria-haspopup="true"
+                        aria-label="Pick accent colour">
+                  <span class="theme-role-dot" id="roleDotAccent"></span>
+                  <span class="theme-role-hex" id="roleHexAccent">#000000</span>
+                  <span class="theme-role-arrow">▾</span>
+                </button>
+                <div class="theme-role-popup hidden" id="rolePopupAccent" role="listbox"
+                     aria-label="Choose accent colour"></div>
+              </div>
+            </div>
+
+            <!-- Mini mockup preview -->
+            <div class="theme-preview-section">
+              <p class="theme-roles-label" data-i18n="sec_theme_preview">Vorschau</p>
+              <div class="theme-mockup" id="themeMockup" aria-hidden="true">
+                <div class="mockup-header">
+                  <div class="mockup-logo"></div>
+                  <div class="mockup-nav">
+                    <div class="mockup-nav-dot"></div>
+                    <div class="mockup-nav-dot"></div>
+                    <div class="mockup-nav-dot"></div>
+                    <div class="mockup-btn-pill"></div>
+                  </div>
+                </div>
+                <div class="mockup-hero">
+                  <div class="mockup-hero-eyebrow"></div>
+                  <div class="mockup-hero-headline"></div>
+                  <div class="mockup-hero-sub"></div>
+                  <div class="mockup-hero-cta"></div>
+                </div>
+                <div class="mockup-cards">
+                  <div class="mockup-card">
+                    <div class="mockup-card-icon"></div>
+                    <div class="mockup-card-title"></div>
+                    <div class="mockup-card-text"></div>
+                  </div>
+                  <div class="mockup-card">
+                    <div class="mockup-card-icon"></div>
+                    <div class="mockup-card-title"></div>
+                    <div class="mockup-card-text"></div>
+                  </div>
+                  <div class="mockup-card">
+                    <div class="mockup-card-icon"></div>
+                    <div class="mockup-card-title"></div>
+                    <div class="mockup-card-text"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="theme-actions">
+              <button id="themeApplyBtn" class="btn-primary" data-i18n="sec_theme_apply">
+                Farbschema anwenden
+              </button>
+              <button id="themeResetBtn" class="btn-ghost" data-i18n="sec_theme_reset">
+                Auf Standard zurücksetzen
+              </button>
+            </div>
+          </div>
+
+        </section>
+
       </main>
     </div><!-- /admin-body -->
   </div><!-- /admin-panel -->
@@ -294,6 +404,7 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <!-- i18n.js first, then content.js, then admin.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.4.0/color-thief.umd.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/content.js"></script>
   <script src="js/admin.js"></script>

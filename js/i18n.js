@@ -217,6 +217,21 @@ const TRANSLATIONS = {
     admin_nav_gallery:  '🖼 Referenzen',
     admin_nav_contact:  '✉ Kontakt',
     admin_nav_security: '🔒 Sicherheit',
+    admin_nav_theme:    '🎨 Farbschema',
+
+    sec_theme_h2:        'Farbschema',
+    sec_theme_desc:      'Extrahieren Sie ein Farbschema aus einem Bild und wenden Sie es auf die Website an.',
+    sec_theme_drop:      'Bild hier ablegen oder klicken zum Hochladen',
+    sec_theme_formats:   'JPG · PNG · SVG · GIF',
+    sec_theme_extracted: 'Extrahierte Farben',
+    sec_theme_roles:     'Rollen zuweisen',
+    sec_theme_primary:   'Primär',
+    sec_theme_accent:    'Akzent',
+    sec_theme_preview:   'Vorschau',
+    sec_theme_apply:     'Farbschema anwenden',
+    sec_theme_reset:     'Auf Standard zurücksetzen',
+    toast_theme_applied: 'Farbschema angewendet!',
+    toast_theme_reset:   'Farbschema auf Standard zurückgesetzt.',
 
     /* ── General section ────────────────────────────────── */
     sec_general_h2:    'Allgemein',
@@ -452,6 +467,21 @@ const TRANSLATIONS = {
     admin_nav_gallery:  '🖼 Gallery',
     admin_nav_contact:  '✉ Contact',
     admin_nav_security: '🔒 Security',
+    admin_nav_theme:    '🎨 Colour Scheme',
+
+    sec_theme_h2:        'Colour Scheme',
+    sec_theme_desc:      'Extract a colour scheme from an image and apply it to the website.',
+    sec_theme_drop:      'Drop an image here, or click to upload',
+    sec_theme_formats:   'JPG · PNG · SVG · GIF',
+    sec_theme_extracted: 'Extracted colours',
+    sec_theme_roles:     'Assign roles',
+    sec_theme_primary:   'Primary',
+    sec_theme_accent:    'Accent',
+    sec_theme_preview:   'Preview',
+    sec_theme_apply:     'Apply Colour Scheme',
+    sec_theme_reset:     'Reset to Default',
+    toast_theme_applied: 'Colour scheme applied!',
+    toast_theme_reset:   'Colour scheme reset to default.',
 
     /* ── General section ────────────────────────────────── */
     sec_general_h2:    'General',
