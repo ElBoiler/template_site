@@ -23,6 +23,7 @@
         <li><a href="#about" data-i18n="nav_about">Über uns</a></li>
         <li><a href="#services" data-i18n="nav_services">Leistungen</a></li>
         <li><a href="#gallery" data-i18n="nav_gallery">Referenzen</a></li>
+        <li><a href="#locations" data-i18n="nav_locations">Standorte</a></li>
         <li><a href="#contact" class="nav-cta" data-i18n="nav_contact">Kontakt</a></li>
       </ul>
       <!-- Language switcher -->
@@ -48,8 +49,9 @@
     </div>
     <a href="#about"    data-i18n="nav_about">Über uns</a>
     <a href="#services" data-i18n="nav_services">Leistungen</a>
-    <a href="#gallery"  data-i18n="nav_gallery">Referenzen</a>
-    <a href="#contact"  data-i18n="nav_contact">Kontakt</a>
+    <a href="#gallery"   data-i18n="nav_gallery">Referenzen</a>
+    <a href="#locations" data-i18n="nav_locations">Standorte</a>
+    <a href="#contact"   data-i18n="nav_contact">Kontakt</a>
   </div>
 
   <!-- ==============================
@@ -157,6 +159,25 @@
       <p id="lightboxCaption" class="lightbox-caption"></p>
     </div>
   </div>
+
+  <!-- ==============================
+       LOCATIONS
+  ============================== -->
+  <section id="locations" class="section-pad">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-eyebrow" data-i18n="eyebrow_locations">Standorte</p>
+        <h2 data-i18n="locations_h2">Unsere Standorte</h2>
+        <p class="section-subtitle" data-i18n="locations_subtitle">
+          Besuchen Sie uns an einem unserer Standorte.
+        </p>
+      </div>
+      <!-- Map rendered by main.js (Leaflet, lazy-loaded) -->
+      <div id="locations-map" class="locations-map"></div>
+      <!-- Location cards built dynamically by content.js -->
+      <div class="location-cards"></div>
+    </div>
+  </section>
 
   <!-- ==============================
        CONTACT

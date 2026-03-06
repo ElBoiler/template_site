@@ -11,6 +11,7 @@ const CONTENT_KEY = 'bds_content';
 const DEFAULT_CONTENT = {
   companyName: 'Boyle Digital Services',  // language-neutral
   referencesVisible: true,                // language-neutral toggle
+  locationsVisible: true,                 // language-neutral toggle
 
   contact: {                               // language-neutral
     address:  '123 Digital Avenue, Dublin, Ireland',
@@ -84,7 +85,9 @@ const DEFAULT_CONTENT = {
       { src: 'https://picsum.photos/seed/bds10/600/400', alt: 'Content-Strategie Workshop',       caption: 'Content-Strategie Workshop'      },
       { src: 'https://picsum.photos/seed/bds11/600/400', alt: 'Datenanalyse-Bericht',             caption: 'Datenanalyse-Bericht'            },
       { src: 'https://picsum.photos/seed/bds12/600/400', alt: 'Kundenerfolgsgeschichte',          caption: 'Kundenerfolgsgeschichte'         }
-    ]
+    ],
+
+    locations: []
   },
 
   /* ── English content ─────────────────────────────────────── */
@@ -141,7 +144,9 @@ const DEFAULT_CONTENT = {
       { src: 'https://picsum.photos/seed/bds10/600/400', alt: 'Content strategy workshop',   caption: 'Content Strategy Workshop'   },
       { src: 'https://picsum.photos/seed/bds11/600/400', alt: 'Data analytics report',       caption: 'Data Analytics Report'       },
       { src: 'https://picsum.photos/seed/bds12/600/400', alt: 'Client success story',        caption: 'Client Success Story'        }
-    ]
+    ],
+
+    locations: []
   }
 };
 
@@ -263,6 +268,25 @@ function applyContent(data, lang) {
     });
   }
 
+  /* Locations — optional section + map (0–12 items) */
+  const locationsSection = document.getElementById('locations');
+  if (locationsSection) {
+    locationsSection.hidden = (data.locationsVisible === false);
+  }
+  const locationCards = document.querySelector('.location-cards');
+  if (locationCards) {
+    locationCards.innerHTML = '';
+    const locs = ld.locations || [];
+    locs.forEach((loc, i) => {
+      locationCards.insertAdjacentHTML('beforeend', buildLocationCardHTML(loc, i));
+    });
+    // Store for lazy Leaflet init; call now if Leaflet is already loaded
+    window._pendingLocations = locs;
+    if (typeof window.initLocationsMap === 'function') {
+      window.initLocationsMap(locs);
+    }
+  }
+
   /* Re-register newly built .reveal and .counter elements with main.js observers */
   if (typeof window.observeRevealEls === 'function') window.observeRevealEls();
   if (typeof window.observeCounterEls === 'function') window.observeCounterEls();
@@ -370,6 +394,23 @@ function safeUrl(url) {
     const p = new URL(url);
     return (p.protocol === 'http:' || p.protocol === 'https:') ? url : '';
   } catch { return ''; }
+}
+
+/**
+ * Build the public HTML for a single location card.
+ * @param {{ name:string, address:string, phone:string, email:string, hours:string, note:string }} loc
+ * @param {number} i
+ * @returns {string}
+ */
+function buildLocationCardHTML(loc, i) {
+  const rows = [
+    loc.address ? `<p class="loc-row"><span class="loc-icon" aria-hidden="true">📍</span>${esc(loc.address)}</p>` : '',
+    loc.phone   ? `<p class="loc-row"><span class="loc-icon" aria-hidden="true">📞</span><a href="tel:${esc(loc.phone)}">${esc(loc.phone)}</a></p>` : '',
+    loc.email   ? `<p class="loc-row"><span class="loc-icon" aria-hidden="true">✉️</span><a href="mailto:${esc(loc.email)}">${esc(loc.email)}</a></p>` : '',
+    loc.hours   ? `<p class="loc-row"><span class="loc-icon" aria-hidden="true">🕐</span>${esc(loc.hours)}</p>` : '',
+    loc.note    ? `<p class="loc-note">${esc(loc.note)}</p>` : '',
+  ].join('');
+  return `<div class="location-card reveal" data-index="${i}"><h3 class="location-name">${esc(loc.name || '')}</h3>${rows}</div>`;
 }
 
 

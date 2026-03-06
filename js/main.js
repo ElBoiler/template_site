@@ -152,7 +152,95 @@ window.observeCounterEls = function () {
 
 
 /* ============================================================
-   7. GALLERY LIGHTBOX
+   7. LOCATIONS MAP  (Leaflet, lazy-loaded)
+   Leaflet CSS + JS are injected dynamically when #locations
+   first enters the viewport. initLocationsMap() is called by
+   content.js after building the location cards.
+   ============================================================ */
+
+/**
+ * Initialise (or re-initialise) the Leaflet map with the given locations array.
+ * Called by content.js after applyContent() builds the cards.
+ * If Leaflet hasn't loaded yet, window._pendingLocations is set and the map
+ * is initialised inside the Leaflet script's onload callback instead.
+ * @param {Array} locations
+ */
+window.initLocationsMap = function (locations) {
+  const container = document.getElementById('locations-map');
+  if (!container || typeof L === 'undefined') return;
+
+  // Destroy existing instance before re-init
+  if (container._leafletMap) {
+    container._leafletMap.remove();
+    container._leafletMap = null;
+  }
+
+  const validLocs = (locations || []).filter(l => l.lat != null && l.lng != null);
+  if (!validLocs.length) {
+    container.style.display = 'none';
+    return;
+  }
+  container.style.display = '';
+
+  const map = L.map(container, { scrollWheelZoom: false });
+  container._leafletMap = map;
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+  const bounds = [];
+  validLocs.forEach(loc => {
+    L.marker([loc.lat, loc.lng])
+      .addTo(map)
+      .bindPopup(`<strong>${loc.name || ''}</strong><br>${loc.address || ''}`);
+    bounds.push([loc.lat, loc.lng]);
+  });
+
+  if (bounds.length === 1) {
+    map.setView(bounds[0], 14);
+  } else {
+    map.fitBounds(bounds, { padding: [40, 40] });
+  }
+};
+
+// Inject Leaflet CSS + JS lazily when #locations enters the viewport
+(function () {
+  const locSec = document.getElementById('locations');
+  if (!locSec) return;
+
+  new IntersectionObserver(function (entries, obs) {
+    if (!entries[0].isIntersecting) return;
+    obs.disconnect();
+
+    if (!document.getElementById('leaflet-css')) {
+      const link = document.createElement('link');
+      link.id   = 'leaflet-css';
+      link.rel  = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
+    }
+
+    if (!document.getElementById('leaflet-js')) {
+      const s = document.createElement('script');
+      s.id  = 'leaflet-js';
+      s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      s.onload = function () {
+        if (window._pendingLocations) {
+          window.initLocationsMap(window._pendingLocations);
+        }
+      };
+      document.head.appendChild(s);
+    } else if (typeof L !== 'undefined' && window._pendingLocations) {
+      window.initLocationsMap(window._pendingLocations);
+    }
+  }, { threshold: 0.1 }).observe(locSec);
+}());
+
+
+/* ============================================================
+   8. GALLERY LIGHTBOX
    Uses event delegation on .gallery-grid so dynamically built
    gallery items are handled without re-binding listeners.
    ============================================================ */

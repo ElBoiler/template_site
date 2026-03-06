@@ -238,6 +238,13 @@ function loadFormData(lang, contentObj) {
   const refToggle = document.getElementById('f-references-visible');
   if (refToggle) refToggle.checked = (data.referencesVisible !== false);
 
+  /* Locations — dynamic editor */
+  renderLocationsEditor(ld.locations || []);
+
+  /* Locations visibility toggle */
+  const locToggle = document.getElementById('f-locations-visible');
+  if (locToggle) locToggle.checked = (data.locationsVisible !== false);
+
   /* Contact — language-neutral */
   val('f-contact-address', data.contact.address);
   val('f-contact-phone',   data.contact.phone);
@@ -357,6 +364,38 @@ function captureFormIntoContent(lang, contentObj) {
   /* References visibility — language-neutral */
   const refToggle = document.getElementById('f-references-visible');
   if (refToggle) contentObj.referencesVisible = refToggle.checked;
+
+  /* Locations — address/phone/email/hours/lat/lng are language-neutral;
+     name and note are language-specific.  */
+  const locItems = document.querySelectorAll('#locationsList .location-editor-item');
+  const locs = Array.from(locItems, div => ({
+    name:    (div.querySelector(`.loc-name-${l}`)?.value  || '').trim(),
+    note:    (div.querySelector(`.loc-note-${l}`)?.value  || '').trim(),
+    address: (div.querySelector('.loc-address')?.value    || '').trim(),
+    phone:   (div.querySelector('.loc-phone')?.value      || '').trim(),
+    email:   (div.querySelector('.loc-email')?.value      || '').trim(),
+    hours:   (div.querySelector('.loc-hours')?.value      || '').trim(),
+    lat:     div.dataset.lat ? parseFloat(div.dataset.lat) : null,
+    lng:     div.dataset.lng ? parseFloat(div.dataset.lng) : null,
+  }));
+  contentObj[l].locations = locs;
+
+  // Sync neutral fields to other lang block; preserve other lang's name/note
+  const otherLocs = contentObj[other].locations || [];
+  contentObj[other].locations = locs.map((loc, i) => ({
+    name:    otherLocs[i]?.name || '',
+    note:    otherLocs[i]?.note || '',
+    address: loc.address,
+    phone:   loc.phone,
+    email:   loc.email,
+    hours:   loc.hours,
+    lat:     loc.lat,
+    lng:     loc.lng,
+  }));
+
+  /* Locations visibility — language-neutral */
+  const locToggle = document.getElementById('f-locations-visible');
+  if (locToggle) contentObj.locationsVisible = locToggle.checked;
 }
 
 /* ============================================================
@@ -588,6 +627,156 @@ function updateAddServiceBtn() {
 
 
 /* ============================================================
+   LOCATIONS EDITOR
+   ============================================================ */
+
+/** Escape a string for use inside an HTML attribute value. */
+function escAttr(s) {
+  return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/** Fully rebuilds the locations list from an array of location objects. */
+function renderLocationsEditor(locs) {
+  const list = document.getElementById('locationsList');
+  if (!list) return;
+  list.innerHTML = '';
+  (locs || []).forEach(loc =>
+    addLocationItem(
+      loc.name    || '', loc.note    || '',
+      loc.address || '', loc.phone   || '',
+      loc.email   || '', loc.hours   || '',
+      loc.lat     ?? null, loc.lng   ?? null
+    )
+  );
+  updateAddLocationBtn();
+}
+
+/** Appends one editable location card. */
+function addLocationItem(name, note, address, phone, email, hours, lat, lng) {
+  const list = document.getElementById('locationsList');
+  if (!list) return;
+  const idx = list.querySelectorAll('.location-editor-item').length + 1;
+  const div = document.createElement('div');
+  div.className  = 'location-editor-item';
+  div.dataset.lat = (lat != null) ? lat : '';
+  div.dataset.lng = (lng != null) ? lng : '';
+
+  div.innerHTML = `
+    <div class="location-item-header">
+      <span class="location-item-label">${T('sec_locations_h2')} ${idx}</span>
+      <button type="button" class="item-remove-btn">${T('sec_location_remove')}</button>
+    </div>
+    <div class="location-lang location-lang--de">
+      <div class="field-group">
+        <label>${T('sec_location_name_lbl', 'de')}</label>
+        <input type="text" class="loc-name-de" value="${escAttr(name)}">
+      </div>
+      <div class="field-group">
+        <label>${T('sec_location_note_lbl', 'de')}</label>
+        <textarea class="loc-note-de" rows="2">${escAttr(note)}</textarea>
+      </div>
+    </div>
+    <div class="location-lang location-lang--en">
+      <div class="field-group">
+        <label>${T('sec_location_name_lbl', 'en')}</label>
+        <input type="text" class="loc-name-en" value="${escAttr(name)}">
+      </div>
+      <div class="field-group">
+        <label>${T('sec_location_note_lbl', 'en')}</label>
+        <textarea class="loc-note-en" rows="2">${escAttr(note)}</textarea>
+      </div>
+    </div>
+    <div class="field-group">
+      <label>${T('sec_location_address_lbl')}</label>
+      <input type="text" class="loc-address" value="${escAttr(address)}">
+    </div>
+    <div class="loc-neutral-row">
+      <div class="field-group">
+        <label>${T('sec_location_phone_lbl')}</label>
+        <input type="tel" class="loc-phone" value="${escAttr(phone)}">
+      </div>
+      <div class="field-group">
+        <label>${T('sec_location_email_lbl')}</label>
+        <input type="email" class="loc-email" value="${escAttr(email)}">
+      </div>
+    </div>
+    <div class="field-group">
+      <label>${T('sec_location_hours_lbl')}</label>
+      <input type="text" class="loc-hours" value="${escAttr(hours)}">
+    </div>
+    <div class="loc-geocode-row">
+      <button type="button" class="loc-geocode-btn">${T('sec_location_geocode_btn')}</button>
+      <span class="loc-geocode-badge"></span>
+    </div>`;
+
+  div.querySelector('.item-remove-btn').addEventListener('click', () => {
+    div.remove();
+    renumberLocationItems();
+    updateAddLocationBtn();
+  });
+  div.querySelector('.loc-geocode-btn').addEventListener('click', () => geocodeLocation(div));
+
+  list.appendChild(div);
+  updateLocationLangVisibility();
+  updateAddLocationBtn();
+}
+
+/** Calls Nominatim to resolve the address in itemDiv into lat/lng. */
+async function geocodeLocation(itemDiv) {
+  const address = (itemDiv.querySelector('.loc-address')?.value || '').trim();
+  if (!address) return;
+  const btn   = itemDiv.querySelector('.loc-geocode-btn');
+  const badge = itemDiv.querySelector('.loc-geocode-badge');
+  btn.disabled       = true;
+  badge.textContent  = '…';
+  badge.className    = 'loc-geocode-badge';
+  try {
+    const res  = await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`,
+      { headers: { 'Accept-Language': 'en' } }
+    );
+    const data = await res.json();
+    if (data && data[0]) {
+      itemDiv.dataset.lat = data[0].lat;
+      itemDiv.dataset.lng = data[0].lon;
+      const label = data[0].display_name.split(',').slice(0, 2).join(',').trim();
+      badge.textContent = `📍 ${label}`;
+      badge.classList.add('geocode-ok');
+    } else {
+      badge.textContent = T('sec_location_geocode_err');
+      badge.classList.add('geocode-err');
+    }
+  } catch {
+    badge.textContent = T('sec_location_geocode_err');
+    badge.classList.add('geocode-err');
+  }
+  btn.disabled = false;
+}
+
+/** Re-numbers the "Standorte N" labels after a card is removed. */
+function renumberLocationItems() {
+  document.querySelectorAll('#locationsList .location-editor-item').forEach((div, i) => {
+    const lbl = div.querySelector('.location-item-label');
+    if (lbl) lbl.textContent = `${T('sec_locations_h2')} ${i + 1}`;
+  });
+}
+
+/** Disables the Add button when 12 location cards exist. */
+function updateAddLocationBtn() {
+  const btn = document.getElementById('addLocationBtn');
+  if (btn) btn.disabled = document.querySelectorAll('#locationsList .location-editor-item').length >= 12;
+}
+
+/** Shows/hides bilingual name+note fields based on current adminContentLang. */
+function updateLocationLangVisibility() {
+  document.querySelectorAll('#locationsList .location-lang').forEach(el => {
+    const isDE = el.classList.contains('location-lang--de');
+    el.style.display = ((adminContentLang === 'de') === isDE) ? '' : 'none';
+  });
+}
+
+
+/* ============================================================
    CONTENT LANGUAGE SWITCHER (admin form tabs: 🇩🇪 / 🇬🇧)
    ============================================================ */
 
@@ -611,8 +800,9 @@ function switchAdminContentLang(newLang) {
   // Reload form with the new language's data
   loadFormData(adminContentLang, pendingContent);
 
-  // Refresh subject language visibility after reload
+  // Refresh subject and location language visibility after reload
   updateSubjectLangVisibility();
+  updateLocationLangVisibility();
 
   // Update tab active states
   syncContentLangTabs();
@@ -785,6 +975,11 @@ document.addEventListener('DOMContentLoaded', () => {
       refreshGalleryBadges();
       updateAddGalleryBtn();
     }
+  });
+
+  // Wire Add Location button
+  document.getElementById('addLocationBtn')?.addEventListener('click', () => {
+    addLocationItem('', '', '', '', '', '', null, null);
   });
 
   if (isAuthed()) {
