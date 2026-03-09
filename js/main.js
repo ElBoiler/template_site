@@ -357,7 +357,7 @@ function clearFieldError(fieldId, errorId) {
   }
 });
 
-contactForm.addEventListener('submit', e => {
+contactForm.addEventListener('submit', async e => {
   e.preventDefault();
 
   const nameVal    = document.getElementById('name').value.trim();
@@ -405,7 +405,7 @@ contactForm.addEventListener('submit', e => {
 
   if (isValid) {
     // Build and open mailto link
-    const content     = (typeof getContent === 'function') ? getContent() : {};
+    const content     = (typeof getContent === 'function') ? await getContent() : {};
     const recipient   = (content.contact && content.contact.email) || '';
     const subjectEl   = document.getElementById('subject');
     const subjectText = subjectEl.options[subjectEl.selectedIndex]?.text || subjectVal;

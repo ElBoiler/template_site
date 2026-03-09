@@ -1005,8 +1005,8 @@ function syncContentLangTabs() {
 /* ============================================================
    SAVE / RESET
    ============================================================ */
-document.getElementById('saveBtn').addEventListener('click', () => {
-  if (!pendingContent) pendingContent = getContent();
+document.getElementById('saveBtn').addEventListener('click', async () => {
+  if (!pendingContent) pendingContent = await getContent();
 
   // Flush the currently visible tab's fields
   captureFormIntoContent(adminContentLang, pendingContent);
@@ -1015,14 +1015,16 @@ document.getElementById('saveBtn').addEventListener('click', () => {
   pendingContent.companyName = get('f-companyName') || DEFAULT_CONTENT.companyName;
   pendingContent.contact     = buildContactFromForm();
 
-  saveContent(pendingContent); // from content.js
+  const saveResult = await saveContent(pendingContent); // from content.js
+  const saveBtn = document.getElementById('saveBtn');
+  if (saveBtn) saveBtn.textContent = saveResult.source === 'kv' ? 'KV ✓' : 'Lokal ✓';
   showToast(T('toast_saved'), 'success');
 });
 
-document.getElementById('resetBtn').addEventListener('click', () => {
+document.getElementById('resetBtn').addEventListener('click', async () => {
   if (!confirm(T('confirm_reset'))) return;
-  resetContent();                          // wipes localStorage → content.js
-  pendingContent = getContent();           // re-reads defaults
+  await resetContent();                          // wipes localStorage → content.js
+  pendingContent = await getContent();           // re-reads defaults
   loadFormData(adminContentLang, pendingContent);
   showToast(T('toast_reset'));
 });
@@ -1131,7 +1133,14 @@ function debounce(fn, delay) {
 /* ============================================================
    INIT
    ============================================================ */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  const contentObj = await getContent();
+
+  // Load saved Worker API key
+  const savedApiKey = localStorage.getItem('bds_api_key') || '';
+  const apiKeyInput = document.getElementById('f-api-key');
+  if (apiKeyInput) apiKeyInput.value = savedApiKey;
+
   // Wire content-language tab clicks
   document.querySelectorAll('#adminLangTabs .admin-lang-tab').forEach(tab => {
     tab.addEventListener('click', () => switchAdminContentLang(tab.dataset.lang));
@@ -1175,6 +1184,69 @@ document.addEventListener('DOMContentLoaded', () => {
     showLogin();
     document.getElementById('passwordInput').focus();
   }
+
+  // ── Storage panel handlers ──────────────────────────────────────────────
+
+  // Test connection
+  document.getElementById('btn-test-connection')?.addEventListener('click', async () => {
+    const key = (document.getElementById('f-api-key')?.value || '').trim();
+    localStorage.setItem('bds_api_key', key);
+    const statusEl = document.getElementById('storage-status');
+    if (!statusEl) return;
+    statusEl.textContent = '…';
+    statusEl.className = 'storage-status';
+    try {
+      const res  = await fetch('/api/ping', { headers: { 'Authorization': `Bearer ${key}` } });
+      const json = await res.json();
+      statusEl.className = 'storage-status ' + (json.ok ? 'status-ok' : 'status-err');
+      statusEl.textContent = json.ok
+        ? '✓ Connected to Cloudflare KV'
+        : '✗ ' + (json.error || 'Unexpected error');
+    } catch (_) {
+      statusEl.className = 'storage-status status-err';
+      statusEl.textContent = '✗ Could not reach API — are you running locally?';
+    }
+  });
+
+  // Export content.json
+  document.getElementById('btn-export')?.addEventListener('click', async () => {
+    const data = await getContent();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = Object.assign(document.createElement('a'), {
+      href: URL.createObjectURL(blob),
+      download: 'content.json'
+    });
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  // Import content.json
+  document.getElementById('btn-import')?.addEventListener('click', () => {
+    document.getElementById('f-import-file')?.click();
+  });
+
+  document.getElementById('f-import-file')?.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const statusEl = document.getElementById('transfer-status');
+    try {
+      const data   = JSON.parse(await file.text());
+      const result = await saveContent(data);
+      if (statusEl) {
+        statusEl.className = 'transfer-status status-ok';
+        statusEl.textContent = result.source === 'kv'
+          ? '✓ Imported to Cloudflare KV'
+          : '✓ Imported to local storage';
+      }
+      loadFormData(adminContentLang, data);
+    } catch (_) {
+      if (statusEl) {
+        statusEl.className = 'transfer-status status-err';
+        statusEl.textContent = '✗ Invalid or unreadable JSON file';
+      }
+    }
+    e.target.value = '';
+  });
 });
 
 

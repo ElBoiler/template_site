@@ -7,6 +7,7 @@
 'use strict';
 
 const CONTENT_KEY = 'bds_content';
+const API_URL = '/api/content';
 
 const DEFAULT_CONTENT = {
   companyName: 'Boyle Digital Services',  // language-neutral
@@ -173,23 +174,64 @@ const DEFAULT_CONTENT = {
    Storage helpers
    ============================================================ */
 
-function getContent() {
+async function getContent() {
+  // 1. Try Cloudflare KV via Worker API
   try {
-    const raw = localStorage.getItem(CONTENT_KEY);
-    if (!raw) return JSON.parse(JSON.stringify(DEFAULT_CONTENT));
-    // Deep-merge so new default keys (e.g. new language block) don't break old saves
-    return deepMerge(DEFAULT_CONTENT, JSON.parse(raw));
-  } catch {
-    return JSON.parse(JSON.stringify(DEFAULT_CONTENT));
+    const res = await fetch(API_URL);
+    if (res.ok) {
+      const remote = await res.json();
+      if (remote && Object.keys(remote).length > 0) {
+        return deepMerge(DEFAULT_CONTENT, remote);
+      }
+    }
+  } catch (_) { /* fall through to localStorage */ }
+
+  // 2. Fallback: localStorage (local file:// / offline / dev)
+  try {
+    const local = localStorage.getItem(CONTENT_KEY);
+    if (local) return deepMerge(DEFAULT_CONTENT, JSON.parse(local));
+  } catch (_) { /* fall through */ }
+
+  // 3. Last resort: hardcoded defaults
+  return JSON.parse(JSON.stringify(DEFAULT_CONTENT));
+}
+
+async function saveContent(data) {
+  const apiKey = localStorage.getItem('bds_api_key');
+  if (apiKey) {
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify(data)
+      });
+      if (res.ok) return { ok: true, source: 'kv' };
+    } catch (_) { /* fall through to localStorage */ }
   }
-}
 
-function saveContent(data) {
+  // Fallback: localStorage
   localStorage.setItem(CONTENT_KEY, JSON.stringify(data));
+  return { ok: true, source: 'local' };
 }
 
-function resetContent() {
+async function resetContent() {
   localStorage.removeItem(CONTENT_KEY);
+  const apiKey = localStorage.getItem('bds_api_key');
+  if (apiKey) {
+    try {
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify(DEFAULT_CONTENT)
+      });
+    } catch (_) { /* ignore — localStorage already cleared */ }
+  }
 }
 
 function deepMerge(defaults, overrides) {
@@ -580,9 +622,9 @@ function buildLocationCardHTML(loc, i) {
 /* ============================================================
    Auto-apply on index.html load
    ============================================================ */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const lang = typeof getLang === 'function' ? getLang() : 'de';
-  applyContent(getContent(), lang);
+  applyContent(await getContent(), lang);
 });
 
 

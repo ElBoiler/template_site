@@ -10,5 +10,13 @@
   },
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+  "kv_namespaces": [
+    {
+      // Create a KV namespace in Cloudflare dashboard → Workers & Pages → KV
+      // Then paste the namespace ID here
+      "binding": "BDS_CONTENT",
+      "id": "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+    }
   ]
 }

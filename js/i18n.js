@@ -418,6 +418,17 @@ const TRANSLATIONS = {
     sec_seo_biztype_local:     'LocalBusiness',
     sec_seo_biztype_org:       'Organization',
     admin_nav_seo:             '🔍 SEO',
+
+    admin_nav_storage:         '💾 Storage',
+    sec_storage_h2:            'Storage & Export',
+    sec_storage_api_h3:        'Cloudflare KV',
+    sec_storage_api_hint:      'Gib den WORKER_SECRET ein, den du per wrangler secret put gesetzt hast.',
+    sec_storage_key_lbl:       'Worker API Key',
+    sec_storage_test:          'Testen',
+    sec_storage_transfer_h3:   'Export / Import',
+    sec_storage_transfer_hint: 'Export lädt den Inhalt als content.json. Import lädt eine exportierte Datei.',
+    sec_storage_export:        '⬇ Exportieren',
+    sec_storage_import:        '⬆ Importieren',
   },
 
 
@@ -726,5 +737,16 @@ const TRANSLATIONS = {
     sec_seo_biztype_local:     'LocalBusiness',
     sec_seo_biztype_org:       'Organization',
     admin_nav_seo:             '🔍 SEO',
+
+    admin_nav_storage:         '💾 Storage',
+    sec_storage_h2:            'Storage & Export',
+    sec_storage_api_h3:        'Cloudflare KV',
+    sec_storage_api_hint:      'Enter the WORKER_SECRET you set via wrangler secret put WORKER_SECRET.',
+    sec_storage_key_lbl:       'Worker API Key',
+    sec_storage_test:          'Test',
+    sec_storage_transfer_h3:   'Export / Import',
+    sec_storage_transfer_hint: 'Export downloads current content as content.json. Import loads a previously exported file.',
+    sec_storage_export:        '⬇ Export',
+    sec_storage_import:        '⬆ Import',
   }
 };

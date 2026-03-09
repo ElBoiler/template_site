@@ -1157,3 +1157,27 @@ textarea, input, select { font-family: var(--font); }
   transition: color var(--trans);
 }
 .seo-char-counter.seo-counter-over { color: var(--a-danger); font-weight: 600; }
+
+/* ── Storage panel ───────────────────────────── */
+.storage-key-row {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+}
+.storage-key-row input { flex: 1; }
+
+.storage-status,
+.transfer-status {
+  margin-top: .5rem;
+  font-size: .875rem;
+  min-height: 1.25rem;
+}
+.status-ok  { color: var(--a-teal); }
+.status-err { color: var(--a-danger, #e53e3e); }
+
+.storage-transfer-row {
+  display: flex;
+  gap: .75rem;
+  flex-wrap: wrap;
+  margin-top: .75rem;
+}

@@ -82,6 +82,7 @@
           <li><a href="#sec-appointments" class="sidebar-link" data-i18n="sec_appointments_h2">📅 Termine</a></li>
           <li><a href="#sec-layout"       class="sidebar-link" data-i18n="admin_nav_layout">⊞ Struktur</a></li>
           <li><a href="#sec-seo"          class="sidebar-link" data-i18n="admin_nav_seo">🔍 SEO</a></li>
+          <li><a href="#" class="admin-nav-link" data-section="sec-storage" data-i18n="admin_nav_storage">💾 Storage</a></li>
           <li><a href="#sec-contact"   class="sidebar-link" data-i18n="admin_nav_contact">✉ Kontakt</a></li>
           <li><a href="#sec-theme"    class="sidebar-link" data-i18n="admin_nav_theme">🎨 Farbschema</a></li>
           <li class="sidebar-divider"></li>
@@ -333,6 +334,35 @@
                 <option value="LocalBusiness">LocalBusiness</option>
                 <option value="Organization">Organization</option>
               </select></div>
+          </div>
+        </section>
+
+        <!-- ── STORAGE ───────────────────────────── -->
+        <section id="sec-storage" class="admin-section" hidden>
+          <h2 data-i18n="sec_storage_h2">Storage &amp; Export</h2>
+
+          <div class="card">
+            <h3 data-i18n="sec_storage_api_h3">Cloudflare KV Connection</h3>
+            <p class="field-hint" data-i18n="sec_storage_api_hint">Enter the WORKER_SECRET you set via <code>wrangler secret put WORKER_SECRET</code>.</p>
+            <div class="field-group">
+              <label for="f-api-key" data-i18n="sec_storage_key_lbl">Worker API Key</label>
+              <div class="storage-key-row">
+                <input type="password" id="f-api-key" autocomplete="off">
+                <button id="btn-test-connection" type="button" class="btn btn-secondary" data-i18n="sec_storage_test">Test</button>
+              </div>
+            </div>
+            <div id="storage-status" class="storage-status" aria-live="polite"></div>
+          </div>
+
+          <div class="card">
+            <h3 data-i18n="sec_storage_transfer_h3">Export / Import</h3>
+            <p class="field-hint" data-i18n="sec_storage_transfer_hint">Export downloads current content as content.json. Import loads a previously exported file into KV (or localStorage if no API key is set).</p>
+            <div class="storage-transfer-row">
+              <button id="btn-export" type="button" class="btn btn-secondary" data-i18n="sec_storage_export">⬇ Export</button>
+              <button id="btn-import" type="button" class="btn btn-secondary" data-i18n="sec_storage_import">⬆ Import</button>
+              <input type="file" id="f-import-file" accept=".json" hidden>
+            </div>
+            <div id="transfer-status" class="transfer-status" aria-live="polite"></div>
           </div>
         </section>
 
