@@ -1151,6 +1151,17 @@ h3 {
   color: rgba(255, 255, 255, 0.4);
 }
 
+.footer-admin-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.2);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color var(--trans);
+}
+.footer-admin-link:hover { color: rgba(255, 255, 255, 0.6); }
+
 
 /* ============================================================
    15. RESPONSIVE HELPERS
