@@ -34,23 +34,22 @@ const DEFAULT_CONTENT = {
   /* ── German content (default language) ──────────────────── */
   de: {
     hero: {
-      eyebrow:  'Digitalagentur',
-      headline: 'Wachstum durch digitale Exzellenz',
-      subtitle: 'Wir helfen Unternehmen, sich in der digitalen Welt zu behaupten – durch strategisches Produktmanagement, datengetriebenes Marketing und moderne Webentwicklung.'
+      eyebrow:  'Ihr Digitalbüro — Berlin-Brandenburg',
+      headline: 'Sie führen Ihr Unternehmen. Wir kümmern uns um Ihren digitalen Auftritt.',
+      subtitle: 'Viele Unternehmen wissen, dass sie online präsenter sein sollten — aber es fehlt die Zeit oder das Know-how. Wir übernehmen das für Sie: verständlich, zuverlässig und ohne Fachchinesisch.'
     },
 
     about: {
-      heading: 'Ihr Partner für die digitale Transformation',
+      heading: 'Digitale Präsenz — ohne Aufwand für Sie',
       paragraphs: [
-        'Bei Boyle Digital Services sind wir überzeugt, dass jedes Unternehmen eine starke digitale Präsenz verdient. Gegründet mit Leidenschaft für Technologie und dem Anspruch auf messbare Ergebnisse, haben wir bereits Hunderte von Unternehmen dabei unterstützt, ihre digitale Strategie von Grund auf zu transformieren.',
-        'Unser interdisziplinäres Team vereint tiefgehende technische Expertise mit kreativem Denken und datengestützten Erkenntnissen. Egal, ob Sie ein neues Produkt einführen, Ihre Marketingaktivitäten skalieren oder Ihren Webauftritt erneuern möchten – wir liefern Lösungen, die wirklich etwas bewegen.',
-        'Wir sind nicht nur ein Dienstleister – wir sind ein langfristiger Partner, der in Ihren Erfolg investiert. Jede Zusammenarbeit beginnt mit einem gründlichen Verständnis Ihrer Ziele, Ihrer Zielgruppe und Ihres Wettbewerbsumfelds.'
+        'Ein gepflegter Webauftritt, der gefunden wird und Vertrauen weckt — das wünschen sich die meisten Unternehmen. Doch zwischen Tagesgeschäft und Kundenterminen bleibt dafür selten Zeit. Genau da kommen wir ins Spiel.',
+        'Wir sind ein kleines, erfahrenes Team aus der Region Berlin-Brandenburg. Wir sprechen kein Agentur-Kauderwelsch, sondern klären mit Ihnen gemeinsam, was Sie wirklich brauchen — und setzen es dann um.',
+        'Ob neue Website, bessere Sichtbarkeit bei Google oder einfach jemand, der sich regelmäßig darum kümmert: Wir sind Ihr direkter Ansprechpartner — verlässlich und vor Ort.'
       ],
       stats: [
-        { number: 150, suffix: '+',    label: 'Zufriedene Kunden'       },
-        { number: 320, suffix: '+',    label: 'Abgeschlossene Projekte' },
-        { number: 8,   suffix: ' J.',  label: 'Jahre Erfahrung'         },
-        { number: 98,  suffix: '%',    label: 'Kundenzufriedenheit'     }
+        { number: 5,   suffix: '+',  label: 'Jahre Erfahrung'      },
+        { number: 30,  suffix: '+',  label: 'Kundenprojekte'        },
+        { number: 100, suffix: '%',  label: 'Persönliche Betreuung' }
       ]
     },
 
@@ -58,17 +57,17 @@ const DEFAULT_CONTENT = {
       {
         icon:  '📋',
         title: 'Produktmanagement',
-        desc:  'Strategische Roadmaps, Backlog-Priorisierung und bereichsübergreifende Teamkoordination – damit Ihre Produktvision termingerecht und budgetkonform Wirklichkeit wird.'
+        desc:  'Sie haben eine Idee oder ein laufendes Projekt, aber kein klares System dahinter? Wir bringen Struktur in Ihren digitalen Prozess — von der Planung bis zur Umsetzung.'
       },
       {
         icon:  '💻',
         title: 'Webentwicklung',
-        desc:  'Individuelle, responsive Websites und Web-Applikationen mit modernen Technologien – schnell, barrierefrei und für maximale Conversion optimiert.'
+        desc:  'Ihre Website soll gefunden werden, auf dem Handy genauso gut aussehen wie am Computer und Besucher zur Kontaktaufnahme bewegen. Wir bauen das für Sie – ohne Fachjargon, ohne versteckte Kosten.'
       },
       {
         icon:  '🔍',
         title: 'SEO & Analytics',
-        desc:  'Technische SEO-Audits, Content-Strategie und Analytics-Dashboards, die Ihnen klaren Einblick in die treibenden Faktoren Ihres Wachstums geben.'
+        desc:  'Wer sucht Sie gerade — und warum findet er die Konkurrenz zuerst? Wir zeigen Ihnen, wo Sie stehen, und verbessern Ihre Sichtbarkeit bei Google Schritt für Schritt.'
       }
     ],
 
@@ -93,23 +92,22 @@ const DEFAULT_CONTENT = {
   /* ── English content ─────────────────────────────────────── */
   en: {
     hero: {
-      eyebrow:  'Digital Services Agency',
-      headline: 'Driving Growth Through Digital Excellence',
-      subtitle: 'We help businesses thrive in the digital landscape through strategic product management, data-driven marketing, and cutting-edge web development.'
+      eyebrow:  'Your Digital Partner — Berlin-Brandenburg',
+      headline: 'You run your business. We handle your digital presence.',
+      subtitle: 'Most businesses know they should be more visible online — but there\'s never enough time or know-how. We take care of it for you: clear, reliable, and without the jargon.'
     },
 
     about: {
-      heading: 'Your Partner in Digital Transformation',
+      heading: 'Digital presence — handled for you',
       paragraphs: [
-        'At Boyle Digital Services, we believe every business deserves a powerful digital presence. Founded with a passion for technology and a commitment to measurable results, we\'ve helped hundreds of businesses transform their digital strategy from the ground up.',
-        'Our multidisciplinary team combines deep technical expertise with creative thinking and data-driven insights. Whether you\'re launching a new product, scaling your marketing efforts, or rebuilding your web presence, we deliver solutions that move the needle.',
-        'We\'re not just a service provider — we\'re a long-term partner invested in your success. Every engagement begins with a thorough understanding of your goals, audience, and competitive landscape.'
+        'A professional website that gets found and builds trust — that\'s what most businesses want. But between daily operations and client meetings, there\'s rarely time to make it happen. That\'s where we come in.',
+        'We\'re a small, experienced team from the Berlin-Brandenburg region. No agency buzzwords — just a straight conversation about what you actually need, followed by getting it done.',
+        'Whether it\'s a new website, better Google visibility, or someone who keeps things running — we\'re your go-to contact: dependable and local.'
       ],
       stats: [
-        { number: 150, suffix: '+',    label: 'Happy Clients'       },
-        { number: 320, suffix: '+',    label: 'Projects Delivered'  },
-        { number: 8,   suffix: ' yrs', label: 'Years of Experience' },
-        { number: 98,  suffix: '%',    label: 'Client Satisfaction' }
+        { number: 5,   suffix: '+',    label: 'Years of Experience' },
+        { number: 30,  suffix: '+',    label: 'Client Projects'     },
+        { number: 100, suffix: '%',    label: 'Personal Service'    }
       ]
     },
 
@@ -117,17 +115,17 @@ const DEFAULT_CONTENT = {
       {
         icon:  '📋',
         title: 'Product Management',
-        desc:  'Strategic roadmapping, backlog prioritisation, and cross-functional team alignment to bring your product vision to life on time and on budget.'
+        desc:  'Got an idea or a running project but no clear system behind it? We bring structure to your digital workflow — from planning through to delivery.'
       },
       {
         icon:  '💻',
         title: 'Web Development',
-        desc:  'Custom, responsive websites and web applications built with modern technologies — fast, accessible, and optimised for conversion.'
+        desc:  'Your website should get found, look great on mobile, and give visitors a reason to get in touch. We build it for you — no jargon, no hidden costs.'
       },
       {
         icon:  '🔍',
         title: 'SEO & Analytics',
-        desc:  'Technical SEO audits, content strategy, and analytics dashboards that give you clear visibility into what\'s driving your growth.'
+        desc:  'Who\'s searching for you right now — and why are they finding your competitors first? We show you where you stand and improve your Google visibility step by step.'
       }
     ],
 
@@ -287,6 +285,10 @@ function applyContent(data, lang) {
     }
   }
 
+  /* Nav link visibility — mirrors section visibility toggles */
+  toggleNavLink('#gallery',   data.referencesVisible !== false);
+  toggleNavLink('#locations', data.locationsVisible  !== false);
+
   /* Re-register newly built .reveal and .counter elements with main.js observers */
   if (typeof window.observeRevealEls === 'function') window.observeRevealEls();
   if (typeof window.observeCounterEls === 'function') window.observeCounterEls();
@@ -378,6 +380,32 @@ function esc(str) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
+}
+
+/**
+ * Shows or hides nav links (desktop + mobile) and footer quick links
+ * for a given anchor href, based on whether the section is visible.
+ * @param {string}  href  e.g. '#gallery' or '#locations'
+ * @param {boolean} show
+ */
+function toggleNavLink(href, show) {
+  // Desktop nav <ul class="nav-links"> — hide the <li> wrapper
+  document.querySelectorAll(`.nav-links a[href="${href}"]`).forEach(a => {
+    if (a.parentElement && a.parentElement.tagName === 'LI') {
+      a.parentElement.style.display = show ? '' : 'none';
+    }
+  });
+  // Mobile menu <div class="mobile-menu"> — hide the <a> directly (no <li>)
+  document.querySelectorAll(`.mobile-menu a[href="${href}"]`).forEach(a => {
+    a.style.display = show ? '' : 'none';
+  });
+  // Footer quick links <div class="footer-col"> — hide the <li> wrapper
+  // Note: footer only has #gallery; #locations call is a safe no-op.
+  document.querySelectorAll(`.footer-col a[href="${href}"]`).forEach(a => {
+    if (a.parentElement && a.parentElement.tagName === 'LI') {
+      a.parentElement.style.display = show ? '' : 'none';
+    }
+  });
 }
 
 /** Show or hide all elements labelled with [data-contact-item="key"]. */
