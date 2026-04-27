@@ -430,6 +430,16 @@ const TRANSLATIONS = {
     sec_storage_transfer_hint: 'Export lädt den Inhalt als content.json. Import lädt eine exportierte Datei.',
     sec_storage_export:        '⬇ Exportieren',
     sec_storage_import:        '⬆ Importieren',
+
+    /* ── About-me page ──────────────────────────────────── */
+    aboutme_meta_title: 'Über mich – Boyle Digital Services',
+    aboutme_eyebrow:    'Über mich',
+    aboutme_heading:    'Tom Boyle',
+    aboutme_role:       'Technical Account Manager · Product Manager',
+    aboutme_languages:  'Englisch / Deutsch',
+    aboutme_p1:         'Ich bin Technical Account Manager und Product Manager in Berlin — mit über 10 Jahren Erfahrung darin, komplexe technische Produkte in messbare Geschäftsergebnisse zu verwandeln. Mit einem Masterabschluss in Ingenieurwesen spreche ich die Sprache von Kunden und Entwicklern gleichermaßen — das heißt, ich manage nicht nur Beziehungen, sondern löse die eigentlichen Probleme.',
+    aboutme_p2:         'Bei ResearchGate habe ich das organische Suchvolumen über 170 Millionen indexierte Seiten um 300 % gesteigert. Bei advizeo (ehemals Comgy, akquiriert) habe ich die gesamte Feedback-Schleife zwischen Kunden und Engineering verantwortet, Lösungszeiten verkürzt und Prozesse skaliert — bevor ich in eine erweiterte Enterprise-Rolle für die DACH-Region gewechselt bin, in der ich Kundenfeedback direkt in Roadmap-Entscheidungen übersetze.',
+    aboutme_p3:         'Ich arbeite hands-on mit SQL, Python und Datentools — und nutze aktiv KI, um interne Lösungen zu bauen und Ideen schneller zu prototypisieren. Wer jemanden sucht, der in einem technischen Gespräch mitdenkt und danach ein sauberes Produktanforderungsdokument schreibt: ich bin die richtige Person.',
   },
 
 
@@ -750,5 +760,15 @@ const TRANSLATIONS = {
     sec_storage_transfer_hint: 'Export downloads current content as content.json. Import loads a previously exported file.',
     sec_storage_export:        '⬇ Export',
     sec_storage_import:        '⬆ Import',
+
+    /* ── About-me page ──────────────────────────────────── */
+    aboutme_meta_title: 'About me – Boyle Digital Services',
+    aboutme_eyebrow:    'About me',
+    aboutme_heading:    'Tom Boyle',
+    aboutme_role:       'Technical Account Manager · Product Manager',
+    aboutme_languages:  'English / German',
+    aboutme_p1:         "I'm a Technical Account Manager and Product Manager based in Berlin, with 10+ years of experience turning complex technical products into measurable business outcomes. I hold an engineering master's degree and speak the language of both customers and engineers — which means I don't just manage relationships, I fix the underlying problems.",
+    aboutme_p2:         'At ResearchGate I drove 300% growth in organic search traffic across 170M+ indexed pages. At advizeo (formerly Comgy, acquired) I owned the entire customer-to-engineering feedback loop, reduced resolution times, and scaled operations without adding headcount — before stepping into a broader enterprise role across the DACH region, turning customer insight into roadmap influence.',
+    aboutme_p3:         "I'm hands-on with SQL, Python, and data tooling, and I actively leverage AI to build internal solutions and prototype faster. If you need someone who can sit in a technical conversation, walk out, and write a product requirement — I'm your person.",
   }
 };
