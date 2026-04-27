@@ -257,6 +257,53 @@ function loadFormData(lang, contentObj) {
   val('f-social-twitter',   social.twitter);
   val('f-social-instagram', social.instagram);
   val('f-social-tiktok',    social.tiktok);
+
+  /* ── Contact — opening hours (language-neutral) ── */
+  val('f-contact-hours', data.contact.hours || '');
+
+  /* ── Jobs ── */
+  val('f-jobs-title-de',    ((data.de || {}).jobs || {}).title    || '');
+  val('f-jobs-body-de',     ((data.de || {}).jobs || {}).body     || '');
+  val('f-jobs-btn-text-de', ((data.de || {}).jobs || {}).btnText  || '');
+  val('f-jobs-title-en',    ((data.en || {}).jobs || {}).title    || '');
+  val('f-jobs-body-en',     ((data.en || {}).jobs || {}).body     || '');
+  val('f-jobs-btn-text-en', ((data.en || {}).jobs || {}).btnText  || '');
+  val('f-jobs-btn-url',     data.jobsBtnUrl || '');
+  const jobsToggle = document.getElementById('f-jobs-visible');
+  if (jobsToggle) jobsToggle.checked = (data.jobsVisible !== false);
+
+  /* ── Appointments ── */
+  val('f-appointments-title-de',    ((data.de || {}).appointments || {}).title    || '');
+  val('f-appointments-body-de',     ((data.de || {}).appointments || {}).body     || '');
+  val('f-appointments-btn-text-de', ((data.de || {}).appointments || {}).btnText  || '');
+  val('f-appointments-title-en',    ((data.en || {}).appointments || {}).title    || '');
+  val('f-appointments-body-en',     ((data.en || {}).appointments || {}).body     || '');
+  val('f-appointments-btn-text-en', ((data.en || {}).appointments || {}).btnText  || '');
+  val('f-appointments-btn-url',     data.appointmentsBtnUrl || '');
+  const apptToggle = document.getElementById('f-appointments-visible');
+  if (apptToggle) apptToggle.checked = (data.appointmentsVisible !== false);
+
+  /* ── Layout ── */
+  renderLayoutEditor(data.sectionOrder || LAYOUT_SECTION_IDS);
+
+  /* ── SEO ── */
+  const seoRoot = data.seo || {};
+  val('f-seo-title-de',  ((data.de || {}).seo || {}).title       || '');
+  val('f-seo-desc-de',   ((data.de || {}).seo || {}).description || '');
+  val('f-seo-title-en',  ((data.en || {}).seo || {}).title       || '');
+  val('f-seo-desc-en',   ((data.en || {}).seo || {}).description || '');
+  val('f-seo-canonical', seoRoot.canonicalUrl  || '');
+  val('f-seo-ogimage',   seoRoot.ogImageUrl    || '');
+  val('f-seo-twitter',   seoRoot.twitterHandle || '');
+  const biztypeEl = document.getElementById('f-seo-biztype');
+  if (biztypeEl) biztypeEl.value = seoRoot.businessType || 'ProfessionalService';
+
+  /* ── Update bilingual visibility for new sections ── */
+  updateJobsLangVisibility();
+  updateAppointmentsLangVisibility();
+  updateSeoLangVisibility();
+  updateSeoDescCount('de');
+  updateSeoDescCount('en');
 }
 
 /** Set a field's value */
@@ -396,6 +443,59 @@ function captureFormIntoContent(lang, contentObj) {
   /* Locations visibility — language-neutral */
   const locToggle = document.getElementById('f-locations-visible');
   if (locToggle) contentObj.locationsVisible = locToggle.checked;
+
+  /* ── Opening hours (language-neutral) ── */
+  contentObj.contact = contentObj.contact || {};
+  contentObj.contact.hours = get('f-contact-hours');
+
+  /* ── Jobs ── */
+  contentObj.de.jobs = {
+    title:   (document.getElementById('f-jobs-title-de')?.value    || '').trim(),
+    body:    (document.getElementById('f-jobs-body-de')?.value     || '').trim(),
+    btnText: (document.getElementById('f-jobs-btn-text-de')?.value || '').trim()
+  };
+  contentObj.en.jobs = {
+    title:   (document.getElementById('f-jobs-title-en')?.value    || '').trim(),
+    body:    (document.getElementById('f-jobs-body-en')?.value     || '').trim(),
+    btnText: (document.getElementById('f-jobs-btn-text-en')?.value || '').trim()
+  };
+  contentObj.jobsBtnUrl = get('f-jobs-btn-url');
+  const jobsTgl = document.getElementById('f-jobs-visible');
+  if (jobsTgl) contentObj.jobsVisible = jobsTgl.checked;
+
+  /* ── Appointments ── */
+  contentObj.de.appointments = {
+    title:   (document.getElementById('f-appointments-title-de')?.value    || '').trim(),
+    body:    (document.getElementById('f-appointments-body-de')?.value     || '').trim(),
+    btnText: (document.getElementById('f-appointments-btn-text-de')?.value || '').trim()
+  };
+  contentObj.en.appointments = {
+    title:   (document.getElementById('f-appointments-title-en')?.value    || '').trim(),
+    body:    (document.getElementById('f-appointments-body-en')?.value     || '').trim(),
+    btnText: (document.getElementById('f-appointments-btn-text-en')?.value || '').trim()
+  };
+  contentObj.appointmentsBtnUrl = get('f-appointments-btn-url');
+  const apptTgl = document.getElementById('f-appointments-visible');
+  if (apptTgl) contentObj.appointmentsVisible = apptTgl.checked;
+
+  /* ── Layout ── */
+  contentObj.sectionOrder = captureLayoutOrder();
+
+  /* ── SEO ── */
+  contentObj.de.seo = {
+    title:       (document.getElementById('f-seo-title-de')?.value || '').trim(),
+    description: (document.getElementById('f-seo-desc-de')?.value  || '').trim()
+  };
+  contentObj.en.seo = {
+    title:       (document.getElementById('f-seo-title-en')?.value || '').trim(),
+    description: (document.getElementById('f-seo-desc-en')?.value  || '').trim()
+  };
+  contentObj.seo = {
+    canonicalUrl:  get('f-seo-canonical'),
+    ogImageUrl:    get('f-seo-ogimage'),
+    twitterHandle: get('f-seo-twitter'),
+    businessType:  document.getElementById('f-seo-biztype')?.value || 'ProfessionalService'
+  };
 }
 
 /* ============================================================
@@ -473,6 +573,7 @@ function buildContactFromForm() {
     address:  get('f-contact-address'),
     phone:    get('f-contact-phone'),
     email:    get('f-contact-email'),
+    hours:   get('f-contact-hours'),
     subjects,
     social: {
       linkedin:  get('f-social-linkedin'),
@@ -775,6 +876,81 @@ function updateLocationLangVisibility() {
   });
 }
 
+function updateJobsLangVisibility() {
+  document.querySelectorAll('.jobs-lang').forEach(el => {
+    el.style.display = el.classList.contains('jobs-lang--' + adminContentLang) ? '' : 'none';
+  });
+}
+
+function updateAppointmentsLangVisibility() {
+  document.querySelectorAll('.appointments-lang').forEach(el => {
+    el.style.display = el.classList.contains('appointments-lang--' + adminContentLang) ? '' : 'none';
+  });
+}
+
+function updateSeoLangVisibility() {
+  document.querySelectorAll('.seo-lang').forEach(el => {
+    el.style.display = el.classList.contains('seo-lang--' + adminContentLang) ? '' : 'none';
+  });
+}
+
+/* ============================================================
+   LAYOUT EDITOR — section ordering
+   ============================================================ */
+const LAYOUT_SECTION_IDS = ['about','services','gallery','locations','jobs','appointments','contact'];
+
+function renderLayoutEditor(order) {
+  const list = document.getElementById('layoutList');
+  if (!list) return;
+  list.innerHTML = '';
+  (order && order.length ? order : LAYOUT_SECTION_IDS).forEach(id => {
+    const row = document.createElement('div');
+    row.className = 'layout-section-row';
+    row.dataset.sectionId = id;
+    row.innerHTML = `<span class="layout-section-name">${T('layout_' + id)}</span>
+      <div class="layout-btns">
+        <button type="button" class="layout-btn layout-up">${T('sec_layout_up')}</button>
+        <button type="button" class="layout-btn layout-down">${T('sec_layout_down')}</button>
+      </div>`;
+    row.querySelector('.layout-up').addEventListener('click',   () => moveSectionRow(row, -1));
+    row.querySelector('.layout-down').addEventListener('click', () => moveSectionRow(row,  1));
+    list.appendChild(row);
+  });
+  updateLayoutBtnStates();
+}
+
+function moveSectionRow(row, dir) {
+  const rows = Array.from(document.querySelectorAll('#layoutList .layout-section-row'));
+  const idx  = rows.indexOf(row);
+  const list = document.getElementById('layoutList');
+  if (dir === -1 && idx > 0)                   list.insertBefore(row, rows[idx - 1]);
+  else if (dir === 1 && idx < rows.length - 1) list.insertBefore(rows[idx + 1], row);
+  updateLayoutBtnStates();
+}
+
+function updateLayoutBtnStates() {
+  const rows = Array.from(document.querySelectorAll('#layoutList .layout-section-row'));
+  rows.forEach((row, i) => {
+    row.querySelector('.layout-up').disabled   = (i === 0);
+    row.querySelector('.layout-down').disabled = (i === rows.length - 1);
+  });
+}
+
+function captureLayoutOrder() {
+  return Array.from(document.querySelectorAll('#layoutList .layout-section-row'),
+    r => r.dataset.sectionId);
+}
+
+/* ── SEO char counter ── */
+function updateSeoDescCount(lang) {
+  const l  = lang || adminContentLang;
+  const ta = document.getElementById('f-seo-desc-' + l);
+  const ct = document.getElementById('seo-desc-counter-' + l);
+  if (!ta || !ct) return;
+  ct.firstChild.textContent = ta.value.length + ' ';
+  ct.classList.toggle('seo-counter-over', ta.value.length > 155);
+}
+
 
 /* ============================================================
    CONTENT LANGUAGE SWITCHER (admin form tabs: 🇩🇪 / 🇬🇧)
@@ -803,6 +979,14 @@ function switchAdminContentLang(newLang) {
   // Refresh subject and location language visibility after reload
   updateSubjectLangVisibility();
   updateLocationLangVisibility();
+  updateJobsLangVisibility();
+  updateAppointmentsLangVisibility();
+  updateSeoLangVisibility();
+  // Refresh bilingual SEO fields for new lang
+  const newSeo = ((contentObj || {})[adminContentLang] || {}).seo || {};
+  val('f-seo-title-' + adminContentLang, newSeo.title       || '');
+  val('f-seo-desc-'  + adminContentLang, newSeo.description || '');
+  updateSeoDescCount(adminContentLang);
 
   // Update tab active states
   syncContentLangTabs();
@@ -821,8 +1005,8 @@ function syncContentLangTabs() {
 /* ============================================================
    SAVE / RESET
    ============================================================ */
-document.getElementById('saveBtn').addEventListener('click', () => {
-  if (!pendingContent) pendingContent = getContent();
+document.getElementById('saveBtn').addEventListener('click', async () => {
+  if (!pendingContent) pendingContent = await getContent();
 
   // Flush the currently visible tab's fields
   captureFormIntoContent(adminContentLang, pendingContent);
@@ -831,14 +1015,16 @@ document.getElementById('saveBtn').addEventListener('click', () => {
   pendingContent.companyName = get('f-companyName') || DEFAULT_CONTENT.companyName;
   pendingContent.contact     = buildContactFromForm();
 
-  saveContent(pendingContent); // from content.js
+  const saveResult = await saveContent(pendingContent); // from content.js
+  const saveBtn = document.getElementById('saveBtn');
+  if (saveBtn) saveBtn.textContent = saveResult.source === 'kv' ? 'KV ✓' : 'Lokal ✓';
   showToast(T('toast_saved'), 'success');
 });
 
-document.getElementById('resetBtn').addEventListener('click', () => {
+document.getElementById('resetBtn').addEventListener('click', async () => {
   if (!confirm(T('confirm_reset'))) return;
-  resetContent();                          // wipes localStorage → content.js
-  pendingContent = getContent();           // re-reads defaults
+  await resetContent();                          // wipes localStorage → content.js
+  pendingContent = await getContent();           // re-reads defaults
   loadFormData(adminContentLang, pendingContent);
   showToast(T('toast_reset'));
 });
@@ -947,7 +1133,14 @@ function debounce(fn, delay) {
 /* ============================================================
    INIT
    ============================================================ */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  const contentObj = await getContent();
+
+  // Load saved Worker API key
+  const savedApiKey = localStorage.getItem('bds_api_key') || '';
+  const apiKeyInput = document.getElementById('f-api-key');
+  if (apiKeyInput) apiKeyInput.value = savedApiKey;
+
   // Wire content-language tab clicks
   document.querySelectorAll('#adminLangTabs .admin-lang-tab').forEach(tab => {
     tab.addEventListener('click', () => switchAdminContentLang(tab.dataset.lang));
@@ -982,12 +1175,78 @@ document.addEventListener('DOMContentLoaded', () => {
     addLocationItem('', '', '', '', '', '', null, null);
   });
 
+  document.getElementById('f-seo-desc-de')?.addEventListener('input', () => updateSeoDescCount('de'));
+  document.getElementById('f-seo-desc-en')?.addEventListener('input', () => updateSeoDescCount('en'));
+
   if (isAuthed()) {
     showPanel();
   } else {
     showLogin();
     document.getElementById('passwordInput').focus();
   }
+
+  // ── Storage panel handlers ──────────────────────────────────────────────
+
+  // Test connection
+  document.getElementById('btn-test-connection')?.addEventListener('click', async () => {
+    const key = (document.getElementById('f-api-key')?.value || '').trim();
+    localStorage.setItem('bds_api_key', key);
+    const statusEl = document.getElementById('storage-status');
+    if (!statusEl) return;
+    statusEl.textContent = '…';
+    statusEl.className = 'storage-status';
+    try {
+      const res  = await fetch('/api/ping', { headers: { 'Authorization': `Bearer ${key}` } });
+      const json = await res.json();
+      statusEl.className = 'storage-status ' + (json.ok ? 'status-ok' : 'status-err');
+      statusEl.textContent = json.ok
+        ? '✓ Connected to Cloudflare KV'
+        : '✗ ' + (json.error || 'Unexpected error');
+    } catch (_) {
+      statusEl.className = 'storage-status status-err';
+      statusEl.textContent = '✗ Could not reach API — are you running locally?';
+    }
+  });
+
+  // Export content.json
+  document.getElementById('btn-export')?.addEventListener('click', async () => {
+    const data = await getContent();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = Object.assign(document.createElement('a'), {
+      href: URL.createObjectURL(blob),
+      download: 'content.json'
+    });
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  // Import content.json
+  document.getElementById('btn-import')?.addEventListener('click', () => {
+    document.getElementById('f-import-file')?.click();
+  });
+
+  document.getElementById('f-import-file')?.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const statusEl = document.getElementById('transfer-status');
+    try {
+      const data   = JSON.parse(await file.text());
+      const result = await saveContent(data);
+      if (statusEl) {
+        statusEl.className = 'transfer-status status-ok';
+        statusEl.textContent = result.source === 'kv'
+          ? '✓ Imported to Cloudflare KV'
+          : '✓ Imported to local storage';
+      }
+      loadFormData(adminContentLang, data);
+    } catch (_) {
+      if (statusEl) {
+        statusEl.className = 'transfer-status status-err';
+        statusEl.textContent = '✗ Invalid or unreadable JSON file';
+      }
+    }
+    e.target.value = '';
+  });
 });
 
 

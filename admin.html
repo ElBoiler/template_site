@@ -78,6 +78,11 @@
           <li><a href="#sec-services" class="sidebar-link" data-i18n="admin_nav_services">🛠 Leistungen</a></li>
           <li><a href="#sec-gallery"   class="sidebar-link" data-i18n="admin_nav_gallery">🖼 Referenzen</a></li>
           <li><a href="#sec-locations" class="sidebar-link" data-i18n="sec_locations_h2">📍 Standorte</a></li>
+          <li><a href="#sec-jobs"         class="sidebar-link" data-i18n="sec_jobs_h2">💼 Stellen</a></li>
+          <li><a href="#sec-appointments" class="sidebar-link" data-i18n="sec_appointments_h2">📅 Termine</a></li>
+          <li><a href="#sec-layout"       class="sidebar-link" data-i18n="admin_nav_layout">⊞ Struktur</a></li>
+          <li><a href="#sec-seo"          class="sidebar-link" data-i18n="admin_nav_seo">🔍 SEO</a></li>
+          <li><a href="#" class="admin-nav-link" data-section="sec-storage" data-i18n="admin_nav_storage">💾 Storage</a></li>
           <li><a href="#sec-contact"   class="sidebar-link" data-i18n="admin_nav_contact">✉ Kontakt</a></li>
           <li><a href="#sec-theme"    class="sidebar-link" data-i18n="admin_nav_theme">🎨 Farbschema</a></li>
           <li class="sidebar-divider"></li>
@@ -211,6 +216,156 @@
           <button type="button" class="btn-add-item" id="addLocationBtn" data-i18n="sec_location_add">+ Standort hinzufügen</button>
         </section>
 
+        <!-- ── JOBS ──────────────────────────────── -->
+        <section class="admin-section" id="sec-jobs">
+          <div class="section-title">
+            <h2 data-i18n="sec_jobs_h2">Stellen</h2>
+            <p data-i18n="sec_jobs_desc">Stellenangebote verwalten.</p>
+          </div>
+          <div class="card toggle-card">
+            <label class="toggle-label">
+              <input type="checkbox" id="f-jobs-visible" checked>
+              <span data-i18n="sec_jobs_visible_lbl">Abschnitt anzeigen</span>
+            </label>
+            <p class="field-hint" data-i18n="sec_jobs_visible_desc">Blendet den Stellen-Abschnitt aus, wenn deaktiviert.</p>
+          </div>
+          <div class="card">
+            <div class="jobs-lang jobs-lang--de">
+              <div class="field-group"><label data-i18n="sec_jobs_title_lbl">Titel</label>
+                <input type="text" id="f-jobs-title-de" placeholder="Offene Stellen"></div>
+              <div class="field-group"><label data-i18n="sec_jobs_body_lbl">Beschreibung</label>
+                <textarea id="f-jobs-body-de" rows="4"></textarea></div>
+              <div class="field-group"><label data-i18n="sec_jobs_btn_text_lbl">Button-Beschriftung</label>
+                <input type="text" id="f-jobs-btn-text-de" placeholder="Jetzt bewerben"></div>
+            </div>
+            <div class="jobs-lang jobs-lang--en">
+              <div class="field-group"><label data-i18n="sec_jobs_title_lbl">Title</label>
+                <input type="text" id="f-jobs-title-en" placeholder="Open Positions"></div>
+              <div class="field-group"><label data-i18n="sec_jobs_body_lbl">Body Text</label>
+                <textarea id="f-jobs-body-en" rows="4"></textarea></div>
+              <div class="field-group"><label data-i18n="sec_jobs_btn_text_lbl">Button Label</label>
+                <input type="text" id="f-jobs-btn-text-en" placeholder="Apply Now"></div>
+            </div>
+            <div class="field-group">
+              <label for="f-jobs-btn-url" data-i18n="sec_jobs_btn_url_lbl">Button-URL</label>
+              <input type="url" id="f-jobs-btn-url" placeholder="https://…">
+            </div>
+          </div>
+        </section>
+
+        <!-- ── APPOINTMENTS ───────────────────────── -->
+        <section class="admin-section" id="sec-appointments">
+          <div class="section-title">
+            <h2 data-i18n="sec_appointments_h2">Termine</h2>
+            <p data-i18n="sec_appointments_desc">Terminbuchungs-Abschnitt verwalten.</p>
+          </div>
+          <div class="card toggle-card">
+            <label class="toggle-label">
+              <input type="checkbox" id="f-appointments-visible" checked>
+              <span data-i18n="sec_appointments_visible_lbl">Abschnitt anzeigen</span>
+            </label>
+            <p class="field-hint" data-i18n="sec_appointments_visible_desc">Blendet den Terminbereich aus, wenn deaktiviert.</p>
+          </div>
+          <div class="card">
+            <div class="appointments-lang appointments-lang--de">
+              <div class="field-group"><label data-i18n="sec_appointments_title_lbl">Titel</label>
+                <input type="text" id="f-appointments-title-de" placeholder="Termin vereinbaren"></div>
+              <div class="field-group"><label data-i18n="sec_appointments_body_lbl">Beschreibung</label>
+                <textarea id="f-appointments-body-de" rows="4"></textarea></div>
+              <div class="field-group"><label data-i18n="sec_appointments_btn_text_lbl">Button-Beschriftung</label>
+                <input type="text" id="f-appointments-btn-text-de" placeholder="Jetzt buchen"></div>
+            </div>
+            <div class="appointments-lang appointments-lang--en">
+              <div class="field-group"><label data-i18n="sec_appointments_title_lbl">Title</label>
+                <input type="text" id="f-appointments-title-en" placeholder="Book an Appointment"></div>
+              <div class="field-group"><label data-i18n="sec_appointments_body_lbl">Body Text</label>
+                <textarea id="f-appointments-body-en" rows="4"></textarea></div>
+              <div class="field-group"><label data-i18n="sec_appointments_btn_text_lbl">Button Label</label>
+                <input type="text" id="f-appointments-btn-text-en" placeholder="Book Now"></div>
+            </div>
+            <div class="field-group">
+              <label for="f-appointments-btn-url" data-i18n="sec_appointments_btn_url_lbl">Button-URL</label>
+              <input type="url" id="f-appointments-btn-url" placeholder="https://…">
+            </div>
+          </div>
+        </section>
+
+        <!-- ── LAYOUT ─────────────────────────────── -->
+        <section class="admin-section" id="sec-layout">
+          <div class="section-title">
+            <h2 data-i18n="sec_layout_h2">Seitenstruktur</h2>
+            <p data-i18n="sec_layout_desc">Reihenfolge der Abschnitte auf der Website festlegen.</p>
+          </div>
+          <div class="card">
+            <div id="layoutList"></div>
+          </div>
+        </section>
+
+        <!-- ── SEO ────────────────────────────────── -->
+        <section class="admin-section" id="sec-seo">
+          <div class="section-title">
+            <h2 data-i18n="sec_seo_h2">SEO &amp; AEO</h2>
+            <p data-i18n="sec_seo_desc">Suchmaschinen-Einstellungen und strukturierte Daten verwalten.</p>
+          </div>
+          <div class="card">
+            <div class="seo-lang seo-lang--de">
+              <div class="field-group"><label for="f-seo-title-de" data-i18n="sec_seo_title_lbl">Seitentitel</label>
+                <input type="text" id="f-seo-title-de" placeholder="Boyle Digital Services — …"></div>
+              <div class="field-group"><label for="f-seo-desc-de" data-i18n="sec_seo_metadesc_lbl">Meta-Beschreibung</label>
+                <textarea id="f-seo-desc-de" rows="3"></textarea>
+                <span class="seo-char-counter" id="seo-desc-counter-de">0 <span data-i18n="sec_seo_chars_hint">Zeichen (Ziel: ≤ 155)</span></span></div>
+            </div>
+            <div class="seo-lang seo-lang--en">
+              <div class="field-group"><label for="f-seo-title-en" data-i18n="sec_seo_title_lbl">Page Title</label>
+                <input type="text" id="f-seo-title-en" placeholder="Boyle Digital Services — …"></div>
+              <div class="field-group"><label for="f-seo-desc-en" data-i18n="sec_seo_metadesc_lbl">Meta Description</label>
+                <textarea id="f-seo-desc-en" rows="3"></textarea>
+                <span class="seo-char-counter" id="seo-desc-counter-en">0 <span data-i18n="sec_seo_chars_hint">characters (target: ≤ 155)</span></span></div>
+            </div>
+            <div class="field-group"><label for="f-seo-canonical" data-i18n="sec_seo_canonical_lbl">Kanonische URL</label>
+              <input type="url" id="f-seo-canonical" placeholder="https://boyledigital.ie/"></div>
+            <div class="field-group"><label for="f-seo-ogimage" data-i18n="sec_seo_ogimage_lbl">OG-Bild-URL</label>
+              <input type="url" id="f-seo-ogimage" placeholder="https://boyledigital.ie/og.jpg"></div>
+            <div class="field-group"><label for="f-seo-twitter" data-i18n="sec_seo_twitter_lbl">Twitter/X-Handle</label>
+              <input type="text" id="f-seo-twitter" placeholder="@boyledigital"></div>
+            <div class="field-group"><label for="f-seo-biztype" data-i18n="sec_seo_biztype_lbl">Unternehmenstyp</label>
+              <select id="f-seo-biztype">
+                <option value="ProfessionalService">ProfessionalService</option>
+                <option value="LocalBusiness">LocalBusiness</option>
+                <option value="Organization">Organization</option>
+              </select></div>
+          </div>
+        </section>
+
+        <!-- ── STORAGE ───────────────────────────── -->
+        <section id="sec-storage" class="admin-section" hidden>
+          <h2 data-i18n="sec_storage_h2">Storage &amp; Export</h2>
+
+          <div class="card">
+            <h3 data-i18n="sec_storage_api_h3">Cloudflare KV Connection</h3>
+            <p class="field-hint" data-i18n="sec_storage_api_hint">Enter the WORKER_SECRET you set via <code>wrangler secret put WORKER_SECRET</code>.</p>
+            <div class="field-group">
+              <label for="f-api-key" data-i18n="sec_storage_key_lbl">Worker API Key</label>
+              <div class="storage-key-row">
+                <input type="password" id="f-api-key" autocomplete="off">
+                <button id="btn-test-connection" type="button" class="btn btn-secondary" data-i18n="sec_storage_test">Test</button>
+              </div>
+            </div>
+            <div id="storage-status" class="storage-status" aria-live="polite"></div>
+          </div>
+
+          <div class="card">
+            <h3 data-i18n="sec_storage_transfer_h3">Export / Import</h3>
+            <p class="field-hint" data-i18n="sec_storage_transfer_hint">Export downloads current content as content.json. Import loads a previously exported file into KV (or localStorage if no API key is set).</p>
+            <div class="storage-transfer-row">
+              <button id="btn-export" type="button" class="btn btn-secondary" data-i18n="sec_storage_export">⬇ Export</button>
+              <button id="btn-import" type="button" class="btn btn-secondary" data-i18n="sec_storage_import">⬆ Import</button>
+              <input type="file" id="f-import-file" accept=".json" hidden>
+            </div>
+            <div id="transfer-status" class="transfer-status" aria-live="polite"></div>
+          </div>
+        </section>
+
         <!-- ── CONTACT ────────────────────────────── -->
         <section class="admin-section" id="sec-contact">
           <div class="section-title">
@@ -231,6 +386,10 @@
             <div class="field-group">
               <label for="f-contact-email" data-i18n="sec_contact_email">E-Mail-Adresse</label>
               <input type="email" id="f-contact-email" placeholder="hello@boyledigital.ie">
+            </div>
+            <div class="field-group">
+              <label for="f-contact-hours" data-i18n="sec_contact_hours">Öffnungszeiten</label>
+              <input type="text" id="f-contact-hours" placeholder="Mo–Fr 09:00–18:00">
             </div>
           </div>
 

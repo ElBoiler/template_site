@@ -1,0 +1,7 @@
+_worker.js
+wrangler.jsonc
+README.md
+LICENSE
+docs/
+.gitattributes
+.gitignore

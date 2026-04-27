@@ -7,16 +7,29 @@
 'use strict';
 
 const CONTENT_KEY = 'bds_content';
+const API_URL = '/api/content';
 
 const DEFAULT_CONTENT = {
   companyName: 'Boyle Digital Services',  // language-neutral
   referencesVisible: true,                // language-neutral toggle
   locationsVisible: true,                 // language-neutral toggle
+  jobsVisible:         true,
+  appointmentsVisible: true,
+  jobsBtnUrl:          '',
+  appointmentsBtnUrl:  '',
+  sectionOrder: ['about','services','gallery','locations','jobs','appointments','contact'],
+  seo: {
+    canonicalUrl:  '',
+    ogImageUrl:    '',
+    twitterHandle: '',
+    businessType:  'ProfessionalService'
+  },
 
   contact: {                               // language-neutral
     address:  '123 Digital Avenue, Dublin, Ireland',
     phone:    '+353 1 234 5678',
     email:    'hello@boyledigital.ie',
+    hours: '',
     subjects: [
       { de: 'Allgemeine Anfrage',  en: 'General Inquiry'   },
       { de: 'Projektangebot',      en: 'Project Proposal'  },
@@ -86,7 +99,10 @@ const DEFAULT_CONTENT = {
       { src: 'https://picsum.photos/seed/bds12/600/400', alt: 'Kundenerfolgsgeschichte',          caption: 'Kundenerfolgsgeschichte'         }
     ],
 
-    locations: []
+    locations: [],
+    jobs:         { title: '', body: '', btnText: '' },
+    appointments: { title: '', body: '', btnText: '' },
+    seo:          { title: '', description: '' },
   },
 
   /* ── English content ─────────────────────────────────────── */
@@ -144,7 +160,10 @@ const DEFAULT_CONTENT = {
       { src: 'https://picsum.photos/seed/bds12/600/400', alt: 'Client success story',        caption: 'Client Success Story'        }
     ],
 
-    locations: []
+    locations: [],
+    jobs:         { title: '', body: '', btnText: '' },
+    appointments: { title: '', body: '', btnText: '' },
+    seo:          { title: '', description: '' },
   }
 };
 
@@ -153,23 +172,64 @@ const DEFAULT_CONTENT = {
    Storage helpers
    ============================================================ */
 
-function getContent() {
+async function getContent() {
+  // 1. Try Cloudflare KV via Worker API
   try {
-    const raw = localStorage.getItem(CONTENT_KEY);
-    if (!raw) return JSON.parse(JSON.stringify(DEFAULT_CONTENT));
-    // Deep-merge so new default keys (e.g. new language block) don't break old saves
-    return deepMerge(DEFAULT_CONTENT, JSON.parse(raw));
-  } catch {
-    return JSON.parse(JSON.stringify(DEFAULT_CONTENT));
+    const res = await fetch(API_URL);
+    if (res.ok) {
+      const remote = await res.json();
+      if (remote && Object.keys(remote).length > 0) {
+        return deepMerge(DEFAULT_CONTENT, remote);
+      }
+    }
+  } catch (_) { /* fall through to localStorage */ }
+
+  // 2. Fallback: localStorage (local file:// / offline / dev)
+  try {
+    const local = localStorage.getItem(CONTENT_KEY);
+    if (local) return deepMerge(DEFAULT_CONTENT, JSON.parse(local));
+  } catch (_) { /* fall through */ }
+
+  // 3. Last resort: hardcoded defaults
+  return JSON.parse(JSON.stringify(DEFAULT_CONTENT));
+}
+
+async function saveContent(data) {
+  const apiKey = localStorage.getItem('bds_api_key');
+  if (apiKey) {
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify(data)
+      });
+      if (res.ok) return { ok: true, source: 'kv' };
+    } catch (_) { /* fall through to localStorage */ }
   }
-}
 
-function saveContent(data) {
+  // Fallback: localStorage
   localStorage.setItem(CONTENT_KEY, JSON.stringify(data));
+  return { ok: true, source: 'local' };
 }
 
-function resetContent() {
+async function resetContent() {
   localStorage.removeItem(CONTENT_KEY);
+  const apiKey = localStorage.getItem('bds_api_key');
+  if (apiKey) {
+    try {
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify(DEFAULT_CONTENT)
+      });
+    } catch (_) { /* ignore — localStorage already cleared */ }
+  }
 }
 
 function deepMerge(defaults, overrides) {
@@ -348,6 +408,151 @@ function applyContent(data, lang) {
     socialContainer.innerHTML = links;
     socialContainer.style.display = links ? '' : 'none';
   }
+
+  /* ── Contact — opening hours ───────────────────────────── */
+  toggleContactItem('hours', !!data.contact.hours);
+  if (data.contact.hours) setText('[data-content="contact.hours"]', data.contact.hours);
+
+  /* ── Jobs — optional section ────────────────────────────── */
+  const jobsSection = document.getElementById('jobs');
+  if (jobsSection) {
+    jobsSection.hidden = (data.jobsVisible === false);
+    const jobsData = ld.jobs || {};
+    setText('.jobs-title', jobsData.title || '');
+    const jobsBody = document.querySelector('.jobs-body');
+    if (jobsBody) jobsBody.innerHTML = esc(jobsData.body || '').replace(/\n/g, '<br>');
+    const jobsBtn = document.querySelector('.jobs-btn');
+    if (jobsBtn) {
+      const showBtn = !!(data.jobsBtnUrl && jobsData.btnText);
+      jobsBtn.style.display = showBtn ? '' : 'none';
+      if (showBtn) { jobsBtn.href = data.jobsBtnUrl; jobsBtn.textContent = jobsData.btnText; }
+    }
+  }
+
+  /* ── Appointments — optional section ───────────────────── */
+  const apptSection = document.getElementById('appointments');
+  if (apptSection) {
+    apptSection.hidden = (data.appointmentsVisible === false);
+    const apptData = ld.appointments || {};
+    setText('.appointments-title', apptData.title || '');
+    const apptBody = document.querySelector('.appointments-body');
+    if (apptBody) apptBody.innerHTML = esc(apptData.body || '').replace(/\n/g, '<br>');
+    const apptBtn = document.querySelector('.appointments-btn');
+    if (apptBtn) {
+      const showBtn = !!(data.appointmentsBtnUrl && apptData.btnText);
+      apptBtn.style.display = showBtn ? '' : 'none';
+      if (showBtn) { apptBtn.href = data.appointmentsBtnUrl; apptBtn.textContent = apptData.btnText; }
+    }
+  }
+
+  /* ── Section DOM reorder ────────────────────────────────── */
+  applyDomOrder(data.sectionOrder);
+
+  /* ── SEO meta tags + JSON-LD ────────────────────────────── */
+  updateSeoMeta(data, ld);
+}
+
+
+/* ============================================================
+   DOM SECTION ORDERING
+   ============================================================ */
+const DEFAULT_SECTION_ORDER = ['about','services','gallery','locations','jobs','appointments','contact'];
+
+function applyDomOrder(order) {
+  if (!order || !order.length) return;
+  const hero = document.getElementById('hero');
+  if (hero) {
+    let after = hero;
+    order.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { after.insertAdjacentElement('afterend', el); after = el; }
+    });
+  }
+  const navLinks = document.querySelector('.nav-links');
+  if (navLinks) {
+    const map = {};
+    navLinks.querySelectorAll('li a[href^="#"]').forEach(a => {
+      map[a.getAttribute('href').slice(1)] = a.closest('li');
+    });
+    order.forEach(id => { if (map[id]) navLinks.appendChild(map[id]); });
+  }
+  const mobileMenu = document.querySelector('.mobile-menu');
+  if (mobileMenu) {
+    const map = {};
+    mobileMenu.querySelectorAll('a[href^="#"]').forEach(a => {
+      map[a.getAttribute('href').slice(1)] = a;
+    });
+    order.forEach(id => { if (map[id]) mobileMenu.appendChild(map[id]); });
+  }
+}
+
+/* ============================================================
+   SEO META UPDATER
+   ============================================================ */
+function setMeta(selector, attr, value, create) {
+  if (!value) return;
+  let el = document.querySelector(selector);
+  if (!el && create) {
+    el = document.createElement(create.tagName || 'meta');
+    if (create.attrName) el.setAttribute(create.attrName, create.attrValue || '');
+    document.head.appendChild(el);
+  }
+  if (el) el.setAttribute(attr, value);
+}
+
+function updateSeoMeta(data, ld) {
+  const seo   = data.seo  || {};
+  const ldSeo = ld.seo   || {};
+  const lang  = (ld === data['en']) ? 'en' : 'de';
+  const title = ldSeo.title || document.title;
+
+  if (ldSeo.title) document.title = ldSeo.title;
+  document.documentElement.lang = lang;
+
+  setMeta('meta[name="description"]', 'content', ldSeo.description,
+    { attrName: 'name', attrValue: 'description' });
+  setMeta('link[rel="canonical"]', 'href', seo.canonicalUrl,
+    { tagName: 'link', attrName: 'rel', attrValue: 'canonical' });
+
+  setMeta('meta[property="og:title"]',       'content', title,             { attrName: 'property', attrValue: 'og:title' });
+  setMeta('meta[property="og:description"]', 'content', ldSeo.description, { attrName: 'property', attrValue: 'og:description' });
+  setMeta('meta[property="og:url"]',         'content', seo.canonicalUrl,  { attrName: 'property', attrValue: 'og:url' });
+  setMeta('meta[property="og:image"]',       'content', seo.ogImageUrl,    { attrName: 'property', attrValue: 'og:image' });
+
+  if (seo.twitterHandle) {
+    const handle = seo.twitterHandle.startsWith('@') ? seo.twitterHandle : '@' + seo.twitterHandle;
+    setMeta('meta[name="twitter:site"]', 'content', handle, { attrName: 'name', attrValue: 'twitter:site' });
+  }
+  setMeta('meta[name="twitter:title"]',       'content', title,             { attrName: 'name', attrValue: 'twitter:title' });
+  setMeta('meta[name="twitter:description"]', 'content', ldSeo.description, { attrName: 'name', attrValue: 'twitter:description' });
+  setMeta('meta[name="twitter:image"]',       'content', seo.ogImageUrl,    { attrName: 'name', attrValue: 'twitter:image' });
+
+  const firstLoc = (ld.locations || []).find(l => l.lat && l.lng);
+  const lb = { '@type': seo.businessType || 'ProfessionalService', name: data.companyName || '' };
+  if (seo.canonicalUrl)    lb.url          = seo.canonicalUrl;
+  if (seo.ogImageUrl)      lb.image        = seo.ogImageUrl;
+  if (data.contact.phone)  lb.telephone    = data.contact.phone;
+  if (data.contact.email)  lb.email        = data.contact.email;
+  if (data.contact.address) lb.address    = { '@type': 'PostalAddress', streetAddress: data.contact.address };
+  if (data.contact.hours)  lb.openingHours = data.contact.hours;
+  if (firstLoc) lb.geo = { '@type': 'GeoCoordinates', latitude: firstLoc.lat, longitude: firstLoc.lng };
+
+  const graph = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      lb,
+      { '@type': 'WebSite', name: data.companyName || '', ...(seo.canonicalUrl ? { url: seo.canonicalUrl } : {}) }
+    ]
+  };
+
+  let ldScript = document.getElementById('ld-json');
+  if (!ldScript) {
+    ldScript = document.createElement('script');
+    ldScript.id   = 'ld-json';
+    ldScript.type = 'application/ld+json';
+    document.head.appendChild(ldScript);
+  }
+  ldScript.textContent = JSON.stringify(graph);
 }
 
 
@@ -445,9 +650,9 @@ function buildLocationCardHTML(loc, i) {
 /* ============================================================
    Auto-apply on index.html load
    ============================================================ */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const lang = typeof getLang === 'function' ? getLang() : 'de';
-  applyContent(getContent(), lang);
+  applyContent(await getContent(), lang);
 });
 
 
