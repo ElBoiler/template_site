@@ -307,6 +307,9 @@ const TRANSLATIONS = {
     /* ── Toast / dialog ─────────────────────────────────── */
     toast_saved:      'Änderungen erfolgreich gespeichert!',
     toast_reset:      'Inhalte auf Standardwerte zurückgesetzt.',
+    toast_save_failed:    'Speichern fehlgeschlagen — Worker-API-Key prüfen (Bereich Storage).',
+    kv_pill_connected:    'KV verbunden',
+    kv_pill_local_only:   'Nicht verbunden — Speicherungen erreichen keine Besucher',
     toast_pw_updated: 'Passwort aktualisiert!',
     toast_wrong_pw:   'Falsches Passwort. Bitte erneut versuchen.',
     err_pw_short:     'Das Passwort muss mindestens 4 Zeichen lang sein.',
@@ -637,6 +640,9 @@ const TRANSLATIONS = {
     /* ── Toast / dialog ─────────────────────────────────── */
     toast_saved:      'Changes saved successfully!',
     toast_reset:      'Content reset to defaults.',
+    toast_save_failed:    'Save failed — check Worker API Key (Storage section).',
+    kv_pill_connected:    'KV connected',
+    kv_pill_local_only:   'Not connected — saves won\'t reach visitors',
     toast_pw_updated: 'Password updated!',
     toast_wrong_pw:   'Incorrect password. Please try again.',
     err_pw_short:     'Password must be at least 4 characters.',
