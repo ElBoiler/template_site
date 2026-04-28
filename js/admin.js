@@ -4,6 +4,30 @@
 
 'use strict';
 
+/**
+ * Updates the KV connection pill element to show connected/offline status.
+ * Pings /api/ping to verify the API key is valid.
+ */
+async function updateConnectionPill() {
+  const pill = document.getElementById('kvStatusPill');
+  if (!pill) return;
+  const apiKey = localStorage.getItem('bds_api_key') || '';
+  let connected = false;
+  if (apiKey) {
+    try {
+      const res = await fetch('/api/ping', { headers: { 'Authorization': `Bearer ${apiKey}` } });
+      const json = await res.json().catch(() => ({}));
+      connected = !!json.ok;
+    } catch (_) { connected = false; }
+  }
+  pill.hidden = false;
+  pill.classList.remove('kv-pill--ok', 'kv-pill--warn');
+  pill.classList.add(connected ? 'kv-pill--ok' : 'kv-pill--warn');
+  const key = connected ? 'kv_pill_connected' : 'kv_pill_local_only';
+  pill.setAttribute('data-i18n', key);
+  pill.textContent = (typeof T === 'function') ? T(key) : key;
+}
+
 const ADMIN_PW_KEY      = 'bds_admin_password';
 const ADMIN_SESSION_KEY = 'bds_admin_auth';
 const DEFAULT_ADMIN_PW  = 'admin'; // plaintext default — hashed on first use
@@ -1149,6 +1173,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const savedApiKey = localStorage.getItem('bds_api_key') || '';
   const apiKeyInput = document.getElementById('f-api-key');
   if (apiKeyInput) apiKeyInput.value = savedApiKey;
+  updateConnectionPill();
 
   // Wire content-language tab clicks
   document.querySelectorAll('#adminLangTabs .admin-lang-tab').forEach(tab => {
@@ -1215,6 +1240,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       statusEl.className = 'storage-status status-err';
       statusEl.textContent = '✗ Could not reach API — are you running locally?';
     }
+    updateConnectionPill();
   });
 
   // Export content.json
