@@ -196,23 +196,24 @@ async function getContent() {
 
 async function saveContent(data) {
   const apiKey = localStorage.getItem('bds_api_key');
-  if (apiKey) {
-    try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify(data)
-      });
-      if (res.ok) return { ok: true, source: 'kv' };
-    } catch (_) { /* fall through to localStorage */ }
+  if (!apiKey) {
+    return { ok: false, error: 'no_api_key' };
   }
-
-  // Fallback: localStorage
-  localStorage.setItem(CONTENT_KEY, JSON.stringify(data));
-  return { ok: true, source: 'local' };
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify(data)
+    });
+    if (res.ok) return { ok: true, source: 'kv' };
+    if (res.status === 401) return { ok: false, error: 'unauthorized' };
+    return { ok: false, error: `http_${res.status}` };
+  } catch (_) {
+    return { ok: false, error: 'network' };
+  }
 }
 
 async function resetContent() {
