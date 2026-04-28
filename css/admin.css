@@ -226,6 +226,37 @@ textarea, input, select { font-family: var(--font); }
   gap: 0.75rem;
 }
 
+/* ── KV connection pill (admin header) ───────────────── */
+.kv-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.kv-pill::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+.kv-pill--ok {
+  background: rgba(34, 139, 86, 0.12);
+  color: #1f8c4e;
+}
+.kv-pill--warn {
+  background: rgba(212, 130, 30, 0.15);
+  color: #b86a14;
+}
+@media (max-width: 720px) {
+  .kv-pill { display: none; } /* save space; toast still surfaces failures */
+}
+
 /* ── Admin header language switcher ──────────────────── */
 .lang-switcher--admin {
   display: flex;
