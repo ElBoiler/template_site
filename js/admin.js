@@ -1017,8 +1017,17 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
 
   const saveResult = await saveContent(pendingContent); // from content.js
   const saveBtn = document.getElementById('saveBtn');
-  if (saveBtn) saveBtn.textContent = saveResult.source === 'kv' ? 'KV ✓' : 'Lokal ✓';
-  showToast(T('toast_saved'), 'success');
+
+  if (saveResult.ok) {
+    if (saveBtn) saveBtn.textContent = 'KV ✓';
+    showToast(T('toast_saved'), 'success');
+  } else {
+    if (saveBtn) saveBtn.textContent = T('admin_save_btn');
+    showToast(T('toast_save_failed'), 'error');
+  }
+
+  // Refresh connection-state pill (added in a later task)
+  if (typeof updateConnectionPill === 'function') updateConnectionPill();
 });
 
 document.getElementById('resetBtn').addEventListener('click', async () => {
