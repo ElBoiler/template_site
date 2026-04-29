@@ -185,6 +185,7 @@ const TRANSLATIONS = {
     footer_svc_pm:      'Produktmanagement',
     footer_svc_web:     'Webentwicklung',
     footer_svc_seo:     'SEO & Analytics',
+    footer_about_me_link: 'Über mich',
 
     /* ── Accessibility labels ───────────────────────────── */
     hamburger_label:   'Navigation ein-/ausblenden',
@@ -515,6 +516,7 @@ const TRANSLATIONS = {
     footer_svc_pm:      'Product Management',
     footer_svc_web:     'Web Development',
     footer_svc_seo:     'SEO & Analytics',
+    footer_about_me_link: 'About me',
 
     /* ── Accessibility labels ───────────────────────────── */
     hamburger_label:   'Toggle navigation menu',
