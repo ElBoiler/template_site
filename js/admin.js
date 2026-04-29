@@ -1050,7 +1050,7 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
     showToast(T('toast_save_failed'), 'error');
   }
 
-  // Refresh connection-state pill (added in a later task)
+  // Refresh connection-state pill after save
   if (typeof updateConnectionPill === 'function') updateConnectionPill();
 });
 
@@ -1268,12 +1268,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       const data   = JSON.parse(await file.text());
       const result = await saveContent(data);
       if (statusEl) {
-        statusEl.className = 'transfer-status status-ok';
-        statusEl.textContent = result.source === 'kv'
-          ? '✓ Imported to Cloudflare KV'
-          : '✓ Imported to local storage';
+        if (result.ok) {
+          statusEl.className = 'transfer-status status-ok';
+          statusEl.textContent = '✓ Imported to Cloudflare KV';
+        } else {
+          statusEl.className = 'transfer-status status-err';
+          statusEl.textContent = '✗ ' + T('toast_save_failed');
+        }
       }
-      loadFormData(adminContentLang, data);
+      if (result.ok) loadFormData(adminContentLang, data);
     } catch (_) {
       if (statusEl) {
         statusEl.className = 'transfer-status status-err';
