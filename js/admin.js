@@ -4,6 +4,30 @@
 
 'use strict';
 
+/**
+ * Updates the KV connection pill element to show connected/offline status.
+ * Pings /api/ping to verify the API key is valid.
+ */
+async function updateConnectionPill() {
+  const pill = document.getElementById('kvStatusPill');
+  if (!pill) return;
+  const apiKey = localStorage.getItem('bds_api_key') || '';
+  let connected = false;
+  if (apiKey) {
+    try {
+      const res = await fetch('/api/ping', { headers: { 'Authorization': `Bearer ${apiKey}` } });
+      const json = await res.json().catch(() => ({}));
+      connected = !!json.ok;
+    } catch (_) { connected = false; }
+  }
+  pill.hidden = false;
+  pill.classList.remove('kv-pill--ok', 'kv-pill--warn');
+  pill.classList.add(connected ? 'kv-pill--ok' : 'kv-pill--warn');
+  const key = connected ? 'kv_pill_connected' : 'kv_pill_local_only';
+  pill.setAttribute('data-i18n', key);
+  pill.textContent = (typeof T === 'function') ? T(key) : key;
+}
+
 const ADMIN_PW_KEY      = 'bds_admin_password';
 const ADMIN_SESSION_KEY = 'bds_admin_auth';
 const DEFAULT_ADMIN_PW  = 'admin'; // plaintext default — hashed on first use
@@ -1017,8 +1041,17 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
 
   const saveResult = await saveContent(pendingContent); // from content.js
   const saveBtn = document.getElementById('saveBtn');
-  if (saveBtn) saveBtn.textContent = saveResult.source === 'kv' ? 'KV ✓' : 'Lokal ✓';
-  showToast(T('toast_saved'), 'success');
+
+  if (saveResult.ok) {
+    if (saveBtn) saveBtn.textContent = 'KV ✓';
+    showToast(T('toast_saved'), 'success');
+  } else {
+    if (saveBtn) saveBtn.textContent = T('admin_save_btn');
+    showToast(T('toast_save_failed'), 'error');
+  }
+
+  // Refresh connection-state pill after save
+  if (typeof updateConnectionPill === 'function') updateConnectionPill();
 });
 
 document.getElementById('resetBtn').addEventListener('click', async () => {
@@ -1140,6 +1173,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const savedApiKey = localStorage.getItem('bds_api_key') || '';
   const apiKeyInput = document.getElementById('f-api-key');
   if (apiKeyInput) apiKeyInput.value = savedApiKey;
+  updateConnectionPill();
 
   // Wire content-language tab clicks
   document.querySelectorAll('#adminLangTabs .admin-lang-tab').forEach(tab => {
@@ -1206,6 +1240,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       statusEl.className = 'storage-status status-err';
       statusEl.textContent = '✗ Could not reach API — are you running locally?';
     }
+    updateConnectionPill();
   });
 
   // Export content.json
@@ -1233,12 +1268,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       const data   = JSON.parse(await file.text());
       const result = await saveContent(data);
       if (statusEl) {
-        statusEl.className = 'transfer-status status-ok';
-        statusEl.textContent = result.source === 'kv'
-          ? '✓ Imported to Cloudflare KV'
-          : '✓ Imported to local storage';
+        if (result.ok) {
+          statusEl.className = 'transfer-status status-ok';
+          statusEl.textContent = '✓ Imported to Cloudflare KV';
+        } else {
+          statusEl.className = 'transfer-status status-err';
+          statusEl.textContent = '✗ ' + T('toast_save_failed');
+        }
       }
-      loadFormData(adminContentLang, data);
+      if (result.ok) loadFormData(adminContentLang, data);
     } catch (_) {
       if (statusEl) {
         statusEl.className = 'transfer-status status-err';
