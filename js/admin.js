@@ -85,12 +85,12 @@ function isAuthed() {
   return sessionStorage.getItem(ADMIN_SESSION_KEY) === '1';
 }
 
-function showPanel() {
+async function showPanel() {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('adminPanel').classList.remove('hidden');
 
   // Initialise in-memory state
-  pendingContent   = getContent();
+  pendingContent   = await getContent();
   adminContentLang = (typeof getLang === 'function') ? getLang() : 'de';
 
   loadFormData(adminContentLang, pendingContent);
@@ -1213,7 +1213,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('f-seo-desc-en')?.addEventListener('input', () => updateSeoDescCount('en'));
 
   if (isAuthed()) {
-    showPanel();
+    await showPanel();
   } else {
     showLogin();
     document.getElementById('passwordInput').focus();
