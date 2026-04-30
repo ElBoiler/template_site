@@ -1007,7 +1007,7 @@ function switchAdminContentLang(newLang) {
   updateAppointmentsLangVisibility();
   updateSeoLangVisibility();
   // Refresh bilingual SEO fields for new lang
-  const newSeo = ((contentObj || {})[adminContentLang] || {}).seo || {};
+  const newSeo = ((pendingContent || {})[adminContentLang] || {}).seo || {};
   val('f-seo-title-' + adminContentLang, newSeo.title       || '');
   val('f-seo-desc-'  + adminContentLang, newSeo.description || '');
   updateSeoDescCount(adminContentLang);
