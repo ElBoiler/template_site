@@ -388,6 +388,25 @@ function loadFormData(lang, contentObj) {
   const biztypeEl = document.getElementById('f-seo-biztype');
   if (biztypeEl) biztypeEl.value = seoRoot.businessType || 'ProfessionalService';
 
+  /* ── Legal pages ── */
+  const imp = data.impressum || {};
+  val('f-imp-name',          imp.anbieter_name    || '');
+  val('f-imp-strasse',       imp.anbieter_strasse || '');
+  val('f-imp-ort',           imp.anbieter_ort     || '');
+  val('f-imp-land',          imp.anbieter_land    || '');
+  val('f-imp-email',         imp.kontakt_email    || '');
+  val('f-imp-telefon',       imp.kontakt_telefon  || '');
+  val('f-imp-vertreter',     imp.vertreter        || '');
+  val('f-imp-ustid',         imp.ustid            || '');
+  val('f-imp-register',      imp.registereintrag  || '');
+  val('f-imp-verantwortlich',imp.verantwortlich   || '');
+  val('f-imp-updated',       imp.updated          || '');
+
+  const ds = data.datenschutz || {};
+  val('f-ds-body-de', ds.body_de  || '');
+  val('f-ds-body-en', ds.body_en  || '');
+  val('f-ds-updated', ds.updated  || '');
+
   /* ── Update bilingual visibility for new sections ── */
   updateJobsLangVisibility();
   updateAppointmentsLangVisibility();
@@ -585,6 +604,26 @@ function captureFormIntoContent(lang, contentObj) {
     ogImageUrl:    get('f-seo-ogimage'),
     twitterHandle: get('f-seo-twitter'),
     businessType:  document.getElementById('f-seo-biztype')?.value || 'ProfessionalService'
+  };
+
+  /* ── Legal pages (language-neutral) ── */
+  contentObj.impressum = {
+    anbieter_name:    get('f-imp-name'),
+    anbieter_strasse: get('f-imp-strasse'),
+    anbieter_ort:     get('f-imp-ort'),
+    anbieter_land:    get('f-imp-land'),
+    kontakt_email:    get('f-imp-email'),
+    kontakt_telefon:  get('f-imp-telefon'),
+    vertreter:        get('f-imp-vertreter'),
+    ustid:            get('f-imp-ustid'),
+    registereintrag:  get('f-imp-register'),
+    verantwortlich:   get('f-imp-verantwortlich'),
+    updated:          get('f-imp-updated')
+  };
+  contentObj.datenschutz = {
+    body_de:  (document.getElementById('f-ds-body-de')?.value || '').trim(),
+    body_en:  (document.getElementById('f-ds-body-en')?.value || '').trim(),
+    updated:  get('f-ds-updated')
   };
 }
 
@@ -1630,3 +1669,99 @@ document.getElementById('themeResetBtn').addEventListener('click', () => {
   if (typeof removeStoredTheme === 'function') removeStoredTheme();
   showToast(T('toast_theme_reset'), '');
 });
+
+
+/* ============================================================
+   PDF TEXT IMPORT — self-contained, no external library.
+   Extracts readable text from uncompressed PDF content streams.
+   ============================================================ */
+
+(function initPdfImport() {
+  const fileInput = document.getElementById('f-ds-pdf-input');
+  const statusEl  = document.getElementById('f-ds-pdf-status');
+  if (!fileInput || !statusEl) return;
+
+  fileInput.addEventListener('change', async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    statusEl.textContent = T('sec_ds_pdf_reading');
+    fileInput.value = '';
+
+    try {
+      const text = await extractPdfText(file);
+      if (text && text.length > 50) {
+        const bodyDe = document.getElementById('f-ds-body-de');
+        if (bodyDe) {
+          bodyDe.value = plainTextToHtml(text);
+          statusEl.style.color = 'var(--color-success, green)';
+          statusEl.textContent = T('sec_ds_pdf_ok').replace('{n}', text.length);
+        }
+      } else {
+        statusEl.style.color = 'var(--color-danger, red)';
+        statusEl.textContent = T('sec_ds_pdf_fail');
+      }
+    } catch (_) {
+      statusEl.style.color = 'var(--color-danger, red)';
+      statusEl.textContent = T('sec_ds_pdf_fail');
+    }
+  });
+}());
+
+async function extractPdfText(file) {
+  const buffer = await file.arrayBuffer();
+  const raw = new TextDecoder('latin1').decode(new Uint8Array(buffer));
+  const lines = [];
+  let pos = 0;
+  while (true) {
+    const btIdx = raw.indexOf('BT', pos);
+    if (btIdx === -1) break;
+    const etIdx = raw.indexOf('ET', btIdx + 2);
+    if (etIdx === -1) break;
+    pos = etIdx + 2;
+    const block = raw.slice(btIdx, etIdx);
+    const parts  = [];
+    const tjRe = /\(([^)\\]*(?:\\[\s\S][^)\\]*)*)\)\s*(?:Tj|'|")/g;
+    let m;
+    while ((m = tjRe.exec(block)) !== null) {
+      const decoded = decodePdfString(m[1]);
+      if (decoded.trim()) parts.push(decoded);
+    }
+    const tjArrRe = /\[([^\]]*)\]\s*TJ/g;
+    while ((m = tjArrRe.exec(block)) !== null) {
+      const inner   = m[1];
+      const innerRe = /\(([^)\\]*(?:\\[\s\S][^)\\]*)*)\)/g;
+      let im;
+      while ((im = innerRe.exec(inner)) !== null) {
+        const decoded = decodePdfString(im[1]);
+        if (decoded.trim()) parts.push(decoded);
+      }
+    }
+    const line = parts.join('').trim();
+    if (line) lines.push(line);
+  }
+  return lines.join('\n').trim();
+}
+
+function decodePdfString(s) {
+  return s
+    .replace(/\\([0-7]{3})/g, (_, oct) => String.fromCharCode(parseInt(oct, 8)))
+    .replace(/\\n/g, '\n')
+    .replace(/\\r/g, '\r')
+    .replace(/\\t/g, '\t')
+    .replace(/\\(.)/g, '$1');
+}
+
+function plainTextToHtml(text) {
+  const paras = text.split(/\n{2,}/).map(p => p.replace(/\n/g, ' ').trim()).filter(Boolean);
+  return paras.map(p => {
+    if (p.length < 80 && !/[.,:;]$/.test(p) && /\d|^[A-ZÄÖÜ]/.test(p)) {
+      return `<h2>${escHtml(p)}</h2>`;
+    }
+    return `<p>${escHtml(p)}</p>`;
+  }).join('\n');
+}
+
+function escHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
