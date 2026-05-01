@@ -43,39 +43,80 @@ let pendingContent = null;
 
 
 /* ============================================================
-   AUTH — passwords are stored as SHA-256 hashes, never plaintext
+   AUTH — PBKDF2 with random 128-bit salt (WebCrypto, no deps)
+   Stored format: "pbkdf2$<hex-salt>$<hex-derived-key>"
+   Legacy SHA-256 hashes (64-char hex) are migrated on first login.
    ============================================================ */
 
-/** Returns a hex SHA-256 digest of the given string. */
+const PBKDF2_ITERATIONS = 200_000;
+const PBKDF2_KEY_BITS   = 256;
+
+/** Derive a PBKDF2 key from password + salt (Uint8Array). Returns hex string. */
+async function pbkdf2Derive(password, salt) {
+  const enc     = new TextEncoder();
+  const keyMat  = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
+  const bits    = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', hash: 'SHA-256', salt, iterations: PBKDF2_ITERATIONS },
+    keyMat, PBKDF2_KEY_BITS
+  );
+  return Array.from(new Uint8Array(bits)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function hexToBytes(hex) {
+  const arr = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < arr.length; i++) arr[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16);
+  return arr;
+}
+
+/** Hash a password for storage. Returns "pbkdf2$<salt-hex>$<key-hex>". */
 async function hashPassword(password) {
-  const data = new TextEncoder().encode(password);
-  const buf  = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(buf))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
+  const salt    = crypto.getRandomValues(new Uint8Array(16));
+  const saltHex = Array.from(salt).map(b => b.toString(16).padStart(2, '0')).join('');
+  const keyHex  = await pbkdf2Derive(password, salt);
+  return `pbkdf2$${saltHex}$${keyHex}`;
 }
 
 /**
  * Verifies an entered password against storage.
- *   1. Nothing stored → compare against hash of DEFAULT_ADMIN_PW
- *   2. Stored value is a 64-char hex hash → compare hashes
- *   3. Legacy plaintext → compare directly, re-store as hash on success
+ *   1. Nothing stored → compare against DEFAULT_ADMIN_PW
+ *   2. Modern "pbkdf2$salt$key" format → PBKDF2 verify
+ *   3. Legacy 64-char SHA-256 hex → SHA-256 compare, migrate to PBKDF2 on success
+ *   4. Legacy plaintext → compare directly, migrate to PBKDF2 on success
  */
 async function checkPassword(entered) {
-  const stored      = localStorage.getItem(ADMIN_PW_KEY);
-  const enteredHash = await hashPassword(entered);
+  const stored = localStorage.getItem(ADMIN_PW_KEY);
 
+  // Nothing stored — first login, check against default
   if (!stored) {
-    return enteredHash === await hashPassword(DEFAULT_ADMIN_PW);
+    const match = (entered === DEFAULT_ADMIN_PW);
+    if (match) {
+      localStorage.setItem(ADMIN_PW_KEY, await hashPassword(entered));
+    }
+    return match;
   }
 
+  // Modern PBKDF2 format
+  if (stored.startsWith('pbkdf2$')) {
+    const [, saltHex, storedKey] = stored.split('$');
+    const derived = await pbkdf2Derive(entered, hexToBytes(saltHex));
+    return derived === storedKey;
+  }
+
+  // Legacy unsalted SHA-256 (64-char hex) — migrate on success
   if (/^[0-9a-f]{64}$/.test(stored)) {
-    return enteredHash === stored;
+    const enc  = new TextEncoder();
+    const buf  = await crypto.subtle.digest('SHA-256', enc.encode(entered));
+    const hex  = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    if (hex === stored) {
+      localStorage.setItem(ADMIN_PW_KEY, await hashPassword(entered));
+      return true;
+    }
+    return false;
   }
 
-  // Legacy plaintext — migrate to hash on successful login
+  // Legacy plaintext — migrate on success
   if (entered === stored) {
-    localStorage.setItem(ADMIN_PW_KEY, enteredHash);
+    localStorage.setItem(ADMIN_PW_KEY, await hashPassword(entered));
     return true;
   }
   return false;
