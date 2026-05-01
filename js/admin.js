@@ -1674,8 +1674,6 @@ document.getElementById('themeResetBtn').addEventListener('click', () => {
 /* ============================================================
    PDF TEXT IMPORT — self-contained, no external library.
    Extracts readable text from uncompressed PDF content streams.
-   Works for most text-based PDFs (Word/LibreOffice exports, legal
-   template generators). Falls back gracefully for compressed PDFs.
    ============================================================ */
 
 (function initPdfImport() {
@@ -1695,8 +1693,7 @@ document.getElementById('themeResetBtn').addEventListener('click', () => {
       if (text && text.length > 50) {
         const bodyDe = document.getElementById('f-ds-body-de');
         if (bodyDe) {
-          const html = plainTextToHtml(text);
-          bodyDe.value = html;
+          bodyDe.value = plainTextToHtml(text);
           statusEl.style.color = 'var(--color-success, green)';
           statusEl.textContent = T('sec_ds_pdf_ok').replace('{n}', text.length);
         }
@@ -1704,26 +1701,17 @@ document.getElementById('themeResetBtn').addEventListener('click', () => {
         statusEl.style.color = 'var(--color-danger, red)';
         statusEl.textContent = T('sec_ds_pdf_fail');
       }
-    } catch (err) {
+    } catch (_) {
       statusEl.style.color = 'var(--color-danger, red)';
       statusEl.textContent = T('sec_ds_pdf_fail');
     }
   });
 }());
 
-/**
- * Minimal PDF text extractor for uncompressed content streams.
- * Reads BT…ET text blocks and decodes Tj / TJ string operators.
- * @param {File} file
- * @returns {Promise<string>}
- */
 async function extractPdfText(file) {
   const buffer = await file.arrayBuffer();
   const raw = new TextDecoder('latin1').decode(new Uint8Array(buffer));
-
   const lines = [];
-
-  // Walk through every BT…ET text block
   let pos = 0;
   while (true) {
     const btIdx = raw.indexOf('BT', pos);
@@ -1731,19 +1719,14 @@ async function extractPdfText(file) {
     const etIdx = raw.indexOf('ET', btIdx + 2);
     if (etIdx === -1) break;
     pos = etIdx + 2;
-
     const block = raw.slice(btIdx, etIdx);
     const parts  = [];
-
-    // (string) Tj — single string
     const tjRe = /\(([^)\\]*(?:\\[\s\S][^)\\]*)*)\)\s*(?:Tj|'|")/g;
     let m;
     while ((m = tjRe.exec(block)) !== null) {
       const decoded = decodePdfString(m[1]);
       if (decoded.trim()) parts.push(decoded);
     }
-
-    // [(string) num (string)] TJ — array
     const tjArrRe = /\[([^\]]*)\]\s*TJ/g;
     while ((m = tjArrRe.exec(block)) !== null) {
       const inner   = m[1];
@@ -1754,15 +1737,12 @@ async function extractPdfText(file) {
         if (decoded.trim()) parts.push(decoded);
       }
     }
-
     const line = parts.join('').trim();
     if (line) lines.push(line);
   }
-
   return lines.join('\n').trim();
 }
 
-/** Decode PDF string escape sequences and octal codes. */
 function decodePdfString(s) {
   return s
     .replace(/\\([0-7]{3})/g, (_, oct) => String.fromCharCode(parseInt(oct, 8)))
@@ -1772,14 +1752,9 @@ function decodePdfString(s) {
     .replace(/\\(.)/g, '$1');
 }
 
-/**
- * Converts plain extracted text into basic HTML paragraphs and headings.
- * Lines that look like headings (short, no terminal punctuation) become <h2>.
- */
 function plainTextToHtml(text) {
   const paras = text.split(/\n{2,}/).map(p => p.replace(/\n/g, ' ').trim()).filter(Boolean);
   return paras.map(p => {
-    // Short line with no trailing sentence punctuation → treat as heading
     if (p.length < 80 && !/[.,:;]$/.test(p) && /\d|^[A-ZÄÖÜ]/.test(p)) {
       return `<h2>${escHtml(p)}</h2>`;
     }

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Datenschutzerklärung – Boyle Digital Services">
-  <title>Datenschutzerklärung – Boyle Digital Services</title>
+  <meta name="description" content="Datenschutzerklärung">
+  <title>Datenschutzerklärung</title>
   <meta name="robots" content="noindex, follow">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
@@ -99,10 +99,8 @@
       const updEl = document.getElementById('ds-updated');
       if (updEl) updEl.textContent = ds.updated || '';
 
-      // Update page lang attribute to match user's choice
       document.documentElement.lang = lang;
 
-      // Company name in nav
       const nameEl = document.querySelector('.nav-logo');
       if (nameEl && content.companyName) {
         const parts = content.companyName.split(' ');

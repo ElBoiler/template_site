@@ -172,7 +172,7 @@ const DEFAULT_CONTENT = {
     anbieter_strasse: '[Bitte ausfüllen: Straße und Hausnummer]',
     anbieter_ort:     '[Bitte ausfüllen: Postleitzahl und Ort]',
     anbieter_land:    '[Bitte ausfüllen: Land]',
-    kontakt_email:    'hello@boyledigital.ie',
+    kontakt_email:    'hello@example.com',
     kontakt_telefon:  '',
     vertreter:        '',
     registereintrag:  '',
@@ -187,7 +187,7 @@ const DEFAULT_CONTENT = {
       '<h2>1. Verantwortlicher</h2>',
       '<p>Verantwortlicher im Sinne der Datenschutz-Grundverordnung (DSGVO) und anderer nationaler Datenschutzgesetze ist:</p>',
       '<p>[Bitte ausfüllen: vollständiger Name]<br>[Bitte ausfüllen: Adresse]<br>',
-      'E-Mail: <a href="mailto:hello@boyledigital.ie">hello@boyledigital.ie</a></p>',
+      'E-Mail: <a href="mailto:hello@example.com">hello@example.com</a></p>',
 
       '<h2>2. Welche Daten werden verarbeitet und warum?</h2>',
 
@@ -241,7 +241,7 @@ const DEFAULT_CONTENT = {
       '<li><strong>Recht auf Widerruf einer Einwilligung</strong> (Art. 7 Abs. 3 DSGVO)</li>',
       '</ul>',
       '<p>Da wir keine personenbezogenen Daten auf unseren Servern speichern, wird eine Auskunftsanfrage in der Regel mit dem Hinweis beantwortet, dass keine Daten vorliegen. ',
-      'Anfragen richten Sie bitte an: <a href="mailto:hello@boyledigital.ie">hello@boyledigital.ie</a>. Wir antworten innerhalb von 30 Tagen.</p>',
+      'Anfragen richten Sie bitte an: <a href="mailto:hello@example.com">hello@example.com</a>. Wir antworten innerhalb von 30 Tagen.</p>',
 
       '<h2>7. Beschwerderecht</h2>',
       '<p>Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde über die Verarbeitung Ihrer personenbezogenen Daten zu beschweren. ',
@@ -256,7 +256,7 @@ const DEFAULT_CONTENT = {
       '<h2>1. Data Controller</h2>',
       '<p>The data controller within the meaning of the General Data Protection Regulation (GDPR) is:</p>',
       '<p>[Please fill in: full name]<br>[Please fill in: address]<br>',
-      'Email: <a href="mailto:hello@boyledigital.ie">hello@boyledigital.ie</a></p>',
+      'Email: <a href="mailto:hello@example.com">hello@example.com</a></p>',
 
       '<h2>2. What data is processed and why?</h2>',
 
@@ -311,7 +311,7 @@ const DEFAULT_CONTENT = {
       '<li><strong>Right to withdraw consent</strong> (Art. 7(3) GDPR)</li>',
       '</ul>',
       '<p>Since we do not store personal data on our servers, an access request will typically be answered by confirming no data is held. ',
-      'Please direct requests to: <a href="mailto:hello@boyledigital.ie">hello@boyledigital.ie</a>. We will respond within 30 days.</p>',
+      'Please direct requests to: <a href="mailto:hello@example.com">hello@example.com</a>. We will respond within 30 days.</p>',
 
       '<h2>7. Right to lodge a complaint</h2>',
       '<p>You have the right to lodge a complaint with a supervisory authority if you believe the processing of your personal data violates the GDPR. ',

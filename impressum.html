@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Impressum – Boyle Digital Services">
-  <title>Impressum – Boyle Digital Services</title>
+  <meta name="description" content="Impressum">
+  <title>Impressum</title>
   <meta name="robots" content="noindex, follow">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
@@ -14,11 +14,6 @@
     .legal-page h2 { margin-top: 2.5rem; margin-bottom: 0.75rem; font-size: 1.2rem; }
     .legal-page p, .legal-page address { margin-bottom: 1rem; font-style: normal; line-height: 1.7; }
     .legal-page a { color: var(--color-primary); }
-    .todo-note {
-      background: #fff3cd; border: 1px solid #ffc107; border-radius: 6px;
-      padding: 0.5rem 1rem; margin: 0.5rem 0 1rem;
-      font-size: 0.875rem; color: #856404;
-    }
     [data-imp].empty { display: none; }
   </style>
 </head>
@@ -154,7 +149,6 @@
         if (e.key === 'Escape' && mobileMenu.classList.contains('open')) toggle();
       });
 
-      // Populate impressum fields from content
       const content = await getContent();
       const imp = content.impressum || {};
 
@@ -165,13 +159,11 @@
         if (!val) el.classList.add('empty');
       });
 
-      // Email link
       const emailEl = document.getElementById('imp-email');
       if (emailEl && imp.kontakt_email) {
         emailEl.href = 'mailto:' + imp.kontakt_email;
       }
 
-      // Hide empty optional sections
       if (!imp.kontakt_telefon) document.getElementById('imp-phone-row').style.display = 'none';
       if (!imp.registereintrag) {
         document.getElementById('imp-register-heading').style.display = 'none';
@@ -182,12 +174,12 @@
         document.getElementById('imp-ustid-row').style.display    = 'none';
       }
 
-      // Company name in nav
       const nameEl = document.querySelector('.nav-logo');
       if (nameEl && content.companyName) {
         const parts = content.companyName.split(' ');
         if (parts.length > 1) {
-          nameEl.innerHTML = parts[0] + ' <span>' + parts[1] + '</span>' + (parts.slice(2).join(' ') ? ' ' + parts.slice(2).join(' ') : '');
+          nameEl.innerHTML = parts[0] + ' <span>' + parts[1] + '</span>' +
+            (parts.slice(2).length ? ' ' + parts.slice(2).join(' ') : '');
         }
       }
     });

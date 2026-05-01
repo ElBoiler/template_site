@@ -348,6 +348,14 @@ function clearFieldError(fieldId, errorId) {
   error.textContent = '';
 }
 
+// Clear consent error when checkbox is ticked
+const consentBox = document.getElementById('consent');
+if (consentBox) {
+  consentBox.addEventListener('change', () => {
+    document.getElementById('consentError').textContent = '';
+  });
+}
+
 // Inline clear on input
 ['name', 'email', 'subject', 'message'].forEach(id => {
   const field = document.getElementById(id);
