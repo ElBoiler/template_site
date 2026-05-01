@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+{{HEAD}}
+</head>
+<body class="page-home">
+{{HEADER}}
+
+  <main id="main">
+
+    <section class="hero-carousel" id="heroCarousel" aria-roledescription="carousel" aria-label="Bilder aus dem Schulleben">
+      <div class="carousel-track" id="carouselTrack" data-carousel-slot="home.carousel"></div>
+      <button class="carousel-btn carousel-prev" id="carouselPrev" aria-label="Vorheriges Bild">‹</button>
+      <button class="carousel-btn carousel-next" id="carouselNext" aria-label="Nächstes Bild">›</button>
+      <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Bildauswahl"></div>
+    </section>
+
+    <section class="welcome section-pad">
+      <div class="container">
+        <p class="section-eyebrow">Herzlich willkommen</p>
+        <h2 data-content="home.welcome.heading">Willkommen an der Chamisso-Grundschule</h2>
+        <div class="welcome-body" data-content="home.welcome.body"></div>
+      </div>
+    </section>
+
+    <section class="events section-pad bg-surface">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-eyebrow">Aktuelle Veranstaltungen</p>
+          <h2>Was bei uns gerade passiert</h2>
+        </div>
+        <ul class="events-list" id="eventsList" data-list-slot="home.veranstaltungen"></ul>
+      </div>
+    </section>
+
+    <section class="news-preview section-pad">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-eyebrow">Neuigkeiten</p>
+          <h2>Aus dem Schulalltag</h2>
+        </div>
+        <ul class="news-grid" id="newsGrid" data-list-slot="posts.latest"></ul>
+        <p class="news-cta-row"><a class="btn btn-primary" href="/aktuelles">Alle Beiträge</a></p>
+      </div>
+    </section>
+
+    <section class="quicklinks section-pad bg-surface">
+      <div class="container">
+        <div class="quicklink-grid">
+          <a class="quicklink-card" href="#" data-content="home.sduiUrl" data-attr="href">
+            <span class="quicklink-icon" aria-hidden="true">📱</span>
+            <h3>Sdui — Schul-App</h3>
+            <p>Stunden- und Vertretungsplan, Krankmeldung, Mitteilungen direkt auf dem Handy.</p>
+          </a>
+          <a class="quicklink-card" href="#" data-content="home.brochureUrl" data-attr="href" download>
+            <span class="quicklink-icon" aria-hidden="true">📄</span>
+            <h3>Schulflyer (PDF)</h3>
+            <p>Alles Wichtige zu unserer Schule auf einen Blick — zum Herunterladen und Teilen.</p>
+          </a>
+          <a class="quicklink-card" href="/kontakt">
+            <span class="quicklink-icon" aria-hidden="true">✉️</span>
+            <h3>Kontakt aufnehmen</h3>
+            <p>Sekretariat, Schulleitung, EFöB — wir sind für Sie erreichbar.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+{{FOOTER}}
+
+  <script>window.__PAGE_KEY = "/";</script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/content.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

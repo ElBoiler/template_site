@@ -1,0 +1,10 @@
+{
+  "template": "page",
+  "key": "/fuer-eltern/krankmeldung",
+  "slug": "krankmeldung",
+  "title": "Krankmeldung",
+  "eyebrow": "Für Eltern",
+  "subtitle": "So melden Sie Ihr Kind krank.",
+  "description": "Krankmeldung an der Chamisso-Grundschule — Vorgehen und Formular.",
+  "body": "<p>Bitte melden Sie Ihr Kind im Krankheitsfall vor Unterrichtsbeginn telefonisch oder über die Sdui-App ab. Bei längerer Krankheit ist eine schriftliche Entschuldigung erforderlich.</p><p><a class=\"btn btn-primary\" href=\"/downloads/krankmeldung.pdf\" download>Krankmeldungs-Formular (PDF)</a></p>"
+}

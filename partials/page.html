@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+{{HEAD}}
+</head>
+<body class="page-{{pageSlug}}">
+{{HEADER}}
+
+  <main id="main" class="page-main">
+    <header class="page-hero">
+      <div class="container">
+        <p class="page-eyebrow">{{eyebrow}}</p>
+        <h1 class="page-title">{{title}}</h1>
+        {{subtitleBlock}}
+      </div>
+    </header>
+
+    <section class="page-content section-pad">
+      <div class="container">
+        <div class="prose" data-content="page.body">{{body}}</div>
+      </div>
+    </section>
+  </main>
+
+{{FOOTER}}
+
+  <script>window.__PAGE_KEY = "{{pageKey}}";</script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/content.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

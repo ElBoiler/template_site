@@ -1,0 +1,11 @@
+{
+  "name": "chamisso-grundschule",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Website der Chamisso-Grundschule Berlin",
+  "scripts": {
+    "build": "node build.js",
+    "dev": "node build.js && npx --yes wrangler@latest pages dev .",
+    "deploy": "node build.js && npx --yes wrangler@latest deploy"
+  }
+}

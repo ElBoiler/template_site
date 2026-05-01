@@ -3,371 +3,156 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Boyle Digital Services — Produktmanagement, digitales Marketing, Webentwicklung und mehr. Ihr vertrauensvoller Partner für digitales Wachstum.">
-  <title>Boyle Digital Services</title>
+  <meta name="description" content="Chamisso-Grundschule Berlin — Musikalische Grundschule. Aktuelles, Veranstaltungen und Informationen zu Unterricht, EFöB und Förderverein.">
+  <title>Start | Chamisso-Grundschule</title>
   <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="css/fonts.css">
-  <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
+  <meta property="og:title" content="Start | Chamisso-Grundschule">
+  <meta property="og:description" content="Chamisso-Grundschule Berlin — Musikalische Grundschule. Aktuelles, Veranstaltungen und Informationen zu Unterricht, EFöB und Förderverein.">
+  <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
 
-  <!-- ==============================
-       NAVIGATION
-  ============================== -->
-  <nav class="navbar" id="navbar">
+</head>
+<body class="page-home">
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <nav class="navbar" id="navbar" aria-label="Hauptnavigation">
     <div class="container nav-container">
-      <!-- Text updated dynamically by content.js -->
-      <a href="#" class="nav-logo">Boyle <span>Digital</span> Services</a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#about" data-i18n="nav_about">Über uns</a></li>
-        <li><a href="#services" data-i18n="nav_services">Leistungen</a></li>
-        <li><a href="#gallery" data-i18n="nav_gallery">Referenzen</a></li>
-        <li><a href="#locations" data-i18n="nav_locations">Standorte</a></li>
-        <li><a href="#jobs"         data-i18n="nav_jobs">Stellen</a></li>
-        <li><a href="#appointments" data-i18n="nav_appointments">Termine</a></li>
-        <li><a href="#contact" class="nav-cta" data-i18n="nav_contact">Kontakt</a></li>
-      </ul>
-      <!-- Language switcher -->
-      <div class="lang-switcher" data-i18n-aria="lang_switcher_label">
-        <button class="lang-btn active" data-lang="de" type="button">DE</button>
-        <span class="lang-divider" aria-hidden="true">|</span>
-        <button class="lang-btn" data-lang="en" type="button">EN</button>
-      </div>
-      <button class="hamburger" id="hamburger" data-i18n-aria="hamburger_label" aria-label="Navigation ein-/ausblenden" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
+      <a href="/" class="nav-logo">
+        <img src="/img/logo.svg" alt="" aria-hidden="true" width="40" height="40" onerror="this.style.display='none'">
+        <span class="nav-logo-text">Chamisso-<span class="nav-logo-accent">Grundschule</span></span>
+      </a>
+
+      <ul class="nav-links" id="navLinks" role="menubar"><li role="none"><a role="menuitem" class="" href="/">Start</a></li><li role="none" class="has-dropdown"><button class="nav-link dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false" role="menuitem">Unsere Schule<span class="dropdown-caret" aria-hidden="true">▾</span></button><ul class="dropdown-menu" role="menu"><li role="none"><a role="menuitem" href="/unsere-schule/musikalische-grundschule">Musikalische Grundschule</a></li><li role="none"><a role="menuitem" href="/unsere-schule/geschichte">Geschichte</a></li><li role="none"><a role="menuitem" href="/unsere-schule/startchancenprogramm">Startchancenprogramm</a></li><li role="none"><a role="menuitem" href="/unsere-schule/ags-projekte">Arbeitsgemeinschaften und Projekte</a></li><li role="none"><a role="menuitem" href="/unsere-schule/kooperationen">Kooperationen</a></li><li role="none"><a role="menuitem" href="/unsere-schule/konfliktlotsen">Konfliktlotsen</a></li><li role="none"><a role="menuitem" href="/unsere-schule/schuelerparlament">Schülerparlament</a></li></ul></li><li role="none" class="has-dropdown"><button class="nav-link dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false" role="menuitem">Unterricht<span class="dropdown-caret" aria-hidden="true">▾</span></button><ul class="dropdown-menu" role="menu"><li role="none"><a role="menuitem" href="/unterricht/unterrichtszeiten">Unterrichtszeiten</a></li><li role="none"><a role="menuitem" href="/unterricht/lernform-fremdsprachen">Lernform und Fremdsprachen</a></li><li role="none"><a role="menuitem" href="/unterricht/inklusion">Angebote inklusiver Schule</a></li><li role="none"><a role="menuitem" href="/unterricht/chakk">ChaKk – Chamisso Kleinklasse</a></li><li role="none"><a role="menuitem" href="/unterricht/lese-sprachfoerderung">Lese- und Sprachförderung</a></li><li role="none"><a role="menuitem" href="/unterricht/ernaehrungsfuehrerschein">Ernährungsführerschein</a></li></ul></li><li role="none"><a role="menuitem" class="" href="/efoeb">EFöB</a></li><li role="none"><a role="menuitem" class="" href="/schulsozialarbeit">Schulsozialarbeit</a></li><li role="none"><a role="menuitem" class="" href="/mittagessen">Mittagessen</a></li><li role="none" class="has-dropdown"><button class="nav-link dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false" role="menuitem">Für Eltern<span class="dropdown-caret" aria-hidden="true">▾</span></button><ul class="dropdown-menu" role="menu"><li role="none"><a role="menuitem" href="/fuer-eltern/krankmeldung">Krankmeldung</a></li><li role="none"><a role="menuitem" href="/fuer-eltern/berlin-pass">Berlin-Pass</a></li><li role="none"><a role="menuitem" href="/fuer-eltern/bvg-ticket">BVG-Ticket</a></li><li role="none"><a role="menuitem" href="/fuer-eltern/sichere-suche">Sichere Suche im Internet für Kinder</a></li></ul></li><li role="none"><a role="menuitem" class="" href="/foerderverein">Förderverein</a></li><li role="none"><a role="menuitem" class="" href="/aktuelles">Aktuelles</a></li><li role="none"><a role="menuitem" class="nav-cta" href="/kontakt">Kontakt</a></li></ul>
+
+      <button class="hamburger" id="hamburger" aria-label="Navigation ein-/ausblenden" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
       </button>
     </div>
   </nav>
 
-  <!-- Mobile Menu Overlay -->
-  <div class="mobile-menu" id="mobileMenu" role="dialog" data-i18n-aria="mobile_menu_label" aria-label="Mobile Navigation">
-    <div class="lang-switcher lang-switcher--mobile">
-      <button class="lang-btn active" data-lang="de" type="button">DE</button>
-      <span class="lang-divider" aria-hidden="true">|</span>
-      <button class="lang-btn" data-lang="en" type="button">EN</button>
-    </div>
-    <a href="#about"    data-i18n="nav_about">Über uns</a>
-    <a href="#services" data-i18n="nav_services">Leistungen</a>
-    <a href="#gallery"   data-i18n="nav_gallery">Referenzen</a>
-    <a href="#locations" data-i18n="nav_locations">Standorte</a>
-    <a href="#jobs"         data-i18n="nav_jobs">Stellen</a>
-    <a href="#appointments" data-i18n="nav_appointments">Termine</a>
-    <a href="#contact"   data-i18n="nav_contact">Kontakt</a>
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobile Navigation" aria-modal="true">
+    <div class="mobile-menu-inner"><a class="m-link" href="/">Start</a><details class="m-group"><summary>Unsere Schule</summary><ul><li><a href="/unsere-schule/musikalische-grundschule">Musikalische Grundschule</a></li><li><a href="/unsere-schule/geschichte">Geschichte</a></li><li><a href="/unsere-schule/startchancenprogramm">Startchancenprogramm</a></li><li><a href="/unsere-schule/ags-projekte">Arbeitsgemeinschaften und Projekte</a></li><li><a href="/unsere-schule/kooperationen">Kooperationen</a></li><li><a href="/unsere-schule/konfliktlotsen">Konfliktlotsen</a></li><li><a href="/unsere-schule/schuelerparlament">Schülerparlament</a></li></ul></details><details class="m-group"><summary>Unterricht</summary><ul><li><a href="/unterricht/unterrichtszeiten">Unterrichtszeiten</a></li><li><a href="/unterricht/lernform-fremdsprachen">Lernform und Fremdsprachen</a></li><li><a href="/unterricht/inklusion">Angebote inklusiver Schule</a></li><li><a href="/unterricht/chakk">ChaKk – Chamisso Kleinklasse</a></li><li><a href="/unterricht/lese-sprachfoerderung">Lese- und Sprachförderung</a></li><li><a href="/unterricht/ernaehrungsfuehrerschein">Ernährungsführerschein</a></li></ul></details><a class="m-link" href="/efoeb">EFöB</a><a class="m-link" href="/schulsozialarbeit">Schulsozialarbeit</a><a class="m-link" href="/mittagessen">Mittagessen</a><details class="m-group"><summary>Für Eltern</summary><ul><li><a href="/fuer-eltern/krankmeldung">Krankmeldung</a></li><li><a href="/fuer-eltern/berlin-pass">Berlin-Pass</a></li><li><a href="/fuer-eltern/bvg-ticket">BVG-Ticket</a></li><li><a href="/fuer-eltern/sichere-suche">Sichere Suche im Internet für Kinder</a></li></ul></details><a class="m-link" href="/foerderverein">Förderverein</a><a class="m-link" href="/aktuelles">Aktuelles</a><a class="m-link" href="/kontakt">Kontakt</a></div>
   </div>
 
-  <!-- ==============================
-       HERO
-  ============================== -->
-  <section id="hero" class="hero">
-    <div class="hero-shapes" aria-hidden="true">
-      <div class="shape shape-1"></div>
-      <div class="shape shape-2"></div>
-      <div class="shape shape-3"></div>
-    </div>
-    <div class="container hero-content">
-      <p class="hero-eyebrow reveal" data-content="hero.eyebrow">Digitalagentur</p>
-      <h1 class="reveal" data-content="hero.headline">Wachstum durch digitale Exzellenz</h1>
-      <p class="hero-subtitle reveal" data-content="hero.subtitle">
-        Wir helfen Unternehmen, sich in der digitalen Welt zu behaupten – durch strategisches
-        Produktmanagement, datengetriebenes Marketing und moderne Webentwicklung.
-      </p>
-      <div class="hero-buttons reveal">
-        <a href="#contact" class="btn btn-primary" data-i18n="hero_cta_contact">Kontakt aufnehmen</a>
-        <a href="#services" class="btn btn-outline" data-i18n="hero_cta_services">Unsere Leistungen</a>
-      </div>
-    </div>
-    <a href="#about" class="scroll-indicator" data-i18n-aria="scroll_down_label" aria-label="Nach unten scrollen">
-      <span class="scroll-arrow"></span>
-    </a>
-  </section>
 
-  <!-- ==============================
-       ABOUT
-  ============================== -->
-  <section id="about" class="about section-pad">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-text">
-          <p class="section-eyebrow reveal" data-i18n="eyebrow_about">Über uns</p>
-          <h2 class="reveal" data-content="about.heading">Ihr Partner für die digitale Transformation</h2>
-          <p class="reveal" data-content="about.p0">
-            Bei Boyle Digital Services sind wir überzeugt, dass jedes Unternehmen eine starke digitale
-            Präsenz verdient. Gegründet mit Leidenschaft für Technologie und dem Anspruch auf messbare
-            Ergebnisse, haben wir bereits Hunderte von Unternehmen dabei unterstützt, ihre digitale
-            Strategie von Grund auf zu transformieren.
-          </p>
-          <p class="reveal" data-content="about.p1">
-            Unser interdisziplinäres Team vereint tiefgehende technische Expertise mit kreativem Denken
-            und datengestützten Erkenntnissen. Egal, ob Sie ein neues Produkt einführen, Ihre
-            Marketingaktivitäten skalieren oder Ihren Webauftritt erneuern möchten – wir liefern
-            Lösungen, die wirklich etwas bewegen.
-          </p>
-          <p class="reveal" data-content="about.p2">
-            Wir sind nicht nur ein Dienstleister – wir sind ein langfristiger Partner, der in Ihren
-            Erfolg investiert. Jede Zusammenarbeit beginnt mit einem gründlichen Verständnis Ihrer
-            Ziele, Ihrer Zielgruppe und Ihres Wettbewerbsumfelds.
-          </p>
+  <main id="main">
+
+    <section class="hero-carousel" id="heroCarousel" aria-roledescription="carousel" aria-label="Bilder aus dem Schulleben">
+      <div class="carousel-track" id="carouselTrack" data-carousel-slot="home.carousel"></div>
+      <button class="carousel-btn carousel-prev" id="carouselPrev" aria-label="Vorheriges Bild">‹</button>
+      <button class="carousel-btn carousel-next" id="carouselNext" aria-label="Nächstes Bild">›</button>
+      <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Bildauswahl"></div>
+    </section>
+
+    <section class="welcome section-pad">
+      <div class="container">
+        <p class="section-eyebrow">Herzlich willkommen</p>
+        <h2 data-content="home.welcome.heading">Willkommen an der Chamisso-Grundschule</h2>
+        <div class="welcome-body" data-content="home.welcome.body"></div>
+      </div>
+    </section>
+
+    <section class="events section-pad bg-surface">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-eyebrow">Aktuelle Veranstaltungen</p>
+          <h2>Was bei uns gerade passiert</h2>
         </div>
-        <!-- Stat cards built dynamically by content.js -->
-        <div class="about-stats"></div>
+        <ul class="events-list" id="eventsList" data-list-slot="home.veranstaltungen"></ul>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ==============================
-       SERVICES
-  ============================== -->
-  <section id="services" class="services section-pad bg-surface">
-    <div class="container">
-      <div class="section-header reveal">
-        <p class="section-eyebrow" data-i18n="eyebrow_services">Was wir tun</p>
-        <h2 data-i18n="services_h2">Umfassende digitale Leistungen</h2>
-        <p class="section-subtitle" data-i18n="services_subtitle">
-          Von der Strategie bis zur Umsetzung bieten wir ganzheitliche digitale Lösungen –
-          maßgeschneidert für Ihre individuellen Geschäftsanforderungen.
-        </p>
+    <section class="news-preview section-pad">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-eyebrow">Neuigkeiten</p>
+          <h2>Aus dem Schulalltag</h2>
+        </div>
+        <ul class="news-grid" id="newsGrid" data-list-slot="posts.latest"></ul>
+        <p class="news-cta-row"><a class="btn btn-primary" href="/aktuelles">Alle Beiträge</a></p>
       </div>
-      <!-- Service cards built dynamically by content.js -->
-      <div class="services-grid"></div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ==============================
-       GALLERY
-  ============================== -->
-  <section id="gallery" class="gallery section-pad">
-    <div class="container">
-      <div class="section-header reveal">
-        <p class="section-eyebrow" data-i18n="eyebrow_gallery">Unsere Arbeit</p>
-        <h2 data-i18n="gallery_h2">Projekte &amp; Highlights</h2>
-        <p class="section-subtitle" data-i18n="gallery_subtitle">
-          Ein Einblick in unsere Arbeit, die Teams, die wir aufgebaut haben, und die
-          Ergebnisse, die wir für unsere Kunden erzielt haben.
-        </p>
-      </div>
-      <!-- Gallery items built dynamically by content.js -->
-      <div class="gallery-grid"></div>
-    </div>
-  </section>
-
-  <!-- Lightbox -->
-  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" data-i18n-aria="lightbox_label" aria-label="Bildanzeige">
-    <button class="lightbox-close" id="lightboxClose" data-i18n-aria="lightbox_close" aria-label="Lightbox schließen">&#10005;</button>
-    <button class="lightbox-prev" id="lightboxPrev" data-i18n-aria="lightbox_prev" aria-label="Vorheriges Bild">&#8249;</button>
-    <button class="lightbox-next" id="lightboxNext" data-i18n-aria="lightbox_next" aria-label="Nächstes Bild">&#8250;</button>
-    <div class="lightbox-inner">
-      <img id="lightboxImg" src="" alt="">
-      <p id="lightboxCaption" class="lightbox-caption"></p>
-    </div>
-  </div>
-
-  <!-- ==============================
-       LOCATIONS
-  ============================== -->
-  <section id="locations" class="section-pad">
-    <div class="container">
-      <div class="section-header reveal">
-        <p class="section-eyebrow" data-i18n="eyebrow_locations">Standorte</p>
-        <h2 data-i18n="locations_h2">Unsere Standorte</h2>
-        <p class="section-subtitle" data-i18n="locations_subtitle">
-          Besuchen Sie uns an einem unserer Standorte.
-        </p>
-      </div>
-      <!-- Map rendered by main.js (Leaflet, lazy-loaded) -->
-      <div id="locations-map" class="locations-map"></div>
-      <!-- Location cards built dynamically by content.js -->
-      <div class="location-cards"></div>
-    </div>
-  </section>
-
-  <!-- ==============================
-       JOBS
-  ============================== -->
-  <section id="jobs" class="jobs section-pad">
-    <div class="container">
-      <div class="section-header reveal">
-        <p class="section-eyebrow" data-i18n="eyebrow_jobs">Karriere</p>
-        <h2 class="jobs-title"></h2>
-      </div>
-      <div class="jobs-content reveal">
-        <p class="jobs-body"></p>
-        <div class="jobs-cta">
-          <a href="#" class="btn btn-primary jobs-btn" target="_blank" rel="noopener noreferrer" style="display:none"></a>
+    <section class="quicklinks section-pad bg-surface">
+      <div class="container">
+        <div class="quicklink-grid">
+          <a class="quicklink-card" href="#" data-content="home.sduiUrl" data-attr="href">
+            <span class="quicklink-icon" aria-hidden="true">📱</span>
+            <h3>Sdui — Schul-App</h3>
+            <p>Stunden- und Vertretungsplan, Krankmeldung, Mitteilungen direkt auf dem Handy.</p>
+          </a>
+          <a class="quicklink-card" href="#" data-content="home.brochureUrl" data-attr="href" download>
+            <span class="quicklink-icon" aria-hidden="true">📄</span>
+            <h3>Schulflyer (PDF)</h3>
+            <p>Alles Wichtige zu unserer Schule auf einen Blick — zum Herunterladen und Teilen.</p>
+          </a>
+          <a class="quicklink-card" href="/kontakt">
+            <span class="quicklink-icon" aria-hidden="true">✉️</span>
+            <h3>Kontakt aufnehmen</h3>
+            <p>Sekretariat, Schulleitung, EFöB — wir sind für Sie erreichbar.</p>
+          </a>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ==============================
-       APPOINTMENTS
-  ============================== -->
-  <section id="appointments" class="appointments section-pad bg-surface">
-    <div class="container">
-      <div class="section-header reveal">
-        <p class="section-eyebrow" data-i18n="eyebrow_appointments">Terminvereinbarung</p>
-        <h2 class="appointments-title"></h2>
-      </div>
-      <div class="appointments-content reveal">
-        <p class="appointments-body"></p>
-        <div class="appointments-cta">
-          <a href="#" class="btn btn-primary appointments-btn" target="_blank" rel="noopener noreferrer" style="display:none"></a>
-        </div>
-      </div>
-    </div>
-  </section>
+  </main>
 
-  <!-- ==============================
-       CONTACT
-  ============================== -->
-  <section id="contact" class="contact section-pad bg-surface">
-    <div class="container">
-      <div class="section-header reveal">
-        <p class="section-eyebrow" data-i18n="eyebrow_contact">Jetzt Kontakt aufnehmen</p>
-        <h2 data-i18n="contact_h2">Gespräch beginnen</h2>
-        <p class="section-subtitle" data-i18n="contact_subtitle">
-          Bereit, Ihre digitale Präsenz auszubauen? Wir freuen uns, mehr über Ihr Projekt zu erfahren.
-        </p>
-      </div>
-      <div class="contact-grid">
-        <div class="contact-info reveal">
-          <h3 data-i18n="contact_info_heading">Kontaktinformationen</h3>
-          <address>
-          <ul class="contact-details">
-            <li data-contact-item="address">
-              <span class="contact-icon" aria-hidden="true">📍</span>
-              <span data-content="contact.address">123 Digital Avenue, Dublin, Ireland</span>
-            </li>
-            <li data-contact-item="phone">
-              <span class="contact-icon" aria-hidden="true">📞</span>
-              <a href="tel:+35312345678" data-content="contact.phone">+353 1 234 5678</a>
-            </li>
-            <li data-contact-item="email">
-              <span class="contact-icon" aria-hidden="true">✉️</span>
-              <a href="mailto:hello@boyledigital.ie" data-content="contact.email">hello@boyledigital.ie</a>
-            </li>
-            <li data-contact-item="hours">
-              <span class="contact-icon" aria-hidden="true">🕐</span>
-              <span data-content="contact.hours"></span>
-            </li>
-          </ul>
-          </address>
-          <!-- Social links rebuilt dynamically by content.js -->
-          <div class="social-links" id="socialLinksContainer"></div>
-        </div>
-        <div class="contact-form-wrap reveal">
-          <form id="contactForm" novalidate>
-            <div class="form-group">
-              <label for="name">
-                <span data-i18n="form_label_name">Vollständiger Name</span>
-                <span class="required">*</span>
-              </label>
-              <input type="text" id="name" name="name"
-                     data-i18n-placeholder="form_placeholder_name"
-                     placeholder="Max Mustermann" autocomplete="name">
-              <span class="form-error" id="nameError" role="alert"></span>
-            </div>
-            <div class="form-group">
-              <label for="email">
-                <span data-i18n="form_label_email">E-Mail-Adresse</span>
-                <span class="required">*</span>
-              </label>
-              <input type="email" id="email" name="email"
-                     data-i18n-placeholder="form_placeholder_email"
-                     placeholder="max@beispiel.de" autocomplete="email">
-              <span class="form-error" id="emailError" role="alert"></span>
-            </div>
-            <div class="form-group">
-              <label for="subject">
-                <span data-i18n="form_label_subject">Betreff</span>
-                <span class="required">*</span>
-              </label>
-              <select id="subject" name="subject">
-                <option value="" data-i18n-value="subject_default">Betreff auswählen …</option>
-              </select>
-              <span class="form-error" id="subjectError" role="alert"></span>
-            </div>
-            <div class="form-group">
-              <label for="message">
-                <span data-i18n="form_label_message">Nachricht</span>
-                <span class="required">*</span>
-              </label>
-              <textarea id="message" name="message" rows="5"
-                        data-i18n-placeholder="form_placeholder_message"
-                        placeholder="Erzählen Sie uns von Ihrem Projekt …"></textarea>
-              <span class="form-error" id="messageError" role="alert"></span>
-            </div>
-            <div class="form-group form-group--consent">
-              <label class="consent-label">
-                <input type="checkbox" id="consent" name="consent">
-                <span data-i18n-html="form_consent_label">Ich habe die <a href="/datenschutz">Datenschutzerklärung</a> gelesen und stimme zu.</span>
-              </label>
-              <span class="form-error" id="consentError" role="alert"></span>
-            </div>
-            <button type="submit" class="btn btn-primary btn-full" data-i18n="form_submit">Nachricht senden</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==============================
-       FOOTER
-  ============================== -->
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-brand">
-          <!-- Text updated dynamically by content.js -->
-          <p class="footer-logo">Boyle <span>Digital</span> Services</p>
-          <p class="footer-tagline" data-i18n="footer_tagline">
-            Wachstum durch digitale Exzellenz. Ihr vertrauensvoller Partner im digitalen Zeitalter.
-          </p>
+
+        <div class="footer-col footer-col--brand">
+          <div class="footer-logo">Chamisso-<span>Grundschule</span></div>
+          <p class="footer-tagline">Musikalische Grundschule im Berliner Bezirk Reinickendorf — wir lernen, musizieren und wachsen gemeinsam.</p>
         </div>
+
         <div class="footer-col">
-          <h4 data-i18n="footer_quick_links">Schnelllinks</h4>
+          <h4>Kontakt</h4>
+          <p data-content="contact.address">Senftenberger Ring 27<br>13435 Berlin</p>
+          <p><a data-content="contact.phone" href="tel:+493021309370">030 / 213 093 70</a></p>
+          <p><a data-content="contact.email" href="mailto:info@chamisso.schule.berlin.de">info@chamisso.schule.berlin.de</a></p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Schule</h4>
           <ul>
-            <li><a href="#about"    data-i18n="footer_about_link">Über uns</a></li>
-            <li><a href="#services" data-i18n="footer_services">Leistungen</a></li>
-            <li><a href="#gallery"  data-i18n="nav_gallery">Referenzen</a></li>
-            <li><a href="#contact"  data-i18n="nav_contact">Kontakt</a></li>
+            <li><a href="/unsere-schule/musikalische-grundschule">Musikalische Grundschule</a></li>
+            <li><a href="/unsere-schule/geschichte">Geschichte</a></li>
+            <li><a href="/aktuelles">Aktuelles</a></li>
+            <li><a href="/foerderverein">Förderverein</a></li>
           </ul>
         </div>
+
         <div class="footer-col">
-          <h4 data-i18n="footer_services">Leistungen</h4>
-          <ul>
-            <li><a href="#services" data-i18n="footer_svc_pm">Produktmanagement</a></li>
-            <li><a href="#services" data-i18n="footer_svc_web">Webentwicklung</a></li>
-            <li><a href="#services" data-i18n="footer_svc_seo">SEO &amp; Analytics</a></li>
-          </ul>
+          <h4>Folgen Sie uns</h4>
+          <div class="social-links" id="socialLinksContainer">
+            <a class="social-link" href="#" aria-label="Facebook" data-social="facebook">Fb</a>
+            <a class="social-link" href="#" aria-label="Instagram" data-social="instagram">Ig</a>
+            <a class="social-link" href="#" aria-label="Twitter" data-social="twitter">Tw</a>
+          </div>
         </div>
-        <div class="footer-col footer-contact-col">
-          <h4 data-i18n="footer_contact">Kontakt</h4>
-          <address>
-          <p data-contact-item="address" data-content="contact.address">123 Digital Avenue, Dublin, Ireland</p>
-          <p data-contact-item="phone"><a href="tel:+35312345678" data-content="contact.phone">+353 1 234 5678</a></p>
-          <p data-contact-item="email"><a href="mailto:hello@boyledigital.ie" data-content="contact.email">hello@boyledigital.ie</a></p>
-          <p data-contact-item="hours"><span data-content="contact.hours"></span></p>
-          <p><a href="/about-me" data-i18n="footer_about_me_link">Über mich</a></p>
-          </address>
-        </div>
+
       </div>
+
       <div class="footer-bottom">
-        <p data-i18n="footer_copyright">© 2026 Boyle Digital Services. Alle Rechte vorbehalten.</p>
-        <span class="footer-legal-links">
-          <a href="/impressum" data-i18n="footer_impressum">Impressum</a>
-          <a href="/datenschutz" data-i18n="footer_datenschutz">Datenschutz</a>
-          <a href="admin.html" class="footer-admin-link" data-i18n="footer_admin">Admin</a>
-        </span>
+        <p>&copy; <span id="footerYear"></span> Chamisso-Grundschule</p>
+        <ul class="footer-legal">
+          <li><a href="/impressum">Impressum</a></li>
+          <li><a href="/datenschutz">Datenschutz</a></li>
+          <li><a href="/kontakt">Kontakt</a></li>
+        </ul>
+        <a href="/admin.html" class="footer-admin-link">admin</a>
       </div>
     </div>
   </footer>
 
-  <!-- i18n.js first, then content.js so getLang() is available, then main.js -->
-  <script src="js/i18n.js"></script>
-  <script src="js/content.js"></script>
-  <script src="js/main.js"></script>
+
+  <script>window.__PAGE_KEY = "/";</script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/content.js"></script>
+  <script src="/js/main.js"></script>
 </body>
 </html>

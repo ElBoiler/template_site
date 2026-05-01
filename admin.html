@@ -3,662 +3,104 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin — Boyle Digital Services</title>
-  <link rel="stylesheet" href="css/fonts.css">
-  <link rel="stylesheet" href="css/admin.css">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Admin — Chamisso-Grundschule</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/admin.css">
 </head>
-<body>
+<body class="admin-body">
 
-  <!-- ==============================
-       LOGIN SCREEN
-  ============================== -->
-  <div id="loginScreen" class="login-screen">
-    <div class="login-card">
-      <div class="login-logo">BDS</div>
-      <h1 data-i18n="admin_login_title">Admin-Panel</h1>
-      <p class="login-subtitle" data-i18n="admin_login_subtitle">Geben Sie Ihr Passwort ein, um fortzufahren</p>
-      <form id="loginForm" novalidate>
-        <div class="login-field">
-          <label for="passwordInput" data-i18n="admin_login_label">Passwort</label>
-          <input type="password" id="passwordInput"
-                 data-i18n-placeholder="admin_login_ph"
-                 placeholder="Passwort eingeben" autocomplete="current-password">
-        </div>
-        <p class="login-error" id="loginError"></p>
-        <button type="submit" class="btn-primary btn-full" data-i18n="admin_login_btn">Anmelden</button>
-      </form>
-      <p class="login-hint"><span data-i18n="admin_login_hint">Standardpasswort: </span><code>admin</code></p>
+  <header class="admin-header">
+    <div class="admin-bar">
+      <a href="/" class="admin-back">← Zur Website</a>
+      <h1>Verwaltung</h1>
+      <button id="logoutBtn" class="btn-link" hidden>Abmelden</button>
     </div>
-  </div>
+  </header>
 
-  <!-- ==============================
-       ADMIN PANEL
-  ============================== -->
-  <div id="adminPanel" class="admin-panel hidden">
+  <main class="admin-main">
 
-    <!-- Header -->
-    <header class="admin-header">
-      <div class="admin-header-left">
-        <span class="admin-logo">BDS Admin</span>
+    <section id="loginSection" class="admin-card">
+      <h2>Anmelden</h2>
+      <p class="admin-help">Geben Sie das Admin-Passwort (Worker Secret) ein, um Beiträge und Kontaktdaten zu bearbeiten.</p>
+      <div class="form-group">
+        <label for="apiKeyInput">Admin-Passwort</label>
+        <input id="apiKeyInput" type="password" autocomplete="current-password" placeholder="••••••••">
+        <span id="loginError" class="form-error" role="alert"></span>
       </div>
-      <div class="admin-header-right">
-        <!-- UI language switcher -->
-        <div class="lang-switcher lang-switcher--admin">
-          <button class="lang-btn active" data-lang="de" type="button">DE</button>
-          <span class="lang-divider" aria-hidden="true">|</span>
-          <button class="lang-btn" data-lang="en" type="button">EN</button>
-        </div>
-        <a href="index.html" target="_blank" class="btn-ghost" data-i18n="admin_view_site">Website anzeigen ↗</a>
-        <span id="kvStatusPill" class="kv-pill kv-pill--warn" data-i18n="kv_pill_local_only" hidden>Nicht verbunden — Speicherungen erreichen keine Besucher</span>
-        <button id="resetBtn" class="btn-ghost btn-danger" data-i18n="admin_reset_btn">Zurücksetzen</button>
-        <button id="saveBtn" class="btn-primary" data-i18n="admin_save_btn">Änderungen speichern</button>
-      </div>
-    </header>
+      <button id="loginBtn" class="btn btn-primary">Anmelden</button>
+      <p class="admin-help admin-help--small">Lokale Bearbeitungen ohne Anmeldung funktionieren nur in diesem Browser und werden nicht veröffentlicht.</p>
+    </section>
 
-    <!-- Content language tab bar (which language's content you're editing) -->
-    <div class="admin-content-lang-bar">
-      <div class="admin-lang-tabs" id="adminLangTabs" role="tablist">
-        <button class="admin-lang-tab active" data-lang="de" role="tab"
-                aria-selected="true" data-i18n="admin_lang_tab_de">🇩🇪 Deutsch</button>
-        <button class="admin-lang-tab" data-lang="en" role="tab"
-                aria-selected="false" data-i18n="admin_lang_tab_en">🇬🇧 Englisch</button>
-      </div>
-    </div>
+    <section id="editorSection" hidden>
 
-    <!-- Body -->
-    <div class="admin-body">
-
-      <!-- Sidebar -->
-      <nav class="admin-sidebar">
-        <ul>
-          <li><a href="#sec-general"  class="sidebar-link active" data-i18n="admin_nav_general">⚙ Allgemein</a></li>
-          <li><a href="#sec-hero"     class="sidebar-link" data-i18n="admin_nav_hero">🚀 Hero</a></li>
-          <li><a href="#sec-about"    class="sidebar-link" data-i18n="admin_nav_about">💼 Über uns</a></li>
-          <li><a href="#sec-services" class="sidebar-link" data-i18n="admin_nav_services">🛠 Leistungen</a></li>
-          <li><a href="#sec-gallery"   class="sidebar-link" data-i18n="admin_nav_gallery">🖼 Referenzen</a></li>
-          <li><a href="#sec-locations" class="sidebar-link" data-i18n="sec_locations_h2">📍 Standorte</a></li>
-          <li><a href="#sec-jobs"         class="sidebar-link" data-i18n="sec_jobs_h2">💼 Stellen</a></li>
-          <li><a href="#sec-appointments" class="sidebar-link" data-i18n="sec_appointments_h2">📅 Termine</a></li>
-          <li><a href="#sec-layout"       class="sidebar-link" data-i18n="admin_nav_layout">⊞ Struktur</a></li>
-          <li><a href="#sec-seo"          class="sidebar-link" data-i18n="admin_nav_seo">🔍 SEO</a></li>
-          <li><a href="#sec-storage" class="sidebar-link" data-i18n="admin_nav_storage">💾 Storage</a></li>
-          <li><a href="#sec-contact"   class="sidebar-link" data-i18n="admin_nav_contact">✉ Kontakt</a></li>
-          <li><a href="#sec-theme"    class="sidebar-link" data-i18n="admin_nav_theme">🎨 Farbschema</a></li>
-          <li><a href="#sec-legal"     class="sidebar-link" data-i18n="admin_nav_legal">📜 Rechtliches</a></li>
-          <li class="sidebar-divider"></li>
-          <li><a href="#sec-security" class="sidebar-link" data-i18n="admin_nav_security">🔒 Sicherheit</a></li>
-        </ul>
+      <nav class="admin-tabs" role="tablist">
+        <button class="admin-tab is-active" role="tab" data-tab="posts">Beiträge</button>
+        <button class="admin-tab" role="tab" data-tab="contact">Kontakt</button>
+        <button class="admin-tab" role="tab" data-tab="events">Veranstaltungen</button>
       </nav>
 
-      <!-- Main content -->
-      <main class="admin-content" id="adminContent">
+      <div class="admin-panel is-active" data-panel="posts">
+        <div class="admin-panel-header">
+          <h2>Beiträge (Aktuelles)</h2>
+          <button id="newPostBtn" class="btn btn-primary">+ Neuer Beitrag</button>
+        </div>
+        <ul id="postsList" class="posts-list"></ul>
+        <p id="postsEmpty" class="admin-empty" hidden>Noch keine Beiträge.</p>
+      </div>
 
-        <!-- ── GENERAL ──────────────────────────── -->
-        <section class="admin-section" id="sec-general">
-          <div class="section-title">
-            <h2 data-i18n="sec_general_h2">Allgemein</h2>
-            <p data-i18n="sec_general_desc">Websiteweite Einstellungen, die auf allen Seiten gelten.</p>
-          </div>
-          <div class="card">
-            <div class="field-group">
-              <label for="f-companyName" data-i18n="sec_general_label">Firmenname</label>
-              <p class="field-hint" data-i18n-html="sec_general_hint">Das zweite Wort wird in Petrol hervorgehoben (z. B. „Boyle <strong>Digital</strong> Services").</p>
-              <input type="text" id="f-companyName" placeholder="Boyle Digital Services">
-            </div>
-          </div>
-        </section>
+      <div class="admin-panel" data-panel="contact">
+        <h2>Kontaktdaten</h2>
+        <div class="form-group"><label for="contactAddress">Adresse</label><input id="contactAddress" type="text"></div>
+        <div class="form-group"><label for="contactPhone">Telefon</label><input id="contactPhone" type="text"></div>
+        <div class="form-group"><label for="contactEmail">E-Mail</label><input id="contactEmail" type="email"></div>
+        <div class="form-group"><label for="contactHours">Öffnungszeiten</label><input id="contactHours" type="text"></div>
+        <h3>Soziale Medien (Links)</h3>
+        <div class="form-group"><label for="socialFacebook">Facebook</label><input id="socialFacebook" type="url"></div>
+        <div class="form-group"><label for="socialInstagram">Instagram</label><input id="socialInstagram" type="url"></div>
+        <div class="form-group"><label for="socialTwitter">Twitter / X</label><input id="socialTwitter" type="url"></div>
+        <button id="saveContactBtn" class="btn btn-primary">Speichern</button>
+        <span id="contactSaveStatus" class="admin-status"></span>
+      </div>
 
-        <!-- ── HERO ─────────────────────────────── -->
-        <section class="admin-section" id="sec-hero">
-          <div class="section-title">
-            <h2 data-i18n="sec_hero_h2">Hero</h2>
-            <p data-i18n="sec_hero_desc">Das Vollbild-Banner oben auf der Seite.</p>
-          </div>
-          <div class="card">
-            <div class="field-group">
-              <label for="f-hero-eyebrow" data-i18n="sec_hero_eyebrow_lbl">Eyebrow-Beschriftung</label>
-              <p class="field-hint" data-i18n="sec_hero_eyebrow_hint">Kleiner Text in Großbuchstaben über der Überschrift.</p>
-              <input type="text" id="f-hero-eyebrow" placeholder="Digitalagentur">
-            </div>
-            <div class="field-group">
-              <label for="f-hero-headline" data-i18n="sec_hero_headline_lbl">Überschrift</label>
-              <textarea id="f-hero-headline" rows="2" placeholder="Wachstum durch digitale Exzellenz"></textarea>
-            </div>
-            <div class="field-group">
-              <label for="f-hero-subtitle" data-i18n="sec_hero_subtitle_lbl">Untertitel / Slogan</label>
-              <textarea id="f-hero-subtitle" rows="3" placeholder="Wir helfen Unternehmen …"></textarea>
-            </div>
-          </div>
-        </section>
+      <div class="admin-panel" data-panel="events">
+        <div class="admin-panel-header">
+          <h2>Veranstaltungen (Startseite)</h2>
+          <button id="newEventBtn" class="btn btn-primary">+ Neue Veranstaltung</button>
+        </div>
+        <ul id="eventsList" class="events-admin-list"></ul>
+        <button id="saveEventsBtn" class="btn btn-primary">Speichern</button>
+        <span id="eventsSaveStatus" class="admin-status"></span>
+      </div>
 
-        <!-- ── ABOUT ─────────────────────────────── -->
-        <section class="admin-section" id="sec-about">
-          <div class="section-title">
-            <h2 data-i18n="sec_about_h2">Über uns</h2>
-            <p data-i18n="sec_about_desc">Unternehmensbeschreibung und Statistik-Zähler.</p>
-          </div>
-          <div class="card">
-            <div class="field-group">
-              <label for="f-about-heading" data-i18n="sec_about_heading_lbl">Abschnittsüberschrift</label>
-              <input type="text" id="f-about-heading" placeholder="Ihr Partner für die digitale Transformation">
-            </div>
-            <div class="field-group">
-              <label for="f-about-p0" data-i18n="sec_about_p0">Absatz 1</label>
-              <textarea id="f-about-p0" rows="4"></textarea>
-            </div>
-            <div class="field-group">
-              <label for="f-about-p1" data-i18n="sec_about_p1">Absatz 2</label>
-              <textarea id="f-about-p1" rows="4"></textarea>
-            </div>
-            <div class="field-group">
-              <label for="f-about-p2" data-i18n="sec_about_p2">Absatz 3</label>
-              <textarea id="f-about-p2" rows="4"></textarea>
-            </div>
-          </div>
+    </section>
 
-          <div class="card">
-            <div class="card-subheading" data-i18n="sec_about_stats">Statistik-Zähler</div>
-            <p class="field-hint" data-i18n="sec_about_stats_desc">Bis zu 6 Statistiken hinzufügen. Zahl und Suffix gelten für beide Sprachen.</p>
-            <!-- Stat rows built dynamically by admin.js -->
-            <div id="statsList"></div>
-            <button type="button" class="btn-add-item" id="addStatBtn" data-i18n="sec_stat_add">+ Statistik hinzufügen</button>
-          </div>
-        </section>
+    <div id="postEditor" class="admin-modal" hidden role="dialog" aria-modal="true" aria-labelledby="postEditorTitle">
+      <div class="admin-modal-inner">
+        <h2 id="postEditorTitle">Beitrag bearbeiten</h2>
+        <input type="hidden" id="postId">
+        <div class="form-group"><label for="postTitle">Titel</label><input id="postTitle" type="text"></div>
+        <div class="form-group"><label for="postSlug">Slug (URL-Endung)</label><input id="postSlug" type="text"></div>
+        <div class="form-group"><label for="postDate">Datum</label><input id="postDate" type="date"></div>
+        <div class="form-group"><label for="postImage">Bild-URL (optional)</label><input id="postImage" type="text" placeholder="/img/news/…"></div>
+        <div class="form-group"><label for="postExcerpt">Kurzbeschreibung</label><textarea id="postExcerpt" rows="2"></textarea></div>
+        <div class="form-group"><label for="postBody">Inhalt (HTML)</label><textarea id="postBody" rows="10"></textarea></div>
+        <div class="admin-modal-actions">
+          <button id="savePostBtn" class="btn btn-primary">Speichern</button>
+          <button id="deletePostBtn" class="btn-link btn-danger">Löschen</button>
+          <button id="cancelPostBtn" class="btn-link">Abbrechen</button>
+        </div>
+        <span id="postSaveStatus" class="admin-status"></span>
+      </div>
+    </div>
 
-        <!-- ── SERVICES ───────────────────────────── -->
-        <section class="admin-section" id="sec-services">
-          <div class="section-title">
-            <h2 data-i18n="sec_services_h2">Leistungen</h2>
-            <p data-i18n="sec_services_desc">Leistungskarten auf der Website hinzufügen, entfernen oder bearbeiten (bis zu 9).</p>
-          </div>
-          <!-- Service cards built dynamically by admin.js -->
-          <div id="servicesList"></div>
-          <button type="button" class="btn-add-item" id="addServiceBtn" data-i18n="sec_svc_add">+ Karte hinzufügen</button>
-        </section>
+  </main>
 
-        <!-- ── GALLERY ────────────────────────────── -->
-        <section class="admin-section" id="sec-gallery">
-          <div class="section-title">
-            <h2 data-i18n="sec_gallery_h2">Referenzen</h2>
-            <p data-i18n="sec_gallery_desc">Galeriefotos hinzufügen, entfernen oder bearbeiten (bis zu 12).</p>
-          </div>
-          <!-- Visibility toggle -->
-          <div class="card toggle-card">
-            <label class="toggle-label">
-              <input type="checkbox" id="f-references-visible" checked>
-              <span data-i18n="sec_gallery_visible_lbl">Abschnitt anzeigen</span>
-            </label>
-            <p class="field-hint" data-i18n="sec_gallery_visible_desc">Blendet den gesamten Referenzen-Abschnitt auf der Website aus, wenn deaktiviert.</p>
-          </div>
-          <!-- Gallery editor items built dynamically by admin.js -->
-          <div class="gallery-editor-grid" id="galleryEditorGrid">
-            <!-- Populated by admin.js -->
-          </div>
-          <button type="button" class="btn-add-item" id="addGalleryBtn" data-i18n="sec_gallery_add">+ Foto hinzufügen</button>
-        </section>
-
-        <!-- ── LOCATIONS ─────────────────────────── -->
-        <section class="admin-section" id="sec-locations">
-          <div class="section-title">
-            <h2 data-i18n="sec_locations_h2">Standorte</h2>
-            <p class="field-hint" data-i18n="sec_locations_desc">Standorte verwalten – bis zu 12 Einträge.</p>
-          </div>
-          <!-- Visibility toggle -->
-          <div class="card toggle-card">
-            <label class="toggle-label">
-              <input type="checkbox" id="f-locations-visible" checked>
-              <span data-i18n="sec_locations_visible_lbl">Abschnitt anzeigen</span>
-            </label>
-            <p class="field-hint" data-i18n="sec_locations_visible_desc">Blendet den Standorte-Abschnitt auf der Website aus, wenn deaktiviert.</p>
-          </div>
-          <!-- Location editor items built dynamically by admin.js -->
-          <div id="locationsList"></div>
-          <button type="button" class="btn-add-item" id="addLocationBtn" data-i18n="sec_location_add">+ Standort hinzufügen</button>
-        </section>
-
-        <!-- ── JOBS ──────────────────────────────── -->
-        <section class="admin-section" id="sec-jobs">
-          <div class="section-title">
-            <h2 data-i18n="sec_jobs_h2">Stellen</h2>
-            <p data-i18n="sec_jobs_desc">Stellenangebote verwalten.</p>
-          </div>
-          <div class="card toggle-card">
-            <label class="toggle-label">
-              <input type="checkbox" id="f-jobs-visible" checked>
-              <span data-i18n="sec_jobs_visible_lbl">Abschnitt anzeigen</span>
-            </label>
-            <p class="field-hint" data-i18n="sec_jobs_visible_desc">Blendet den Stellen-Abschnitt aus, wenn deaktiviert.</p>
-          </div>
-          <div class="card">
-            <div class="jobs-lang jobs-lang--de">
-              <div class="field-group"><label data-i18n="sec_jobs_title_lbl">Titel</label>
-                <input type="text" id="f-jobs-title-de" placeholder="Offene Stellen"></div>
-              <div class="field-group"><label data-i18n="sec_jobs_body_lbl">Beschreibung</label>
-                <textarea id="f-jobs-body-de" rows="4"></textarea></div>
-              <div class="field-group"><label data-i18n="sec_jobs_btn_text_lbl">Button-Beschriftung</label>
-                <input type="text" id="f-jobs-btn-text-de" placeholder="Jetzt bewerben"></div>
-            </div>
-            <div class="jobs-lang jobs-lang--en">
-              <div class="field-group"><label data-i18n="sec_jobs_title_lbl">Title</label>
-                <input type="text" id="f-jobs-title-en" placeholder="Open Positions"></div>
-              <div class="field-group"><label data-i18n="sec_jobs_body_lbl">Body Text</label>
-                <textarea id="f-jobs-body-en" rows="4"></textarea></div>
-              <div class="field-group"><label data-i18n="sec_jobs_btn_text_lbl">Button Label</label>
-                <input type="text" id="f-jobs-btn-text-en" placeholder="Apply Now"></div>
-            </div>
-            <div class="field-group">
-              <label for="f-jobs-btn-url" data-i18n="sec_jobs_btn_url_lbl">Button-URL</label>
-              <input type="url" id="f-jobs-btn-url" placeholder="https://…">
-            </div>
-          </div>
-        </section>
-
-        <!-- ── APPOINTMENTS ───────────────────────── -->
-        <section class="admin-section" id="sec-appointments">
-          <div class="section-title">
-            <h2 data-i18n="sec_appointments_h2">Termine</h2>
-            <p data-i18n="sec_appointments_desc">Terminbuchungs-Abschnitt verwalten.</p>
-          </div>
-          <div class="card toggle-card">
-            <label class="toggle-label">
-              <input type="checkbox" id="f-appointments-visible" checked>
-              <span data-i18n="sec_appointments_visible_lbl">Abschnitt anzeigen</span>
-            </label>
-            <p class="field-hint" data-i18n="sec_appointments_visible_desc">Blendet den Terminbereich aus, wenn deaktiviert.</p>
-          </div>
-          <div class="card">
-            <div class="appointments-lang appointments-lang--de">
-              <div class="field-group"><label data-i18n="sec_appointments_title_lbl">Titel</label>
-                <input type="text" id="f-appointments-title-de" placeholder="Termin vereinbaren"></div>
-              <div class="field-group"><label data-i18n="sec_appointments_body_lbl">Beschreibung</label>
-                <textarea id="f-appointments-body-de" rows="4"></textarea></div>
-              <div class="field-group"><label data-i18n="sec_appointments_btn_text_lbl">Button-Beschriftung</label>
-                <input type="text" id="f-appointments-btn-text-de" placeholder="Jetzt buchen"></div>
-            </div>
-            <div class="appointments-lang appointments-lang--en">
-              <div class="field-group"><label data-i18n="sec_appointments_title_lbl">Title</label>
-                <input type="text" id="f-appointments-title-en" placeholder="Book an Appointment"></div>
-              <div class="field-group"><label data-i18n="sec_appointments_body_lbl">Body Text</label>
-                <textarea id="f-appointments-body-en" rows="4"></textarea></div>
-              <div class="field-group"><label data-i18n="sec_appointments_btn_text_lbl">Button Label</label>
-                <input type="text" id="f-appointments-btn-text-en" placeholder="Book Now"></div>
-            </div>
-            <div class="field-group">
-              <label for="f-appointments-btn-url" data-i18n="sec_appointments_btn_url_lbl">Button-URL</label>
-              <input type="url" id="f-appointments-btn-url" placeholder="https://…">
-            </div>
-          </div>
-        </section>
-
-        <!-- ── LAYOUT ─────────────────────────────── -->
-        <section class="admin-section" id="sec-layout">
-          <div class="section-title">
-            <h2 data-i18n="sec_layout_h2">Seitenstruktur</h2>
-            <p data-i18n="sec_layout_desc">Reihenfolge der Abschnitte auf der Website festlegen.</p>
-          </div>
-          <div class="card">
-            <div id="layoutList"></div>
-          </div>
-        </section>
-
-        <!-- ── SEO ────────────────────────────────── -->
-        <section class="admin-section" id="sec-seo">
-          <div class="section-title">
-            <h2 data-i18n="sec_seo_h2">SEO &amp; AEO</h2>
-            <p data-i18n="sec_seo_desc">Suchmaschinen-Einstellungen und strukturierte Daten verwalten.</p>
-          </div>
-          <div class="card">
-            <div class="seo-lang seo-lang--de">
-              <div class="field-group"><label for="f-seo-title-de" data-i18n="sec_seo_title_lbl">Seitentitel</label>
-                <input type="text" id="f-seo-title-de" placeholder="Boyle Digital Services — …"></div>
-              <div class="field-group"><label for="f-seo-desc-de" data-i18n="sec_seo_metadesc_lbl">Meta-Beschreibung</label>
-                <textarea id="f-seo-desc-de" rows="3"></textarea>
-                <span class="seo-char-counter" id="seo-desc-counter-de">0 <span data-i18n="sec_seo_chars_hint">Zeichen (Ziel: ≤ 155)</span></span></div>
-            </div>
-            <div class="seo-lang seo-lang--en">
-              <div class="field-group"><label for="f-seo-title-en" data-i18n="sec_seo_title_lbl">Page Title</label>
-                <input type="text" id="f-seo-title-en" placeholder="Boyle Digital Services — …"></div>
-              <div class="field-group"><label for="f-seo-desc-en" data-i18n="sec_seo_metadesc_lbl">Meta Description</label>
-                <textarea id="f-seo-desc-en" rows="3"></textarea>
-                <span class="seo-char-counter" id="seo-desc-counter-en">0 <span data-i18n="sec_seo_chars_hint">characters (target: ≤ 155)</span></span></div>
-            </div>
-            <div class="field-group"><label for="f-seo-canonical" data-i18n="sec_seo_canonical_lbl">Kanonische URL</label>
-              <input type="url" id="f-seo-canonical" placeholder="https://boyledigital.ie/"></div>
-            <div class="field-group"><label for="f-seo-ogimage" data-i18n="sec_seo_ogimage_lbl">OG-Bild-URL</label>
-              <input type="url" id="f-seo-ogimage" placeholder="https://boyledigital.ie/og.jpg"></div>
-            <div class="field-group"><label for="f-seo-twitter" data-i18n="sec_seo_twitter_lbl">Twitter/X-Handle</label>
-              <input type="text" id="f-seo-twitter" placeholder="@boyledigital"></div>
-            <div class="field-group"><label for="f-seo-biztype" data-i18n="sec_seo_biztype_lbl">Unternehmenstyp</label>
-              <select id="f-seo-biztype">
-                <option value="ProfessionalService">ProfessionalService</option>
-                <option value="LocalBusiness">LocalBusiness</option>
-                <option value="Organization">Organization</option>
-              </select></div>
-          </div>
-        </section>
-
-        <!-- ── STORAGE ───────────────────────────── -->
-        <section id="sec-storage" class="admin-section">
-          <h2 data-i18n="sec_storage_h2">Storage &amp; Export</h2>
-
-          <div class="card">
-            <h3 data-i18n="sec_storage_api_h3">Cloudflare KV Connection</h3>
-            <p class="field-hint" data-i18n="sec_storage_api_hint">Enter the WORKER_SECRET you set via <code>wrangler secret put WORKER_SECRET</code>.</p>
-            <div class="field-group">
-              <label for="f-api-key" data-i18n="sec_storage_key_lbl">Worker API Key</label>
-              <div class="storage-key-row">
-                <input type="password" id="f-api-key" autocomplete="off">
-                <button id="btn-test-connection" type="button" class="btn btn-secondary" data-i18n="sec_storage_test">Test</button>
-              </div>
-            </div>
-            <div id="storage-status" class="storage-status" aria-live="polite"></div>
-          </div>
-
-          <div class="card">
-            <h3 data-i18n="sec_storage_transfer_h3">Export / Import</h3>
-            <p class="field-hint" data-i18n="sec_storage_transfer_hint">Export downloads current content as content.json. Import loads a previously exported file into KV (or localStorage if no API key is set).</p>
-            <div class="storage-transfer-row">
-              <button id="btn-export" type="button" class="btn btn-secondary" data-i18n="sec_storage_export">⬇ Export</button>
-              <button id="btn-import" type="button" class="btn btn-secondary" data-i18n="sec_storage_import">⬆ Import</button>
-              <input type="file" id="f-import-file" accept=".json" hidden>
-            </div>
-            <div id="transfer-status" class="transfer-status" aria-live="polite"></div>
-          </div>
-        </section>
-
-        <!-- ── CONTACT ────────────────────────────── -->
-        <section class="admin-section" id="sec-contact">
-          <div class="section-title">
-            <h2 data-i18n="sec_contact_h2">Kontakt</h2>
-            <p data-i18n="sec_contact_desc">Kontaktdaten auf der Website aktualisieren.</p>
-          </div>
-          <div class="card">
-            <div class="card-subheading" data-i18n="sec_contact_details">Kontaktdaten</div>
-            <p class="field-hint" data-i18n="sec_contact_hide_hint">Lassen Sie ein Feld leer, um es auf der Website auszublenden.</p>
-            <div class="field-group">
-              <label for="f-contact-address" data-i18n="sec_contact_address">Adresse</label>
-              <input type="text" id="f-contact-address" placeholder="123 Digital Avenue, Dublin, Ireland">
-            </div>
-            <div class="field-group">
-              <label for="f-contact-phone" data-i18n="sec_contact_phone">Telefonnummer</label>
-              <input type="tel" id="f-contact-phone" placeholder="+353 1 234 5678">
-            </div>
-            <div class="field-group">
-              <label for="f-contact-email" data-i18n="sec_contact_email">E-Mail-Adresse</label>
-              <input type="email" id="f-contact-email" placeholder="hello@boyledigital.ie">
-            </div>
-            <div class="field-group">
-              <label for="f-contact-hours" data-i18n="sec_contact_hours">Öffnungszeiten</label>
-              <input type="text" id="f-contact-hours" placeholder="Mo–Fr 09:00–18:00">
-            </div>
-          </div>
-
-          <div class="card" id="subjectsCard">
-            <div class="card-subheading" data-i18n="sec_subjects_h">Betreff-Optionen</div>
-            <p class="field-hint" data-i18n="sec_subjects_desc">Bis zu 5 Betreff-Optionen für das Kontaktformular definieren.</p>
-            <div id="subjectsList"></div>
-            <button type="button" class="btn-add-subject" id="addSubjectBtn" data-i18n="sec_subjects_add">+ Betreff hinzufügen</button>
-          </div>
-
-          <div class="card">
-            <div class="card-subheading" data-i18n="sec_social_h">Social-Media-Links</div>
-            <p class="field-hint" data-i18n-html="sec_social_hint">Vollständige URLs eingeben (z. B. <code>https://linkedin.com/company/ihrunternehmen</code>). Leer lassen, um die Schaltfläche auszublenden.</p>
-            <div class="field-group">
-              <label for="f-social-linkedin" data-i18n="sec_social_linkedin">LinkedIn</label>
-              <input type="url" id="f-social-linkedin" placeholder="https://linkedin.com/company/…">
-            </div>
-            <div class="field-group">
-              <label for="f-social-twitter" data-i18n="sec_social_twitter">Twitter / X</label>
-              <input type="url" id="f-social-twitter" placeholder="https://x.com/…">
-            </div>
-            <div class="field-group">
-              <label for="f-social-instagram" data-i18n="sec_social_instagram">Instagram</label>
-              <input type="url" id="f-social-instagram" placeholder="https://instagram.com/…">
-            </div>
-            <div class="field-group">
-              <label for="f-social-tiktok" data-i18n="sec_social_tiktok">TikTok</label>
-              <input type="url" id="f-social-tiktok" placeholder="https://tiktok.com/@…">
-            </div>
-          </div>
-        </section>
-
-        <!-- ── LEGAL PAGES ──────────────────────────────────── -->
-        <section class="admin-section" id="sec-legal">
-          <div class="section-title">
-            <h2 data-i18n="sec_legal_h2">Impressum &amp; Datenschutz</h2>
-            <p data-i18n="sec_legal_desc">Pflichtangaben gemäß TMG §5 und DSGVO Art. 13/14. Alle Felder werden auf den Seiten /impressum und /datenschutz angezeigt.</p>
-          </div>
-
-          <!-- Impressum -->
-          <div class="card">
-            <h3 style="margin:0 0 1.25rem" data-i18n="sec_imp_h3">Impressum</h3>
-            <div class="field-group">
-              <label for="f-imp-name" data-i18n="sec_imp_name">Name / Firmenname</label>
-              <input type="text" id="f-imp-name" placeholder="Max Mustermann">
-            </div>
-            <div class="field-group">
-              <label for="f-imp-strasse" data-i18n="sec_imp_strasse">Straße und Hausnummer</label>
-              <input type="text" id="f-imp-strasse" placeholder="Musterstraße 1">
-            </div>
-            <div class="field-group">
-              <label for="f-imp-ort" data-i18n="sec_imp_ort">Postleitzahl und Ort</label>
-              <input type="text" id="f-imp-ort" placeholder="10115 Berlin">
-            </div>
-            <div class="field-group">
-              <label for="f-imp-land" data-i18n="sec_imp_land">Land</label>
-              <input type="text" id="f-imp-land" placeholder="Deutschland">
-            </div>
-            <div class="field-group">
-              <label for="f-imp-email" data-i18n="sec_imp_email">E-Mail (Kontakt)</label>
-              <input type="email" id="f-imp-email" placeholder="hello@example.com">
-            </div>
-            <div class="field-group">
-              <label for="f-imp-telefon" data-i18n="sec_imp_telefon">Telefon (optional)</label>
-              <input type="tel" id="f-imp-telefon" placeholder="+49 30 12345678">
-            </div>
-            <div class="field-group">
-              <label for="f-imp-vertreter" data-i18n="sec_imp_vertreter">Vertretungsberechtigte Person</label>
-              <input type="text" id="f-imp-vertreter" placeholder="Max Mustermann">
-            </div>
-            <div class="field-group">
-              <label for="f-imp-ustid" data-i18n="sec_imp_ustid">USt-ID (optional)</label>
-              <input type="text" id="f-imp-ustid" placeholder="DE123456789">
-            </div>
-            <div class="field-group">
-              <label for="f-imp-register" data-i18n="sec_imp_register">Handelsregistereintrag (optional)</label>
-              <input type="text" id="f-imp-register" placeholder="z. B. HRB 12345, AG Berlin-Charlottenburg">
-            </div>
-            <div class="field-group">
-              <label for="f-imp-verantwortlich" data-i18n="sec_imp_verantwortlich">Inhaltlich Verantwortlicher (§ 55 Abs. 2 RStV)</label>
-              <input type="text" id="f-imp-verantwortlich" placeholder="Max Mustermann">
-            </div>
-            <div class="field-group">
-              <label for="f-imp-updated" data-i18n="sec_legal_updated">Letzte Aktualisierung</label>
-              <input type="text" id="f-imp-updated" placeholder="Mai 2026">
-            </div>
-          </div>
-
-          <!-- Datenschutzerklärung -->
-          <div class="card">
-            <h3 style="margin:0 0 0.5rem" data-i18n="sec_ds_h3">Datenschutzerklärung</h3>
-            <p class="field-hint" data-i18n="sec_ds_desc">HTML-Inhalt der Datenschutzerklärung. Sie können Text direkt eingeben oder eine PDF-Datei importieren.</p>
-
-            <!-- PDF import -->
-            <div class="field-group">
-              <label data-i18n="sec_ds_pdf_lbl">PDF importieren</label>
-              <p class="field-hint" data-i18n="sec_ds_pdf_hint">Text wird aus der PDF extrahiert und in das Textfeld unten eingefügt. Überprüfen und bearbeiten Sie danach den Text.</p>
-              <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap">
-                <label class="btn-ghost" style="cursor:pointer">
-                  <span data-i18n="sec_ds_pdf_btn">PDF auswählen …</span>
-                  <input type="file" id="f-ds-pdf-input" accept=".pdf" style="display:none">
-                </label>
-                <span id="f-ds-pdf-status" style="font-size:0.875rem;color:var(--color-text-muted)"></span>
-              </div>
-            </div>
-
-            <!-- DE body -->
-            <div class="field-group">
-              <label for="f-ds-body-de" data-i18n="sec_ds_body_de">Inhalt (Deutsch) — HTML</label>
-              <textarea id="f-ds-body-de" rows="18" style="font-family:monospace;font-size:0.8rem"></textarea>
-            </div>
-
-            <!-- EN body -->
-            <div class="field-group">
-              <label for="f-ds-body-en" data-i18n="sec_ds_body_en">Inhalt (Englisch) — HTML (optional)</label>
-              <textarea id="f-ds-body-en" rows="10" style="font-family:monospace;font-size:0.8rem"></textarea>
-            </div>
-
-            <div class="field-group">
-              <label for="f-ds-updated" data-i18n="sec_legal_updated">Letzte Aktualisierung</label>
-              <input type="text" id="f-ds-updated" placeholder="Mai 2026">
-            </div>
-          </div>
-        </section>
-
-        <!-- ── SECURITY ───────────────────────────── -->
-        <section class="admin-section" id="sec-security">
-          <div class="section-title">
-            <h2 data-i18n="sec_security_h2">Sicherheit</h2>
-            <p data-i18n="sec_security_desc">Passwort des Admin-Panels ändern.</p>
-          </div>
-          <div class="card">
-            <div class="field-group">
-              <label for="f-new-password" data-i18n="sec_security_new_pw">Neues Passwort</label>
-              <input type="password" id="f-new-password"
-                     data-i18n-placeholder="sec_security_new_ph"
-                     placeholder="Neues Passwort eingeben" autocomplete="new-password">
-            </div>
-            <div class="field-group">
-              <label for="f-confirm-password" data-i18n="sec_security_conf_pw">Neues Passwort bestätigen</label>
-              <input type="password" id="f-confirm-password"
-                     data-i18n-placeholder="sec_security_conf_ph"
-                     placeholder="Neues Passwort wiederholen" autocomplete="new-password">
-            </div>
-            <p class="field-error hidden" id="passwordChangeError"></p>
-            <button id="changePasswordBtn" class="btn-primary" data-i18n="sec_security_btn">Passwort aktualisieren</button>
-          </div>
-        </section>
-
-        <!-- ── COLOUR SCHEME ────────────────────────────── -->
-        <section class="admin-section" id="sec-theme">
-          <div class="section-title">
-            <h2 data-i18n="sec_theme_h2">Farbschema</h2>
-            <p data-i18n="sec_theme_desc">Extrahieren Sie ein Farbschema aus einem Bild und wenden Sie es auf die Website an.</p>
-          </div>
-
-          <!-- Upload zone -->
-          <div class="card">
-            <div class="theme-drop-zone" id="themeDropZone" role="button" tabindex="0"
-                 aria-label="Upload image">
-              <input type="file" id="themeImageInput" accept=".jpg,.jpeg,.png,.svg,.gif"
-                     class="theme-file-input" aria-hidden="true">
-              <div class="theme-drop-inner" id="themeDropPrompt">
-                <span class="theme-drop-icon">🖼</span>
-                <span class="theme-drop-label" data-i18n="sec_theme_drop">Bild hier ablegen oder klicken zum Hochladen</span>
-                <span class="theme-drop-formats" data-i18n="sec_theme_formats">JPG · PNG · SVG · GIF</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Palette (hidden until image uploaded) -->
-          <div class="card hidden" id="themePaletteCard">
-
-            <!-- Image thumbnail + swatches -->
-            <div class="theme-palette-row">
-              <img id="themeImgThumbnail" class="theme-thumbnail" alt="Uploaded image">
-              <div class="theme-swatches" id="themeSwatches" aria-label="Extracted colours"></div>
-            </div>
-
-            <!-- Role assignment -->
-            <div class="theme-roles">
-              <p class="theme-roles-label" data-i18n="sec_theme_roles">Rollen zuweisen</p>
-              <div class="theme-role-row">
-                <span class="theme-role-name" data-i18n="sec_theme_primary">Primär</span>
-                <button class="theme-role-swatch" id="rolePickerPrimary" aria-haspopup="true"
-                        aria-label="Pick primary colour">
-                  <span class="theme-role-dot" id="roleDotPrimary"></span>
-                  <span class="theme-role-hex" id="roleHexPrimary">#000000</span>
-                  <span class="theme-role-arrow">▾</span>
-                </button>
-                <div class="theme-role-popup hidden" id="rolePopupPrimary" role="listbox"
-                     aria-label="Choose primary colour"></div>
-              </div>
-              <div class="theme-role-row">
-                <span class="theme-role-name" data-i18n="sec_theme_accent">Akzent</span>
-                <button class="theme-role-swatch" id="rolePickerAccent" aria-haspopup="true"
-                        aria-label="Pick accent colour">
-                  <span class="theme-role-dot" id="roleDotAccent"></span>
-                  <span class="theme-role-hex" id="roleHexAccent">#000000</span>
-                  <span class="theme-role-arrow">▾</span>
-                </button>
-                <div class="theme-role-popup hidden" id="rolePopupAccent" role="listbox"
-                     aria-label="Choose accent colour"></div>
-              </div>
-            </div>
-
-            <!-- Mini mockup preview -->
-            <div class="theme-preview-section">
-              <p class="theme-roles-label" data-i18n="sec_theme_preview">Vorschau</p>
-              <div class="theme-mockup" id="themeMockup" aria-hidden="true">
-                <div class="mockup-header">
-                  <div class="mockup-logo"></div>
-                  <div class="mockup-nav">
-                    <div class="mockup-nav-dot"></div>
-                    <div class="mockup-nav-dot"></div>
-                    <div class="mockup-nav-dot"></div>
-                    <div class="mockup-btn-pill"></div>
-                  </div>
-                </div>
-                <div class="mockup-hero">
-                  <div class="mockup-hero-eyebrow"></div>
-                  <div class="mockup-hero-headline"></div>
-                  <div class="mockup-hero-sub"></div>
-                  <div class="mockup-hero-cta"></div>
-                </div>
-                <div class="mockup-cards">
-                  <div class="mockup-card">
-                    <div class="mockup-card-icon"></div>
-                    <div class="mockup-card-title"></div>
-                    <div class="mockup-card-text"></div>
-                  </div>
-                  <div class="mockup-card">
-                    <div class="mockup-card-icon"></div>
-                    <div class="mockup-card-title"></div>
-                    <div class="mockup-card-text"></div>
-                  </div>
-                  <div class="mockup-card">
-                    <div class="mockup-card-icon"></div>
-                    <div class="mockup-card-title"></div>
-                    <div class="mockup-card-text"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Actions -->
-            <div class="theme-actions">
-              <button id="themeApplyBtn" class="btn-primary" data-i18n="sec_theme_apply">
-                Farbschema anwenden
-              </button>
-              <button id="themeResetBtn" class="btn-ghost" data-i18n="sec_theme_reset">
-                Auf Standard zurücksetzen
-              </button>
-            </div>
-          </div>
-
-        </section>
-
-      </main>
-    </div><!-- /admin-body -->
-  </div><!-- /admin-panel -->
-
-  <!-- Toast -->
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-  <!-- i18n.js first, then content.js, then admin.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.4.0/color-thief.umd.js"></script>
-  <script src="js/i18n.js"></script>
-  <script src="js/content.js"></script>
-  <script src="js/admin.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/content.js"></script>
+  <script src="/js/admin.js"></script>
 </body>
 </html>
