@@ -1045,6 +1045,45 @@ h3 {
   min-height: 1.1em;
 }
 
+/* Consent checkbox */
+.form-group--consent { margin-bottom: 1.25rem; }
+
+.consent-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.consent-label input[type="checkbox"] {
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--clr-primary, #0e7490);
+  cursor: pointer;
+}
+
+.consent-label a { color: var(--clr-primary, #0e7490); }
+
+/* Footer legal links */
+.footer-legal-links {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.footer-legal-links a {
+  color: var(--clr-footer-text, #94a3b8);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-legal-links a:hover { color: var(--clr-primary, #0e7490); }
+
 /* Success message */
 .success-message {
   display: none;
