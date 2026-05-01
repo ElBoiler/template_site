@@ -114,10 +114,35 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
   const entered = document.getElementById('passwordInput').value;
   const errorEl = document.getElementById('loginError');
 
-  if (await checkPassword(entered)) {
+  // Try Worker session endpoint first — verifies the secret and returns the API key
+  let authed = false;
+  try {
+    const res = await fetch('/api/session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret: entered })
+    });
+    if (res.ok) {
+      const json = await res.json();
+      if (json.ok && json.key) {
+        localStorage.setItem('bds_api_key', json.key);
+        const apiKeyInput = document.getElementById('f-api-key');
+        if (apiKeyInput) apiKeyInput.value = json.key;
+        authed = true;
+      }
+    }
+  } catch (_) { /* offline / local dev — fall through to local check */ }
+
+  // Fallback: local password hash check (file://, dev server, Worker unreachable)
+  if (!authed) {
+    authed = await checkPassword(entered);
+  }
+
+  if (authed) {
     sessionStorage.setItem(ADMIN_SESSION_KEY, '1');
     errorEl.textContent = '';
     showPanel();
+    updateConnectionPill();
   } else {
     errorEl.textContent = T('toast_wrong_pw');
     document.getElementById('passwordInput').value = '';
