@@ -218,14 +218,14 @@ window.initLocationsMap = function (locations) {
       const link = document.createElement('link');
       link.id   = 'leaflet-css';
       link.rel  = 'stylesheet';
-      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      link.href = 'vendor/leaflet/leaflet.css';
       document.head.appendChild(link);
     }
 
     if (!document.getElementById('leaflet-js')) {
       const s = document.createElement('script');
       s.id  = 'leaflet-js';
-      s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      s.src = 'vendor/leaflet/leaflet.js';
       s.onload = function () {
         if (window._pendingLocations) {
           window.initLocationsMap(window._pendingLocations);
@@ -357,6 +357,14 @@ function clearFieldError(fieldId, errorId) {
   }
 });
 
+// Clear consent error when checkbox is ticked
+const consentBox = document.getElementById('consent');
+if (consentBox) {
+  consentBox.addEventListener('change', () => {
+    document.getElementById('consentError').textContent = '';
+  });
+}
+
 contactForm.addEventListener('submit', async e => {
   e.preventDefault();
 
@@ -401,6 +409,16 @@ contactForm.addEventListener('submit', async e => {
     isValid = false;
   } else {
     clearFieldError('message', 'messageError');
+  }
+
+  // Consent
+  const consentChecked = document.getElementById('consent')?.checked;
+  const consentError   = document.getElementById('consentError');
+  if (!consentChecked) {
+    if (consentError) consentError.textContent = T('err_consent_required');
+    isValid = false;
+  } else {
+    if (consentError) consentError.textContent = '';
   }
 
   if (isValid) {

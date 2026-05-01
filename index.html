@@ -7,9 +7,7 @@
   <title>Boyle Digital Services</title>
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -301,6 +299,13 @@
                         placeholder="Erzählen Sie uns von Ihrem Projekt …"></textarea>
               <span class="form-error" id="messageError" role="alert"></span>
             </div>
+            <div class="form-group form-group--consent">
+              <label class="consent-label">
+                <input type="checkbox" id="consent" name="consent">
+                <span data-i18n-html="form_consent_label">Ich habe die <a href="/datenschutz">Datenschutzerklärung</a> gelesen und stimme zu.</span>
+              </label>
+              <span class="form-error" id="consentError" role="alert"></span>
+            </div>
             <button type="submit" class="btn btn-primary btn-full" data-i18n="form_submit">Nachricht senden</button>
           </form>
         </div>
@@ -351,7 +356,11 @@
       </div>
       <div class="footer-bottom">
         <p data-i18n="footer_copyright">© 2026 Boyle Digital Services. Alle Rechte vorbehalten.</p>
-        <a href="admin.html" class="footer-admin-link" data-i18n="footer_admin">Admin</a>
+        <span class="footer-legal-links">
+          <a href="/impressum" data-i18n="footer_impressum">Impressum</a>
+          <a href="/datenschutz" data-i18n="footer_datenschutz">Datenschutz</a>
+          <a href="admin.html" class="footer-admin-link" data-i18n="footer_admin">Admin</a>
+        </span>
       </div>
     </div>
   </footer>
