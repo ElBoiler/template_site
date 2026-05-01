@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin — Boyle Digital Services</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
@@ -86,6 +84,7 @@
           <li><a href="#sec-storage" class="sidebar-link" data-i18n="admin_nav_storage">💾 Storage</a></li>
           <li><a href="#sec-contact"   class="sidebar-link" data-i18n="admin_nav_contact">✉ Kontakt</a></li>
           <li><a href="#sec-theme"    class="sidebar-link" data-i18n="admin_nav_theme">🎨 Farbschema</a></li>
+          <li><a href="#sec-legal"     class="sidebar-link" data-i18n="admin_nav_legal">📜 Rechtliches</a></li>
           <li class="sidebar-divider"></li>
           <li><a href="#sec-security" class="sidebar-link" data-i18n="admin_nav_security">🔒 Sicherheit</a></li>
         </ul>
@@ -419,6 +418,99 @@
             <div class="field-group">
               <label for="f-social-tiktok" data-i18n="sec_social_tiktok">TikTok</label>
               <input type="url" id="f-social-tiktok" placeholder="https://tiktok.com/@…">
+            </div>
+          </div>
+        </section>
+
+        <!-- ── LEGAL PAGES ──────────────────────────────────── -->
+        <section class="admin-section" id="sec-legal">
+          <div class="section-title">
+            <h2 data-i18n="sec_legal_h2">Impressum &amp; Datenschutz</h2>
+            <p data-i18n="sec_legal_desc">Pflichtangaben gemäß TMG §5 und DSGVO Art. 13/14. Alle Felder werden auf den Seiten /impressum und /datenschutz angezeigt.</p>
+          </div>
+
+          <!-- Impressum -->
+          <div class="card">
+            <h3 style="margin:0 0 1.25rem" data-i18n="sec_imp_h3">Impressum</h3>
+            <div class="field-group">
+              <label for="f-imp-name" data-i18n="sec_imp_name">Name / Firmenname</label>
+              <input type="text" id="f-imp-name" placeholder="Max Mustermann">
+            </div>
+            <div class="field-group">
+              <label for="f-imp-strasse" data-i18n="sec_imp_strasse">Straße und Hausnummer</label>
+              <input type="text" id="f-imp-strasse" placeholder="Musterstraße 1">
+            </div>
+            <div class="field-group">
+              <label for="f-imp-ort" data-i18n="sec_imp_ort">Postleitzahl und Ort</label>
+              <input type="text" id="f-imp-ort" placeholder="10115 Berlin">
+            </div>
+            <div class="field-group">
+              <label for="f-imp-land" data-i18n="sec_imp_land">Land</label>
+              <input type="text" id="f-imp-land" placeholder="Deutschland">
+            </div>
+            <div class="field-group">
+              <label for="f-imp-email" data-i18n="sec_imp_email">E-Mail (Kontakt)</label>
+              <input type="email" id="f-imp-email" placeholder="hello@example.com">
+            </div>
+            <div class="field-group">
+              <label for="f-imp-telefon" data-i18n="sec_imp_telefon">Telefon (optional)</label>
+              <input type="tel" id="f-imp-telefon" placeholder="+49 30 12345678">
+            </div>
+            <div class="field-group">
+              <label for="f-imp-vertreter" data-i18n="sec_imp_vertreter">Vertretungsberechtigte Person</label>
+              <input type="text" id="f-imp-vertreter" placeholder="Max Mustermann">
+            </div>
+            <div class="field-group">
+              <label for="f-imp-ustid" data-i18n="sec_imp_ustid">USt-ID (optional)</label>
+              <input type="text" id="f-imp-ustid" placeholder="DE123456789">
+            </div>
+            <div class="field-group">
+              <label for="f-imp-register" data-i18n="sec_imp_register">Handelsregistereintrag (optional)</label>
+              <input type="text" id="f-imp-register" placeholder="z. B. HRB 12345, AG Berlin-Charlottenburg">
+            </div>
+            <div class="field-group">
+              <label for="f-imp-verantwortlich" data-i18n="sec_imp_verantwortlich">Inhaltlich Verantwortlicher (§ 55 Abs. 2 RStV)</label>
+              <input type="text" id="f-imp-verantwortlich" placeholder="Max Mustermann">
+            </div>
+            <div class="field-group">
+              <label for="f-imp-updated" data-i18n="sec_legal_updated">Letzte Aktualisierung</label>
+              <input type="text" id="f-imp-updated" placeholder="Mai 2026">
+            </div>
+          </div>
+
+          <!-- Datenschutzerklärung -->
+          <div class="card">
+            <h3 style="margin:0 0 0.5rem" data-i18n="sec_ds_h3">Datenschutzerklärung</h3>
+            <p class="field-hint" data-i18n="sec_ds_desc">HTML-Inhalt der Datenschutzerklärung. Sie können Text direkt eingeben oder eine PDF-Datei importieren.</p>
+
+            <!-- PDF import -->
+            <div class="field-group">
+              <label data-i18n="sec_ds_pdf_lbl">PDF importieren</label>
+              <p class="field-hint" data-i18n="sec_ds_pdf_hint">Text wird aus der PDF extrahiert und in das Textfeld unten eingefügt. Überprüfen und bearbeiten Sie danach den Text.</p>
+              <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap">
+                <label class="btn-ghost" style="cursor:pointer">
+                  <span data-i18n="sec_ds_pdf_btn">PDF auswählen …</span>
+                  <input type="file" id="f-ds-pdf-input" accept=".pdf" style="display:none">
+                </label>
+                <span id="f-ds-pdf-status" style="font-size:0.875rem;color:var(--color-text-muted)"></span>
+              </div>
+            </div>
+
+            <!-- DE body -->
+            <div class="field-group">
+              <label for="f-ds-body-de" data-i18n="sec_ds_body_de">Inhalt (Deutsch) — HTML</label>
+              <textarea id="f-ds-body-de" rows="18" style="font-family:monospace;font-size:0.8rem"></textarea>
+            </div>
+
+            <!-- EN body -->
+            <div class="field-group">
+              <label for="f-ds-body-en" data-i18n="sec_ds_body_en">Inhalt (Englisch) — HTML (optional)</label>
+              <textarea id="f-ds-body-en" rows="10" style="font-family:monospace;font-size:0.8rem"></textarea>
+            </div>
+
+            <div class="field-group">
+              <label for="f-ds-updated" data-i18n="sec_legal_updated">Letzte Aktualisierung</label>
+              <input type="text" id="f-ds-updated" placeholder="Mai 2026">
             </div>
           </div>
         </section>

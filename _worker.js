@@ -5,6 +5,7 @@
  *   GET  /api/content  → read from KV (auto-seeds from /content.json if empty)
  *   POST /api/content  → write to KV  (requires Authorization: Bearer {WORKER_SECRET})
  *   GET  /api/ping     → connection test (requires Authorization: Bearer {WORKER_SECRET})
+ *   POST /api/session  → verify secret in body, return key for auto-population in admin UI
  *   *                  → pass-through to static assets
  *
  * Setup:
@@ -28,6 +29,10 @@ export default {
     if (url.pathname === '/api/ping') {
       if (!isAuthed(request, env)) return jsonRes({ ok: false, error: 'Unauthorized' }, 401);
       return jsonRes({ ok: true });
+    }
+
+    if (url.pathname === '/api/session' && request.method === 'POST') {
+      return handleSession(request, env);
     }
 
     return env.ASSETS.fetch(request);
@@ -68,6 +73,17 @@ async function handleGet(request, env) {
       'Cache-Control': 'no-cache'
     }
   });
+}
+
+async function handleSession(request, env) {
+  let body;
+  try { body = await request.json(); } catch (_) {
+    return jsonRes({ error: 'Bad Request' }, 400);
+  }
+  if (!body || body.secret !== env.WORKER_SECRET) {
+    return jsonRes({ ok: false, error: 'Unauthorized' }, 401);
+  }
+  return jsonRes({ ok: true, key: env.WORKER_SECRET });
 }
 
 async function handlePost(request, env) {

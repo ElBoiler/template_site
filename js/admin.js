@@ -43,39 +43,80 @@ let pendingContent = null;
 
 
 /* ============================================================
-   AUTH — passwords are stored as SHA-256 hashes, never plaintext
+   AUTH — PBKDF2 with random 128-bit salt (WebCrypto, no deps)
+   Stored format: "pbkdf2$<hex-salt>$<hex-derived-key>"
+   Legacy SHA-256 hashes (64-char hex) are migrated on first login.
    ============================================================ */
 
-/** Returns a hex SHA-256 digest of the given string. */
+const PBKDF2_ITERATIONS = 200_000;
+const PBKDF2_KEY_BITS   = 256;
+
+/** Derive a PBKDF2 key from password + salt (Uint8Array). Returns hex string. */
+async function pbkdf2Derive(password, salt) {
+  const enc     = new TextEncoder();
+  const keyMat  = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
+  const bits    = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', hash: 'SHA-256', salt, iterations: PBKDF2_ITERATIONS },
+    keyMat, PBKDF2_KEY_BITS
+  );
+  return Array.from(new Uint8Array(bits)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function hexToBytes(hex) {
+  const arr = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < arr.length; i++) arr[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16);
+  return arr;
+}
+
+/** Hash a password for storage. Returns "pbkdf2$<salt-hex>$<key-hex>". */
 async function hashPassword(password) {
-  const data = new TextEncoder().encode(password);
-  const buf  = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(buf))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
+  const salt    = crypto.getRandomValues(new Uint8Array(16));
+  const saltHex = Array.from(salt).map(b => b.toString(16).padStart(2, '0')).join('');
+  const keyHex  = await pbkdf2Derive(password, salt);
+  return `pbkdf2$${saltHex}$${keyHex}`;
 }
 
 /**
  * Verifies an entered password against storage.
- *   1. Nothing stored → compare against hash of DEFAULT_ADMIN_PW
- *   2. Stored value is a 64-char hex hash → compare hashes
- *   3. Legacy plaintext → compare directly, re-store as hash on success
+ *   1. Nothing stored → compare against DEFAULT_ADMIN_PW
+ *   2. Modern "pbkdf2$salt$key" format → PBKDF2 verify
+ *   3. Legacy 64-char SHA-256 hex → SHA-256 compare, migrate to PBKDF2 on success
+ *   4. Legacy plaintext → compare directly, migrate to PBKDF2 on success
  */
 async function checkPassword(entered) {
-  const stored      = localStorage.getItem(ADMIN_PW_KEY);
-  const enteredHash = await hashPassword(entered);
+  const stored = localStorage.getItem(ADMIN_PW_KEY);
 
+  // Nothing stored — first login, check against default
   if (!stored) {
-    return enteredHash === await hashPassword(DEFAULT_ADMIN_PW);
+    const match = (entered === DEFAULT_ADMIN_PW);
+    if (match) {
+      localStorage.setItem(ADMIN_PW_KEY, await hashPassword(entered));
+    }
+    return match;
   }
 
+  // Modern PBKDF2 format
+  if (stored.startsWith('pbkdf2$')) {
+    const [, saltHex, storedKey] = stored.split('$');
+    const derived = await pbkdf2Derive(entered, hexToBytes(saltHex));
+    return derived === storedKey;
+  }
+
+  // Legacy unsalted SHA-256 (64-char hex) — migrate on success
   if (/^[0-9a-f]{64}$/.test(stored)) {
-    return enteredHash === stored;
+    const enc  = new TextEncoder();
+    const buf  = await crypto.subtle.digest('SHA-256', enc.encode(entered));
+    const hex  = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    if (hex === stored) {
+      localStorage.setItem(ADMIN_PW_KEY, await hashPassword(entered));
+      return true;
+    }
+    return false;
   }
 
-  // Legacy plaintext — migrate to hash on successful login
+  // Legacy plaintext — migrate on success
   if (entered === stored) {
-    localStorage.setItem(ADMIN_PW_KEY, enteredHash);
+    localStorage.setItem(ADMIN_PW_KEY, await hashPassword(entered));
     return true;
   }
   return false;
@@ -114,10 +155,35 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
   const entered = document.getElementById('passwordInput').value;
   const errorEl = document.getElementById('loginError');
 
-  if (await checkPassword(entered)) {
+  // Try Worker session endpoint first — verifies the secret and returns the API key
+  let authed = false;
+  try {
+    const res = await fetch('/api/session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret: entered })
+    });
+    if (res.ok) {
+      const json = await res.json();
+      if (json.ok && json.key) {
+        localStorage.setItem('bds_api_key', json.key);
+        const apiKeyInput = document.getElementById('f-api-key');
+        if (apiKeyInput) apiKeyInput.value = json.key;
+        authed = true;
+      }
+    }
+  } catch (_) { /* offline / local dev — fall through to local check */ }
+
+  // Fallback: local password hash check (file://, dev server, Worker unreachable)
+  if (!authed) {
+    authed = await checkPassword(entered);
+  }
+
+  if (authed) {
     sessionStorage.setItem(ADMIN_SESSION_KEY, '1');
     errorEl.textContent = '';
     showPanel();
+    updateConnectionPill();
   } else {
     errorEl.textContent = T('toast_wrong_pw');
     document.getElementById('passwordInput').value = '';
@@ -322,6 +388,25 @@ function loadFormData(lang, contentObj) {
   const biztypeEl = document.getElementById('f-seo-biztype');
   if (biztypeEl) biztypeEl.value = seoRoot.businessType || 'ProfessionalService';
 
+  /* ── Legal pages ── */
+  const imp = data.impressum || {};
+  val('f-imp-name',          imp.anbieter_name    || '');
+  val('f-imp-strasse',       imp.anbieter_strasse || '');
+  val('f-imp-ort',           imp.anbieter_ort     || '');
+  val('f-imp-land',          imp.anbieter_land    || '');
+  val('f-imp-email',         imp.kontakt_email    || '');
+  val('f-imp-telefon',       imp.kontakt_telefon  || '');
+  val('f-imp-vertreter',     imp.vertreter        || '');
+  val('f-imp-ustid',         imp.ustid            || '');
+  val('f-imp-register',      imp.registereintrag  || '');
+  val('f-imp-verantwortlich',imp.verantwortlich   || '');
+  val('f-imp-updated',       imp.updated          || '');
+
+  const ds = data.datenschutz || {};
+  val('f-ds-body-de', ds.body_de  || '');
+  val('f-ds-body-en', ds.body_en  || '');
+  val('f-ds-updated', ds.updated  || '');
+
   /* ── Update bilingual visibility for new sections ── */
   updateJobsLangVisibility();
   updateAppointmentsLangVisibility();
@@ -519,6 +604,26 @@ function captureFormIntoContent(lang, contentObj) {
     ogImageUrl:    get('f-seo-ogimage'),
     twitterHandle: get('f-seo-twitter'),
     businessType:  document.getElementById('f-seo-biztype')?.value || 'ProfessionalService'
+  };
+
+  /* ── Legal pages (language-neutral) ── */
+  contentObj.impressum = {
+    anbieter_name:    get('f-imp-name'),
+    anbieter_strasse: get('f-imp-strasse'),
+    anbieter_ort:     get('f-imp-ort'),
+    anbieter_land:    get('f-imp-land'),
+    kontakt_email:    get('f-imp-email'),
+    kontakt_telefon:  get('f-imp-telefon'),
+    vertreter:        get('f-imp-vertreter'),
+    ustid:            get('f-imp-ustid'),
+    registereintrag:  get('f-imp-register'),
+    verantwortlich:   get('f-imp-verantwortlich'),
+    updated:          get('f-imp-updated')
+  };
+  contentObj.datenschutz = {
+    body_de:  (document.getElementById('f-ds-body-de')?.value || '').trim(),
+    body_en:  (document.getElementById('f-ds-body-en')?.value || '').trim(),
+    updated:  get('f-ds-updated')
   };
 }
 
@@ -1564,3 +1669,99 @@ document.getElementById('themeResetBtn').addEventListener('click', () => {
   if (typeof removeStoredTheme === 'function') removeStoredTheme();
   showToast(T('toast_theme_reset'), '');
 });
+
+
+/* ============================================================
+   PDF TEXT IMPORT — self-contained, no external library.
+   Extracts readable text from uncompressed PDF content streams.
+   ============================================================ */
+
+(function initPdfImport() {
+  const fileInput = document.getElementById('f-ds-pdf-input');
+  const statusEl  = document.getElementById('f-ds-pdf-status');
+  if (!fileInput || !statusEl) return;
+
+  fileInput.addEventListener('change', async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    statusEl.textContent = T('sec_ds_pdf_reading');
+    fileInput.value = '';
+
+    try {
+      const text = await extractPdfText(file);
+      if (text && text.length > 50) {
+        const bodyDe = document.getElementById('f-ds-body-de');
+        if (bodyDe) {
+          bodyDe.value = plainTextToHtml(text);
+          statusEl.style.color = 'var(--color-success, green)';
+          statusEl.textContent = T('sec_ds_pdf_ok').replace('{n}', text.length);
+        }
+      } else {
+        statusEl.style.color = 'var(--color-danger, red)';
+        statusEl.textContent = T('sec_ds_pdf_fail');
+      }
+    } catch (_) {
+      statusEl.style.color = 'var(--color-danger, red)';
+      statusEl.textContent = T('sec_ds_pdf_fail');
+    }
+  });
+}());
+
+async function extractPdfText(file) {
+  const buffer = await file.arrayBuffer();
+  const raw = new TextDecoder('latin1').decode(new Uint8Array(buffer));
+  const lines = [];
+  let pos = 0;
+  while (true) {
+    const btIdx = raw.indexOf('BT', pos);
+    if (btIdx === -1) break;
+    const etIdx = raw.indexOf('ET', btIdx + 2);
+    if (etIdx === -1) break;
+    pos = etIdx + 2;
+    const block = raw.slice(btIdx, etIdx);
+    const parts  = [];
+    const tjRe = /\(([^)\\]*(?:\\[\s\S][^)\\]*)*)\)\s*(?:Tj|'|")/g;
+    let m;
+    while ((m = tjRe.exec(block)) !== null) {
+      const decoded = decodePdfString(m[1]);
+      if (decoded.trim()) parts.push(decoded);
+    }
+    const tjArrRe = /\[([^\]]*)\]\s*TJ/g;
+    while ((m = tjArrRe.exec(block)) !== null) {
+      const inner   = m[1];
+      const innerRe = /\(([^)\\]*(?:\\[\s\S][^)\\]*)*)\)/g;
+      let im;
+      while ((im = innerRe.exec(inner)) !== null) {
+        const decoded = decodePdfString(im[1]);
+        if (decoded.trim()) parts.push(decoded);
+      }
+    }
+    const line = parts.join('').trim();
+    if (line) lines.push(line);
+  }
+  return lines.join('\n').trim();
+}
+
+function decodePdfString(s) {
+  return s
+    .replace(/\\([0-7]{3})/g, (_, oct) => String.fromCharCode(parseInt(oct, 8)))
+    .replace(/\\n/g, '\n')
+    .replace(/\\r/g, '\r')
+    .replace(/\\t/g, '\t')
+    .replace(/\\(.)/g, '$1');
+}
+
+function plainTextToHtml(text) {
+  const paras = text.split(/\n{2,}/).map(p => p.replace(/\n/g, ' ').trim()).filter(Boolean);
+  return paras.map(p => {
+    if (p.length < 80 && !/[.,:;]$/.test(p) && /\d|^[A-ZÄÖÜ]/.test(p)) {
+      return `<h2>${escHtml(p)}</h2>`;
+    }
+    return `<p>${escHtml(p)}</p>`;
+  }).join('\n');
+}
+
+function escHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
