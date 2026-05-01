@@ -435,6 +435,41 @@ const TRANSLATIONS = {
     sec_storage_export:        '⬇ Exportieren',
     sec_storage_import:        '⬆ Importieren',
 
+    /* ── Legal pages admin ──────────────────────────────── */
+    admin_nav_legal:        '📜 Rechtliches',
+    sec_legal_h2:           'Impressum & Datenschutz',
+    sec_legal_desc:         'Pflichtangaben gemäß TMG §5 und DSGVO Art. 13/14. Inhalte erscheinen auf /impressum und /datenschutz.',
+    sec_imp_h3:             'Impressum',
+    sec_imp_name:           'Name / Firmenname',
+    sec_imp_strasse:        'Straße und Hausnummer',
+    sec_imp_ort:            'Postleitzahl und Ort',
+    sec_imp_land:           'Land',
+    sec_imp_email:          'E-Mail (Kontakt)',
+    sec_imp_telefon:        'Telefon (optional)',
+    sec_imp_vertreter:      'Vertretungsberechtigte Person',
+    sec_imp_ustid:          'USt-ID (optional)',
+    sec_imp_register:       'Handelsregistereintrag (optional)',
+    sec_imp_verantwortlich: 'Inhaltlich Verantwortlicher (§ 55 Abs. 2 RStV)',
+    sec_legal_updated:      'Letzte Aktualisierung',
+    sec_ds_h3:              'Datenschutzerklärung',
+    sec_ds_desc:            'HTML-Inhalt der Datenschutzerklärung. Text eingeben oder per PDF importieren.',
+    sec_ds_pdf_lbl:         'PDF importieren',
+    sec_ds_pdf_hint:        'Text wird aus der PDF extrahiert und in das Textfeld unten eingefügt.',
+    sec_ds_pdf_btn:         'PDF auswählen …',
+    sec_ds_pdf_reading:     'PDF wird gelesen …',
+    sec_ds_pdf_ok:          '{n} Zeichen extrahiert. Bitte Text überprüfen.',
+    sec_ds_pdf_fail:        'Kein Text extrahierbar. Bitte manuell einfügen.',
+    sec_ds_body_de:         'Inhalt (Deutsch) — HTML',
+    sec_ds_body_en:         'Inhalt (Englisch) — HTML (optional)',
+
+    /* ── Contact form consent ───────────────────────────── */
+    form_consent_label:     'Ich habe die <a href="/datenschutz">Datenschutzerklärung</a> gelesen und bin damit einverstanden, dass meine Angaben zur Kontaktaufnahme verarbeitet werden.',
+    err_consent_required:   'Bitte stimmen Sie der Datenschutzerklärung zu, um fortzufahren.',
+
+    /* ── Footer legal links ─────────────────────────────── */
+    footer_impressum:       'Impressum',
+    footer_datenschutz:     'Datenschutz',
+
     /* ── About-me page ──────────────────────────────────── */
     aboutme_meta_title: 'Über mich – Boyle Digital Services',
     aboutme_eyebrow:    'Über mich',
@@ -768,6 +803,41 @@ const TRANSLATIONS = {
     sec_storage_transfer_hint: 'Export downloads current content as content.json. Import loads a previously exported file.',
     sec_storage_export:        '⬇ Export',
     sec_storage_import:        '⬆ Import',
+
+    /* ── Legal pages admin ──────────────────────────────── */
+    admin_nav_legal:        '📜 Legal',
+    sec_legal_h2:           'Impressum & Privacy Policy',
+    sec_legal_desc:         'Required disclosures under TMG §5 and GDPR Art. 13/14. Content appears on /impressum and /datenschutz.',
+    sec_imp_h3:             'Impressum (Legal Notice)',
+    sec_imp_name:           'Name / Company name',
+    sec_imp_strasse:        'Street and house number',
+    sec_imp_ort:            'Postcode and city',
+    sec_imp_land:           'Country',
+    sec_imp_email:          'Email (contact)',
+    sec_imp_telefon:        'Phone (optional)',
+    sec_imp_vertreter:      'Authorised representative',
+    sec_imp_ustid:          'VAT ID (optional)',
+    sec_imp_register:       'Trade register entry (optional)',
+    sec_imp_verantwortlich: 'Editorial responsible (§ 55 para. 2 RStV)',
+    sec_legal_updated:      'Last updated',
+    sec_ds_h3:              'Privacy Policy (Datenschutzerklärung)',
+    sec_ds_desc:            'HTML content of the privacy policy. Type directly or import from a PDF.',
+    sec_ds_pdf_lbl:         'Import from PDF',
+    sec_ds_pdf_hint:        'Text is extracted from the PDF and inserted into the field below.',
+    sec_ds_pdf_btn:         'Select PDF …',
+    sec_ds_pdf_reading:     'Reading PDF …',
+    sec_ds_pdf_ok:          '{n} characters extracted. Please review the text.',
+    sec_ds_pdf_fail:        'No text could be extracted. Please paste manually.',
+    sec_ds_body_de:         'Content (German) — HTML',
+    sec_ds_body_en:         'Content (English) — HTML (optional)',
+
+    /* ── Contact form consent ───────────────────────────── */
+    form_consent_label:     'I have read the <a href="/datenschutz">Privacy Policy</a> and agree that my details may be used to respond to my enquiry.',
+    err_consent_required:   'Please accept the privacy policy to continue.',
+
+    /* ── Footer legal links ─────────────────────────────── */
+    footer_impressum:       'Legal Notice',
+    footer_datenschutz:     'Privacy Policy',
 
     /* ── About-me page ──────────────────────────────────── */
     aboutme_meta_title: 'About me – Boyle Digital Services',
