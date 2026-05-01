@@ -164,6 +164,165 @@ const DEFAULT_CONTENT = {
     jobs:         { title: '', body: '', btnText: '' },
     appointments: { title: '', body: '', btnText: '' },
     seo:          { title: '', description: '' },
+  },
+
+  /* ── Impressum (language-neutral legal data) ─────────────── */
+  impressum: {
+    anbieter_name:    '[Bitte ausfüllen: vollständiger Name oder Firmenname]',
+    anbieter_strasse: '[Bitte ausfüllen: Straße und Hausnummer]',
+    anbieter_ort:     '[Bitte ausfüllen: Postleitzahl und Ort]',
+    anbieter_land:    '[Bitte ausfüllen: Land]',
+    kontakt_email:    'hello@boyledigital.ie',
+    kontakt_telefon:  '',
+    vertreter:        '',
+    registereintrag:  '',
+    ustid:            '',
+    verantwortlich:   '',
+    updated:          'Mai 2026'
+  },
+
+  /* ── Datenschutzerklärung body text (HTML, per language) ─── */
+  datenschutz: {
+    body_de: [
+      '<h2>1. Verantwortlicher</h2>',
+      '<p>Verantwortlicher im Sinne der Datenschutz-Grundverordnung (DSGVO) und anderer nationaler Datenschutzgesetze ist:</p>',
+      '<p>[Bitte ausfüllen: vollständiger Name]<br>[Bitte ausfüllen: Adresse]<br>',
+      'E-Mail: <a href="mailto:hello@boyledigital.ie">hello@boyledigital.ie</a></p>',
+
+      '<h2>2. Welche Daten werden verarbeitet und warum?</h2>',
+
+      '<h3>2.1 Serverlog-Daten / IP-Adressen</h3>',
+      '<p>Bei jedem Aufruf unserer Website überträgt Ihr Browser automatisch Daten an unsere Infrastruktur. ',
+      'Diese Seite wird über das Netzwerk von <strong>Cloudflare, Inc.</strong> (101 Townsend St, San Francisco, CA 94107, USA) ausgeliefert. ',
+      'Cloudflare verarbeitet dabei Ihre IP-Adresse sowie technische Anfrage-Metadaten (Browser-Typ, Betriebssystem, Datum und Uhrzeit des Abrufs, aufgerufene URL). ',
+      'Dies ist technisch notwendig, um die Website zu Ihrem Browser zu übertragen.</p>',
+      '<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der sicheren und zuverlässigen Auslieferung der Website).</p>',
+      '<p>Wir haben mit Cloudflare einen Auftragsverarbeitungsvertrag gemäß Art. 28 DSGVO geschlossen. Cloudflares Datenschutzrichtlinie finden Sie unter <a href="https://www.cloudflare.com/de-de/privacypolicy/" target="_blank" rel="noopener noreferrer">cloudflare.com/privacypolicy</a>.</p>',
+
+      '<h3>2.2 Spracheinstellung</h3>',
+      '<p>Unsere Website speichert Ihre Sprachpräferenz (Deutsch / Englisch) im <strong>localStorage</strong> Ihres Browsers unter dem Schlüssel <code>bds_lang</code>. ',
+      'Dieser Wert verlässt Ihren Browser nicht und wird ausschließlich verwendet, um die gewählte Sprache beim nächsten Besuch beizubehalten. ',
+      'Es werden keine Cookies gesetzt.</p>',
+      '<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an nutzerfreundlicher Bedienung).</p>',
+
+      '<h3>2.3 Kontaktformular</h3>',
+      '<p>Unser Kontaktformular (Name, E-Mail-Adresse, Betreff, Nachricht) wird ausschließlich lokal in Ihrem Browser verarbeitet. ',
+      'Bei Absenden öffnet das Formular Ihr lokales E-Mail-Programm via <code>mailto:</code>-Link. ',
+      'Die eingegebenen Daten werden <strong>nicht</strong> auf unseren Servern gespeichert und <strong>nicht</strong> von uns übertragen. ',
+      'Die anschließende E-Mail-Kommunikation unterliegt dem Datenschutzrecht Ihres E-Mail-Anbieters.</p>',
+      '<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahmen) bzw. Art. 6 Abs. 1 lit. a DSGVO (Einwilligung).</p>',
+
+      '<h3>2.4 Kartenansicht / OpenStreetMap</h3>',
+      '<p>Falls unser Standorte-Bereich auf der Website aktiv ist und Sie diesen aufrufen, werden Kartenkacheln vom Server der <strong>OpenStreetMap Foundation</strong> geladen. ',
+      'Dabei wird Ihre IP-Adresse an <code>tile.openstreetmap.org</code> übertragen. ',
+      'OpenStreetMap ist ein nichtkommerzieller, gemeinnütziger Dienst. Die Datenschutzrichtlinie finden Sie unter ',
+      '<a href="https://wiki.openstreetmap.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer">wiki.openstreetmap.org/wiki/Privacy_Policy</a>.</p>',
+      '<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>',
+
+      '<h2>3. Cookies</h2>',
+      '<p>Wir setzen <strong>keine Cookies</strong>. Die unter 2.2 genannte Sprachpräferenz wird im localStorage gespeichert, nicht in einem Cookie.</p>',
+
+      '<h2>4. Tracking und Analyse</h2>',
+      '<p>Wir verwenden <strong>keine</strong> Analyse-, Tracking- oder Remarketing-Werkzeuge (weder Google Analytics, Matomo, noch andere Dienste).</p>',
+
+      '<h2>5. Speicherdauer</h2>',
+      '<p>Die unter 2.2 beschriebenen localStorage-Daten bleiben bis zur manuellen Löschung in Ihrem Browser gespeichert. Sie können diese jederzeit über die Entwicklertools Ihres Browsers löschen.</p>',
+      '<p>Cloudflare-Logdaten werden gemäß den Aufbewahrungsfristen von Cloudflare gespeichert (in der Regel maximal 30 Tage).</p>',
+
+      '<h2>6. Ihre Rechte</h2>',
+      '<p>Sie haben gegenüber uns folgende Rechte hinsichtlich der Sie betreffenden personenbezogenen Daten:</p>',
+      '<ul>',
+      '<li><strong>Auskunftsrecht</strong> (Art. 15 DSGVO)</li>',
+      '<li><strong>Recht auf Berichtigung</strong> (Art. 16 DSGVO)</li>',
+      '<li><strong>Recht auf Löschung</strong> (Art. 17 DSGVO)</li>',
+      '<li><strong>Recht auf Einschränkung der Verarbeitung</strong> (Art. 18 DSGVO)</li>',
+      '<li><strong>Recht auf Datenübertragbarkeit</strong> (Art. 20 DSGVO)</li>',
+      '<li><strong>Widerspruchsrecht</strong> (Art. 21 DSGVO)</li>',
+      '<li><strong>Recht auf Widerruf einer Einwilligung</strong> (Art. 7 Abs. 3 DSGVO)</li>',
+      '</ul>',
+      '<p>Da wir keine personenbezogenen Daten auf unseren Servern speichern, wird eine Auskunftsanfrage in der Regel mit dem Hinweis beantwortet, dass keine Daten vorliegen. ',
+      'Anfragen richten Sie bitte an: <a href="mailto:hello@boyledigital.ie">hello@boyledigital.ie</a>. Wir antworten innerhalb von 30 Tagen.</p>',
+
+      '<h2>7. Beschwerderecht</h2>',
+      '<p>Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde über die Verarbeitung Ihrer personenbezogenen Daten zu beschweren. ',
+      'Zuständig ist die Behörde am Ort Ihres gewöhnlichen Aufenthalts, Ihres Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes.</p>',
+
+      '<h2>8. Änderungen dieser Datenschutzerklärung</h2>',
+      '<p>Wir behalten uns vor, diese Datenschutzerklärung zu aktualisieren, um sie an geänderte Rechtslagen oder bei Änderungen des Dienstes anzupassen. ',
+      'Die jeweils aktuelle Fassung finden Sie auf dieser Seite.</p>'
+    ].join(''),
+
+    body_en: [
+      '<h2>1. Data Controller</h2>',
+      '<p>The data controller within the meaning of the General Data Protection Regulation (GDPR) is:</p>',
+      '<p>[Please fill in: full name]<br>[Please fill in: address]<br>',
+      'Email: <a href="mailto:hello@boyledigital.ie">hello@boyledigital.ie</a></p>',
+
+      '<h2>2. What data is processed and why?</h2>',
+
+      '<h3>2.1 Server log data / IP addresses</h3>',
+      '<p>Each time you visit our website your browser automatically transmits data to our infrastructure. ',
+      'This site is delivered via the network of <strong>Cloudflare, Inc.</strong> (101 Townsend St, San Francisco, CA 94107, USA). ',
+      'Cloudflare processes your IP address and technical request metadata (browser type, OS, date and time of request, URL accessed). ',
+      'This is technically necessary to deliver the website to your browser.</p>',
+      '<p>Legal basis: Art. 6(1)(f) GDPR (legitimate interest in secure and reliable website delivery).</p>',
+      '<p>We have entered into a data processing agreement with Cloudflare pursuant to Art. 28 GDPR. ',
+      "Cloudflare's privacy policy is available at <a href=\"https://www.cloudflare.com/privacypolicy/\" target=\"_blank\" rel=\"noopener noreferrer\">cloudflare.com/privacypolicy</a>.</p>",
+
+      '<h3>2.2 Language preference</h3>',
+      '<p>Our website stores your language preference (German / English) in your browser\'s <strong>localStorage</strong> under the key <code>bds_lang</code>. ',
+      'This value never leaves your browser and is used solely to remember your language choice on your next visit. ',
+      'No cookies are set.</p>',
+      '<p>Legal basis: Art. 6(1)(f) GDPR (legitimate interest in user-friendly operation).</p>',
+
+      '<h3>2.3 Contact form</h3>',
+      '<p>Our contact form (name, email address, subject, message) is processed exclusively in your browser. ',
+      'When you submit the form, it opens your local email client via a <code>mailto:</code> link. ',
+      'The data entered is <strong>not</strong> stored on our servers and is <strong>not</strong> transmitted by us. ',
+      "Subsequent email communication is subject to your email provider's privacy policy.</p>",
+      '<p>Legal basis: Art. 6(1)(b) GDPR (pre-contractual measures) or Art. 6(1)(a) GDPR (consent).</p>',
+
+      '<h3>2.4 Map / OpenStreetMap</h3>',
+      '<p>If our Locations section is active and you scroll to it, map tiles are loaded from the <strong>OpenStreetMap Foundation</strong> servers. ',
+      'Your IP address is transmitted to <code>tile.openstreetmap.org</code>. ',
+      'OpenStreetMap is a non-commercial, non-profit service. Their privacy policy is available at ',
+      '<a href="https://wiki.openstreetmap.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer">wiki.openstreetmap.org/wiki/Privacy_Policy</a>.</p>',
+      '<p>Legal basis: Art. 6(1)(f) GDPR.</p>',
+
+      '<h2>3. Cookies</h2>',
+      '<p>We set <strong>no cookies</strong>. The language preference mentioned in 2.2 is stored in localStorage, not a cookie.</p>',
+
+      '<h2>4. Tracking and analytics</h2>',
+      '<p>We use <strong>no</strong> analytics, tracking, or remarketing tools (no Google Analytics, Matomo, or similar services).</p>',
+
+      '<h2>5. Retention periods</h2>',
+      '<p>The localStorage data described in 2.2 remains stored in your browser until manually deleted. You can delete it at any time via your browser\'s developer tools.</p>',
+      '<p>Cloudflare log data is stored in accordance with Cloudflare\'s retention periods (typically up to 30 days).</p>',
+
+      '<h2>6. Your rights</h2>',
+      '<p>You have the following rights with regard to your personal data:</p>',
+      '<ul>',
+      '<li><strong>Right of access</strong> (Art. 15 GDPR)</li>',
+      '<li><strong>Right to rectification</strong> (Art. 16 GDPR)</li>',
+      '<li><strong>Right to erasure</strong> (Art. 17 GDPR)</li>',
+      '<li><strong>Right to restriction of processing</strong> (Art. 18 GDPR)</li>',
+      '<li><strong>Right to data portability</strong> (Art. 20 GDPR)</li>',
+      '<li><strong>Right to object</strong> (Art. 21 GDPR)</li>',
+      '<li><strong>Right to withdraw consent</strong> (Art. 7(3) GDPR)</li>',
+      '</ul>',
+      '<p>Since we do not store personal data on our servers, an access request will typically be answered by confirming no data is held. ',
+      'Please direct requests to: <a href="mailto:hello@boyledigital.ie">hello@boyledigital.ie</a>. We will respond within 30 days.</p>',
+
+      '<h2>7. Right to lodge a complaint</h2>',
+      '<p>You have the right to lodge a complaint with a supervisory authority if you believe the processing of your personal data violates the GDPR. ',
+      'The competent authority is that of your habitual residence, place of work, or the location of the alleged infringement.</p>',
+
+      '<h2>8. Changes to this privacy policy</h2>',
+      '<p>We reserve the right to update this privacy policy to reflect changes in legal requirements or our services. ',
+      'The current version is always available on this page.</p>'
+    ].join(''),
+
+    updated: 'Mai 2026'
   }
 };
 
