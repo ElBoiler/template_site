@@ -1,0 +1,20 @@
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <nav class="navbar" id="navbar" aria-label="Hauptnavigation">
+    <div class="container nav-container">
+      <a href="/" class="nav-logo">
+        <img src="/img/logo.svg" alt="" aria-hidden="true" width="40" height="40" onerror="this.style.display='none'">
+        <span class="nav-logo-text">Chamisso-<span class="nav-logo-accent">Grundschule</span></span>
+      </a>
+
+      <ul class="nav-links" id="navLinks" role="menubar">{{NAV_DESKTOP}}</ul>
+
+      <button class="hamburger" id="hamburger" aria-label="Navigation ein-/ausblenden" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobile Navigation" aria-modal="true">
+    <div class="mobile-menu-inner">{{NAV_MOBILE}}</div>
+  </div>

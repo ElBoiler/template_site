@@ -1,0 +1,47 @@
+{
+  "groups": [
+    { "label": "Start", "href": "/" },
+    {
+      "label": "Unsere Schule",
+      "children": [
+        { "label": "Musikalische Grundschule",          "href": "/unsere-schule/musikalische-grundschule" },
+        { "label": "Geschichte",                        "href": "/unsere-schule/geschichte" },
+        { "label": "Startchancenprogramm",              "href": "/unsere-schule/startchancenprogramm" },
+        { "label": "Arbeitsgemeinschaften und Projekte","href": "/unsere-schule/ags-projekte" },
+        { "label": "Kooperationen",                     "href": "/unsere-schule/kooperationen" },
+        { "label": "Konfliktlotsen",                    "href": "/unsere-schule/konfliktlotsen" },
+        { "label": "Schülerparlament",                  "href": "/unsere-schule/schuelerparlament" }
+      ]
+    },
+    {
+      "label": "Unterricht",
+      "children": [
+        { "label": "Unterrichtszeiten",            "href": "/unterricht/unterrichtszeiten" },
+        { "label": "Lernform und Fremdsprachen",   "href": "/unterricht/lernform-fremdsprachen" },
+        { "label": "Angebote inklusiver Schule",   "href": "/unterricht/inklusion" },
+        { "label": "ChaKk – Chamisso Kleinklasse", "href": "/unterricht/chakk" },
+        { "label": "Lese- und Sprachförderung",    "href": "/unterricht/lese-sprachfoerderung" },
+        { "label": "Ernährungsführerschein",       "href": "/unterricht/ernaehrungsfuehrerschein" }
+      ]
+    },
+    { "label": "EFöB",            "href": "/efoeb" },
+    { "label": "Schulsozialarbeit","href": "/schulsozialarbeit" },
+    { "label": "Mittagessen",     "href": "/mittagessen" },
+    {
+      "label": "Für Eltern",
+      "children": [
+        { "label": "Krankmeldung",                       "href": "/fuer-eltern/krankmeldung" },
+        { "label": "Berlin-Pass",                        "href": "/fuer-eltern/berlin-pass" },
+        { "label": "BVG-Ticket",                         "href": "/fuer-eltern/bvg-ticket" },
+        { "label": "Sichere Suche im Internet für Kinder","href": "/fuer-eltern/sichere-suche" }
+      ]
+    },
+    { "label": "Förderverein", "href": "/foerderverein" },
+    { "label": "Aktuelles",    "href": "/aktuelles" },
+    { "label": "Kontakt",      "href": "/kontakt" }
+  ],
+  "footer": [
+    { "label": "Impressum",   "href": "/impressum" },
+    { "label": "Datenschutz", "href": "/datenschutz" }
+  ]
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+{{HEAD}}
+</head>
+<body class="page-aktuelles">
+{{HEADER}}
+
+  <main id="main" class="page-main">
+    <header class="page-hero">
+      <div class="container">
+        <p class="page-eyebrow">Aktuelles</p>
+        <h1 class="page-title">Aus dem Schulalltag</h1>
+        <p class="page-subtitle">Neuigkeiten, Berichte und Eindrücke aus unserer Schule.</p>
+      </div>
+    </header>
+
+    <section class="news-list-section section-pad">
+      <div class="container">
+        <ul class="news-grid news-grid--full" id="newsGrid" data-list-slot="posts.all"></ul>
+        <p class="news-empty" id="newsEmpty" hidden>Es sind noch keine Beiträge veröffentlicht.</p>
+      </div>
+    </section>
+  </main>
+
+{{FOOTER}}
+
+  <script>window.__PAGE_KEY = "/aktuelles";</script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/content.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

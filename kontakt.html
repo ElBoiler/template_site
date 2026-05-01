@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Impressum der Chamisso-Grundschule Berlin.">
-  <title>Impressum | Chamisso-Grundschule</title>
+  <meta name="description" content="Kontakt zur Chamisso-Grundschule Berlin: Sekretariat, Schulleitung und EFöB.">
+  <title>Kontakt | Chamisso-Grundschule</title>
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Impressum | Chamisso-Grundschule">
-  <meta property="og:description" content="Impressum der Chamisso-Grundschule Berlin.">
+  <meta property="og:title" content="Kontakt | Chamisso-Grundschule">
+  <meta property="og:description" content="Kontakt zur Chamisso-Grundschule Berlin: Sekretariat, Schulleitung und EFöB.">
   <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="/css/styles.css">
 
 </head>
-<body class="page-impressum">
+<body class="page-kontakt">
   <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
   <nav class="navbar" id="navbar" aria-label="Hauptnavigation">
@@ -41,15 +41,55 @@
   <main id="main" class="page-main">
     <header class="page-hero">
       <div class="container">
-        <p class="page-eyebrow">Rechtliches</p>
-        <h1 class="page-title">Impressum</h1>
-        
+        <p class="page-eyebrow">Kontakt</p>
+        <h1 class="page-title">Sprechen Sie uns an</h1>
       </div>
     </header>
 
-    <section class="page-content section-pad">
+    <section class="contact section-pad">
       <div class="container">
-        <div class="prose" data-content="page.body"><h2>Angaben gemäß § 5 TMG</h2><p>Chamisso-Grundschule<br>Senftenberger Ring 27<br>13435 Berlin</p><p>Telefon: 030 / 213 093 70<br>E-Mail: info@chamisso.schule.berlin.de</p><h2>Vertretungsberechtigte Schulleitung</h2><p><em>Name der Schulleitung hier einfügen</em></p><h2>Aufsichtsbehörde</h2><p>Bezirksamt Reinickendorf von Berlin — Schul- und Sportamt</p><h2>Verantwortlich für den Inhalt</h2><p><em>Verantwortliche Person hier einfügen</em></p></div>
+        <div class="contact-grid">
+          <aside class="contact-info">
+            <h3>Sekretariat</h3>
+            <ul class="contact-details">
+              <li><span class="contact-icon" aria-hidden="true">📍</span>
+                <span data-content="contact.address">Senftenberger Ring 27, 13435 Berlin</span></li>
+              <li><span class="contact-icon" aria-hidden="true">📞</span>
+                <a data-content="contact.phone" href="tel:+493021309370">030 / 213 093 70</a></li>
+              <li><span class="contact-icon" aria-hidden="true">✉️</span>
+                <a data-content="contact.email" href="mailto:info@chamisso.schule.berlin.de">info@chamisso.schule.berlin.de</a></li>
+              <li><span class="contact-icon" aria-hidden="true">🕒</span>
+                <span data-content="contact.hours">Mo–Fr 7:30–14:00 Uhr</span></li>
+            </ul>
+          </aside>
+
+          <form id="contactForm" class="contact-form" novalidate>
+            <div class="form-group">
+              <label for="name">Name <span class="required" aria-hidden="true">*</span></label>
+              <input id="name" name="name" type="text" required>
+              <span id="nameError" class="form-error" role="alert"></span>
+            </div>
+            <div class="form-group">
+              <label for="email">E-Mail <span class="required" aria-hidden="true">*</span></label>
+              <input id="email" name="email" type="email" required>
+              <span id="emailError" class="form-error" role="alert"></span>
+            </div>
+            <div class="form-group">
+              <label for="subject">Betreff <span class="required" aria-hidden="true">*</span></label>
+              <select id="subject" name="subject" required>
+                <option value="">Bitte wählen</option>
+              </select>
+              <span id="subjectError" class="form-error" role="alert"></span>
+            </div>
+            <div class="form-group">
+              <label for="message">Nachricht <span class="required" aria-hidden="true">*</span></label>
+              <textarea id="message" name="message" rows="6" required></textarea>
+              <span id="messageError" class="form-error" role="alert"></span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Nachricht per E-Mail senden</button>
+            <p class="form-note">Beim Absenden öffnet sich Ihr E-Mail-Programm mit der vorausgefüllten Nachricht.</p>
+          </form>
+        </div>
       </div>
     </section>
   </main>
@@ -104,7 +144,7 @@
   </footer>
 
 
-  <script>window.__PAGE_KEY = "/impressum";</script>
+  <script>window.__PAGE_KEY = "/kontakt";</script>
   <script src="/js/i18n.js"></script>
   <script src="/js/content.js"></script>
   <script src="/js/main.js"></script>

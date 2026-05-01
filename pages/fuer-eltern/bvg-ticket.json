@@ -1,0 +1,10 @@
+{
+  "template": "page",
+  "key": "/fuer-eltern/bvg-ticket",
+  "slug": "bvg-ticket",
+  "title": "BVG-Ticket (Schülerticket)",
+  "eyebrow": "Für Eltern",
+  "subtitle": "Kostenfreies Schülerticket für unsere Schülerinnen und Schüler.",
+  "description": "BVG-Schülerticket an der Chamisso-Grundschule beantragen.",
+  "body": "<p>Alle Berliner Schülerinnen und Schüler haben Anspruch auf das kostenfreie Schülerticket der BVG. Den Antrag erhalten Sie im Sekretariat oder als Download.</p><p><a class=\"btn btn-primary\" href=\"/downloads/bvg-ticket-antrag.pdf\" download>BVG-Antrag (PDF)</a></p>"
+}

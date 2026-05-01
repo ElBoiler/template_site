@@ -1,0 +1,10 @@
+{
+  "template": "page",
+  "key": "/unterricht/unterrichtszeiten",
+  "slug": "unterrichtszeiten",
+  "title": "Unterrichtszeiten",
+  "eyebrow": "Stundenplan",
+  "subtitle": "Unsere Stunden- und Pausenzeiten im Überblick.",
+  "description": "Unterrichts- und Pausenzeiten der Chamisso-Grundschule.",
+  "body": "<p>Der Unterricht beginnt um 8:00 Uhr. Eine Übersicht aller Stunden- und Pausenzeiten finden Sie hier.</p><p><em>Inhalt folgt — Tabelle mit Unterrichtszeiten hier einfügen.</em></p>"
+}
