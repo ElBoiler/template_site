@@ -218,14 +218,14 @@ window.initLocationsMap = function (locations) {
       const link = document.createElement('link');
       link.id   = 'leaflet-css';
       link.rel  = 'stylesheet';
-      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      link.href = 'vendor/leaflet/leaflet.css';
       document.head.appendChild(link);
     }
 
     if (!document.getElementById('leaflet-js')) {
       const s = document.createElement('script');
       s.id  = 'leaflet-js';
-      s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      s.src = 'vendor/leaflet/leaflet.js';
       s.onload = function () {
         if (window._pendingLocations) {
           window.initLocationsMap(window._pendingLocations);
