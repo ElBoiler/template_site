@@ -7,13 +7,35 @@
    1. CSS CUSTOM PROPERTIES
    ============================================================ */
 :root {
-  /* ── Chamisso brand palette ────────────────────────────── */
-  --clr-primary:       #0B304C;   /* dark navy  — nav, headings, footer   */
-  --clr-primary-dark:  #071E30;   /* deeper navy — darkened contexts       */
-  --clr-secondary:     #3D86A6;   /* teal/blue  — logo, links, accents     */
-  --clr-accent:        #EECE03;   /* school yellow — CTA, highlights       */
-  --clr-accent-hover:  #C8A800;   /* darker yellow on hover                */
-  --clr-accent-light:  #FEFCE8;   /* pale yellow tint for surfaces         */
+  /* ── Official Chamisso-Grundschule brand palette ────────── */
+  /* Blue ramp (reference) */
+  --clr-blue:          #63B9D3; /* Hauptfarbe Blau   */
+  --clr-blue-dark-1:   #3D86A6; /* Blau Dunkel 1     */
+  --clr-blue-dark-2:   #1E5879; /* Blau Dunkel 2     */
+  --clr-blue-dark-3:   #0B304C; /* Blau Dunkel 3     */
+  --clr-blue-pastel:   #E7EFF1; /* Blau Pastel       */
+
+  /* Yellow ramp (reference) */
+  --clr-yellow:        #EECE03; /* Kontrastfarbe Gelb */
+  --clr-yellow-dark-1: #D3B502;
+  --clr-yellow-dark-2: #B79B05;
+  --clr-yellow-dark-3: #9C8400;
+  --clr-yellow-pastel: #F1EFE3;
+
+  /* Neutrals (reference) */
+  --clr-neutral-1:     #000000;
+  --clr-neutral-2:     #333333;
+  --clr-neutral-3:     #777777;
+  --clr-neutral-4:     #999999;
+  --clr-neutral-5:     #F2F2F2;
+
+  /* ── Semantic aliases (overridden at runtime by data.theme) */
+  --clr-primary:       #0F172A; /* nav / footer bg; heading text  */
+  --clr-primary-dark:  #1E293B; /* hover states; skip-link text   */
+  --clr-secondary:     #3D86A6; /* teal — links, form focus       */
+  --clr-accent:        #0891B2; /* CTA, highlights                */
+  --clr-accent-hover:  #0E7490;
+  --clr-accent-light:  #ECFEFF;
   --clr-bg:            #FFFFFF;
   --clr-surface:       #F8FAFC;
   --clr-surface-warm:  #FFFEF5;
@@ -23,8 +45,8 @@
   --clr-success:       #10B981;
   --clr-error:         #EF4444;
 
-  /* Gradient — dark navy → teal */
-  --gradient-hero: linear-gradient(135deg, #0B304C 0%, #3D86A6 100%);
+  /* Gradient (overridden by data.theme) */
+  --gradient-hero: linear-gradient(135deg, #0F172A 0%, #0891B2 100%);
 
   /* Typography — friendly, legible */
   --font-heading: 'Quicksand', system-ui, -apple-system, sans-serif;
@@ -317,7 +339,7 @@ h3 {
 
 .nav-links .nav-cta {
   background: var(--clr-accent);
-  color: var(--clr-primary-dark) !important;
+  color: var(--clr-primary) !important;
   padding: 0.5rem 1.1rem !important;
   border-radius: var(--radius-full);
   font-weight: 700;
@@ -1450,7 +1472,7 @@ h3 {
 
 /* Page hero (sub-pages) */
 .page-hero {
-  background: linear-gradient(135deg, var(--clr-primary) 0%, var(--clr-primary-dark) 100%);
+  background: var(--gradient-hero);
   color: #fff;
   padding: 3rem 0 2.5rem;
 }

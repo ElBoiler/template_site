@@ -41,6 +41,7 @@
         <button class="admin-tab is-active" role="tab" data-tab="posts">Beiträge</button>
         <button class="admin-tab" role="tab" data-tab="contact">Kontakt</button>
         <button class="admin-tab" role="tab" data-tab="events">Veranstaltungen</button>
+        <button class="admin-tab" role="tab" data-tab="theme">🎨 Farbschema</button>
       </nav>
 
       <div class="admin-panel is-active" data-panel="posts">
@@ -76,6 +77,98 @@
         <span id="eventsSaveStatus" class="admin-status"></span>
       </div>
 
+      <!-- ── COLOUR SCHEME PANEL ──────────────────────────── -->
+      <div class="admin-panel" data-panel="theme">
+        <h2>Farbschema</h2>
+        <p class="admin-help">Bild hochladen → Farben extrahieren → Primär- und Akzentfarbe zuweisen → Anwenden.</p>
+
+        <!-- Upload zone -->
+        <div class="theme-drop-zone" id="themeDropZone" role="button" tabindex="0" aria-label="Bild hochladen">
+          <input type="file" id="themeImageInput" accept=".jpg,.jpeg,.png,.gif" class="theme-file-input" aria-hidden="true">
+          <div id="themeDropPrompt" class="theme-drop-inner">
+            <span class="theme-drop-icon">🖼</span>
+            <span class="theme-drop-label">Bild hier ablegen oder klicken zum Hochladen</span>
+            <span class="theme-drop-formats">JPG · PNG · GIF</span>
+          </div>
+        </div>
+
+        <!-- Palette card (hidden until image uploaded) -->
+        <div id="themePaletteCard" hidden>
+
+          <!-- Thumbnail + swatches -->
+          <div class="theme-palette-row">
+            <img id="themeImgThumbnail" class="theme-thumbnail" alt="Hochgeladenes Bild">
+            <div id="themeSwatches" class="theme-swatches" aria-label="Extrahierte Farben"></div>
+          </div>
+
+          <!-- Role pickers -->
+          <div class="theme-roles">
+            <p class="theme-roles-label">Rollen zuweisen</p>
+
+            <div class="theme-role-row">
+              <span class="theme-role-name">Primär</span>
+              <button type="button" class="theme-role-swatch" id="rolePickerPrimary"
+                      aria-haspopup="true" aria-label="Primärfarbe wählen">
+                <span class="theme-role-dot" id="roleDotPrimary"></span>
+                <span class="theme-role-arrow">▾</span>
+              </button>
+              <div class="theme-role-popup hidden" id="rolePopupPrimary" role="listbox"
+                   aria-label="Primärfarbe aus Palette wählen"></div>
+              <input type="text" id="roleHexPrimary" class="theme-hex-input"
+                     maxlength="7" placeholder="#0B304C" aria-label="Hex-Wert Primärfarbe">
+            </div>
+
+            <div class="theme-role-row">
+              <span class="theme-role-name">Akzent</span>
+              <button type="button" class="theme-role-swatch" id="rolePickerAccent"
+                      aria-haspopup="true" aria-label="Akzentfarbe wählen">
+                <span class="theme-role-dot" id="roleDotAccent"></span>
+                <span class="theme-role-arrow">▾</span>
+              </button>
+              <div class="theme-role-popup hidden" id="rolePopupAccent" role="listbox"
+                   aria-label="Akzentfarbe aus Palette wählen"></div>
+              <input type="text" id="roleHexAccent" class="theme-hex-input"
+                     maxlength="7" placeholder="#EECE03" aria-label="Hex-Wert Akzentfarbe">
+            </div>
+          </div>
+
+          <!-- Mini mockup preview -->
+          <div class="theme-preview-section">
+            <p class="theme-roles-label">Vorschau</p>
+            <div class="theme-mockup" id="themeMockup" aria-hidden="true">
+              <div class="mockup-header">
+                <div class="mockup-logo"></div>
+                <div class="mockup-nav">
+                  <div class="mockup-nav-dot"></div>
+                  <div class="mockup-nav-dot"></div>
+                  <div class="mockup-nav-dot"></div>
+                  <div class="mockup-btn-pill"></div>
+                </div>
+              </div>
+              <div class="mockup-hero">
+                <div class="mockup-hero-eyebrow"></div>
+                <div class="mockup-hero-headline"></div>
+                <div class="mockup-hero-sub"></div>
+                <div class="mockup-hero-cta"></div>
+              </div>
+              <div class="mockup-cards">
+                <div class="mockup-card"><div class="mockup-card-icon"></div><div class="mockup-card-title"></div><div class="mockup-card-text"></div></div>
+                <div class="mockup-card"><div class="mockup-card-icon"></div><div class="mockup-card-title"></div><div class="mockup-card-text"></div></div>
+                <div class="mockup-card"><div class="mockup-card-icon"></div><div class="mockup-card-title"></div><div class="mockup-card-text"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="theme-actions">
+            <button id="themeApplyBtn" class="btn btn-primary">Farbschema anwenden</button>
+            <button id="themeResetBtn" class="btn-link">Auf Standard zurücksetzen</button>
+            <span id="themeSaveStatus" class="admin-status"></span>
+          </div>
+
+        </div><!-- /themePaletteCard -->
+      </div><!-- /theme panel -->
+
     </section>
 
     <div id="postEditor" class="admin-modal" hidden role="dialog" aria-modal="true" aria-labelledby="postEditorTitle">
@@ -99,6 +192,7 @@
 
   </main>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.4.0/color-thief.umd.js"></script>
   <script src="/js/i18n.js"></script>
   <script src="/js/content.js"></script>
   <script src="/js/admin.js"></script>

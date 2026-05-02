@@ -17,6 +17,18 @@
 
 'use strict';
 
+/* ── Theme: apply cached values instantly (prevents flash) ── */
+(function () {
+  try {
+    const raw = localStorage.getItem('bds_theme');
+    if (!raw) return;
+    const theme = JSON.parse(raw);
+    Object.entries(theme).forEach(function (entry) {
+      document.documentElement.style.setProperty(entry[0], entry[1]);
+    });
+  } catch (_) {}
+})();
+
 const CONTENT_KEY = 'bds_content';
 const API_URL     = '/api/content';
 
@@ -60,6 +72,15 @@ const DEFAULT_CONTENT = {
     },
     sduiUrl:     'https://sdui.app/news',
     brochureUrl: '/downloads/chamisso-flyer.pdf'
+  },
+
+  theme: {
+    '--clr-primary':      '#0B304C',
+    '--clr-accent':       '#EECE03',
+    '--clr-accent-hover': '#D3B502',
+    '--clr-accent-light': '#F1EFE3',
+    '--clr-text':         '#333333',
+    '--gradient-hero':    'linear-gradient(135deg, #0B304C 0%, #1E5879 60%, #63B9D3 100%)',
   },
 
   pages: {},
@@ -352,6 +373,30 @@ function renderNewsGrid(data, limit) {
 
 
 /* ============================================================
+   THEME
+   ============================================================ */
+
+const THEME_KEY   = 'bds_theme';
+const THEME_PROPS = [
+  '--clr-primary', '--clr-accent', '--clr-accent-hover',
+  '--clr-accent-light', '--clr-text', '--gradient-hero',
+];
+
+function applyAndCacheTheme(theme) {
+  if (!theme || typeof theme !== 'object') return;
+  Object.entries(theme).forEach(([p, v]) => {
+    document.documentElement.style.setProperty(p, v);
+  });
+  try { localStorage.setItem(THEME_KEY, JSON.stringify(theme)); } catch (_) {}
+}
+
+function removeTheme() {
+  THEME_PROPS.forEach(p => document.documentElement.style.removeProperty(p));
+  localStorage.removeItem(THEME_KEY);
+}
+
+
+/* ============================================================
    APPLY
    ============================================================ */
 
@@ -371,9 +416,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const data = await getContent();
     applyContent(data);
+    applyAndCacheTheme(data.theme);
   } catch (err) {
     console.error('content.js: failed to load content', err);
     applyContent(DEFAULT_CONTENT);
+    applyAndCacheTheme(DEFAULT_CONTENT.theme);
   }
 });
 
@@ -382,8 +429,10 @@ document.addEventListener('DOMContentLoaded', async () => {
    EXPORTS (for admin.js)
    ============================================================ */
 
-window.getContent      = getContent;
-window.saveContent     = saveContent;
-window.resetContent    = resetContent;
-window.applyContent    = applyContent;
-window.DEFAULT_CONTENT = DEFAULT_CONTENT;
+window.getContent          = getContent;
+window.saveContent         = saveContent;
+window.resetContent        = resetContent;
+window.applyContent        = applyContent;
+window.DEFAULT_CONTENT     = DEFAULT_CONTENT;
+window.applyAndCacheTheme  = applyAndCacheTheme;
+window.removeTheme         = removeTheme;

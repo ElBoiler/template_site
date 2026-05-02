@@ -339,4 +339,309 @@
     }
   })();
 
+
+  /* ============================================================
+     COLOUR SCHEME SECTION
+     ============================================================ */
+
+  let colorThief        = null;
+  try { colorThief = new ColorThief(); } catch (_) { /* CDN unavailable */ }
+
+  let extractedSwatches = [];   // [{ hex, r, g, b }, ...]
+  let pendingPrimary    = null; // hex string
+  let pendingAccent     = null; // hex string
+
+  /* ── Colour utilities ─────────────────────────────────── */
+
+  function rgbToHex(r, g, b) {
+    return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+  }
+
+  function hexToRgb(hex) {
+    const n = parseInt(hex.slice(1), 16);
+    return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+  }
+
+  function rgbToHsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h = 0, s = 0;
+    const l = (max + min) / 2;
+    if (max !== min) {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+        case g: h = ((b - r) / d + 2) / 6; break;
+        case b: h = ((r - g) / d + 4) / 6; break;
+      }
+    }
+    return { h: h * 360, s: s * 100, l: l * 100 };
+  }
+
+  function hslToHex(h, s, l) {
+    h /= 360; s /= 100; l /= 100;
+    let r, g, b;
+    if (s === 0) {
+      r = g = b = l;
+    } else {
+      const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      const p = 2 * l - q;
+      const hue2rgb = (p2, q2, t) => {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1/6) return p2 + (q2 - p2) * 6 * t;
+        if (t < 1/2) return q2;
+        if (t < 2/3) return p2 + (q2 - p2) * (2/3 - t) * 6;
+        return p2;
+      };
+      r = hue2rgb(p, q, h + 1/3);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1/3);
+    }
+    return rgbToHex(Math.round(r * 255), Math.round(g * 255), Math.round(b * 255));
+  }
+
+  function isValidHex(s) { return /^#[0-9a-fA-F]{6}$/.test(s); }
+
+  /**
+   * Given two hex colours, compute the full theme object.
+   * Primary is darkened to L≤20 so it works on nav/footer backgrounds.
+   */
+  function computeTheme(primaryHex, accentHex) {
+    const pRgb = hexToRgb(primaryHex);
+    const pHsl = rgbToHsl(pRgb.r, pRgb.g, pRgb.b);
+    const aRgb = hexToRgb(accentHex);
+    const aHsl = rgbToHsl(aRgb.r, aRgb.g, aRgb.b);
+
+    const primary     = pHsl.l > 20 ? hslToHex(pHsl.h, Math.min(pHsl.s, 65), 18) : primaryHex;
+    const accentHover = hslToHex(aHsl.h, aHsl.s, Math.max(aHsl.l - 15, 5));
+    const accentLight = hslToHex(aHsl.h, Math.min(aHsl.s, 40), 95);
+    const text        = hslToHex(pHsl.h, Math.min(pHsl.s, 20), 20);
+
+    return {
+      '--clr-primary':      primary,
+      '--clr-accent':       accentHex,
+      '--clr-accent-hover': accentHover,
+      '--clr-accent-light': accentLight,
+      '--clr-text':         text,
+      '--gradient-hero':    `linear-gradient(135deg, ${primary} 0%, ${accentHex} 100%)`,
+    };
+  }
+
+  /* ── DOM refs ─────────────────────────────────────────── */
+
+  const themeDropZone    = $('themeDropZone');
+  const themeImageInput  = $('themeImageInput');
+  const themePaletteCard = $('themePaletteCard');
+  const themeSwatchesEl  = $('themeSwatches');
+  const themeImgThumb    = $('themeImgThumbnail');
+  const rolePopupPrimary = $('rolePopupPrimary');
+  const rolePopupAccent  = $('rolePopupAccent');
+  const roleHexPrimary   = $('roleHexPrimary');
+  const roleHexAccent    = $('roleHexAccent');
+  const roleDotPrimary   = $('roleDotPrimary');
+  const roleDotAccent    = $('roleDotAccent');
+  const themeSaveStatus  = $('themeSaveStatus');
+
+  /* ── UI helpers ───────────────────────────────────────── */
+
+  function setRoleColour(role, hex) {
+    if (role === 'Primary') {
+      pendingPrimary = hex;
+      roleDotPrimary.style.background = hex;
+      roleHexPrimary.value = hex;
+      roleHexPrimary.classList.remove('is-invalid');
+    } else {
+      pendingAccent = hex;
+      roleDotAccent.style.background = hex;
+      roleHexAccent.value = hex;
+      roleHexAccent.classList.remove('is-invalid');
+    }
+  }
+
+  function previewTheme() {
+    if (!pendingPrimary || !pendingAccent) return;
+    const theme = computeTheme(pendingPrimary, pendingAccent);
+    Object.entries(theme).forEach(([p, v]) =>
+      document.documentElement.style.setProperty(p, v)
+    );
+  }
+
+  function buildSwatchPopup(popupEl, role) {
+    popupEl.innerHTML = '';
+    extractedSwatches.forEach(sw => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'theme-swatch';
+      btn.style.background = sw.hex;
+      btn.title = sw.hex;
+      btn.setAttribute('role', 'option');
+      btn.addEventListener('click', () => {
+        setRoleColour(role, sw.hex);
+        previewTheme();
+        popupEl.classList.add('hidden');
+      });
+      popupEl.appendChild(btn);
+    });
+  }
+
+  function renderExtractedSwatches() {
+    themeSwatchesEl.innerHTML = '';
+    extractedSwatches.forEach(sw => {
+      const div = document.createElement('div');
+      div.className = 'theme-swatch';
+      div.style.background = sw.hex;
+      div.title = sw.hex;
+      themeSwatchesEl.appendChild(div);
+    });
+  }
+
+  /* ── Auto role assignment ─────────────────────────────── */
+
+  function autoAssignRoles(swatches) {
+    const sorted = [...swatches].sort((a, b) =>
+      rgbToHsl(a.r, a.g, a.b).l - rgbToHsl(b.r, b.g, b.b).l
+    );
+    const primary  = sorted[0];
+    const rest     = swatches.filter(s => s !== primary);
+    const accent   = rest.length
+      ? rest.reduce((best, s) =>
+          rgbToHsl(s.r, s.g, s.b).s > rgbToHsl(best.r, best.g, best.b).s ? s : best,
+          rest[0])
+      : primary;
+    return { primary: primary.hex, accent: accent.hex };
+  }
+
+  /* ── Image upload & extraction ────────────────────────── */
+
+  function handleImageFile(file) {
+    if (!file || !file.type.match(/^image\/(jpeg|png|gif)$/)) return;
+    if (!colorThief) {
+      showStatus(themeSaveStatus, 'Farb-Bibliothek nicht geladen.', 'error');
+      return;
+    }
+
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+
+    img.onload = () => {
+      try {
+        const palette = colorThief.getPalette(img, 6);
+        extractedSwatches = palette.map(([r, g, b]) => ({ r, g, b, hex: rgbToHex(r, g, b) }));
+      } catch (_) {
+        extractedSwatches = [{ r: 11, g: 48, b: 76, hex: '#0b304c' }];
+      }
+
+      const { primary, accent } = autoAssignRoles(extractedSwatches);
+      setRoleColour('Primary', primary);
+      setRoleColour('Accent',  accent);
+
+      themeImgThumb.src = url;
+      renderExtractedSwatches();
+      buildSwatchPopup(rolePopupPrimary, 'Primary');
+      buildSwatchPopup(rolePopupAccent,  'Accent');
+      previewTheme();
+
+      themePaletteCard.hidden = false;
+      URL.revokeObjectURL(url);
+    };
+
+    img.crossOrigin = 'anonymous';
+    img.src = url;
+  }
+
+  /* ── Hex input sync ───────────────────────────────────── */
+
+  function wireHexInput(inputEl, role) {
+    inputEl.addEventListener('input', () => {
+      const val = inputEl.value.trim();
+      if (isValidHex(val)) {
+        inputEl.classList.remove('is-invalid');
+        if (role === 'Primary') {
+          pendingPrimary = val;
+          roleDotPrimary.style.background = val;
+        } else {
+          pendingAccent = val;
+          roleDotAccent.style.background = val;
+        }
+        previewTheme();
+      } else {
+        inputEl.classList.toggle('is-invalid', val.length >= 4);
+      }
+    });
+  }
+
+  /* ── Event wiring ─────────────────────────────────────── */
+
+  themeImageInput.addEventListener('change', e => handleImageFile(e.target.files[0]));
+
+  themeDropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    themeDropZone.classList.add('drag-over');
+  });
+  themeDropZone.addEventListener('dragleave', () => themeDropZone.classList.remove('drag-over'));
+  themeDropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    themeDropZone.classList.remove('drag-over');
+    handleImageFile(e.dataTransfer.files[0]);
+  });
+  themeDropZone.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); themeImageInput.click(); }
+  });
+
+  // Role picker toggle buttons
+  ['Primary', 'Accent'].forEach(role => {
+    const btn   = $(`rolePicker${role}`);
+    const popup = $(`rolePopup${role}`);
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const other = role === 'Primary' ? 'Accent' : 'Primary';
+      $(`rolePopup${other}`).classList.add('hidden');
+      popup.classList.toggle('hidden');
+    });
+  });
+
+  // Close popups on outside click
+  document.addEventListener('click', () => {
+    rolePopupPrimary.classList.add('hidden');
+    rolePopupAccent.classList.add('hidden');
+  });
+
+  wireHexInput(roleHexPrimary, 'Primary');
+  wireHexInput(roleHexAccent,  'Accent');
+
+  // Apply
+  $('themeApplyBtn').addEventListener('click', async () => {
+    if (!pendingPrimary || !pendingAccent) {
+      showStatus(themeSaveStatus, 'Bitte zuerst ein Bild hochladen.', 'error');
+      return;
+    }
+    if (!data) { showStatus(themeSaveStatus, 'Bitte zuerst anmelden.', 'error'); return; }
+    const theme = computeTheme(pendingPrimary, pendingAccent);
+    data.theme = theme;
+    showStatus(themeSaveStatus, 'Wird gespeichert …', 'info');
+    const r = await window.saveContent(data);
+    if (r.ok) {
+      window.applyAndCacheTheme(theme);
+      showStatus(themeSaveStatus, 'Farbschema gespeichert ✓', 'success');
+    } else {
+      showStatus(themeSaveStatus, 'Fehler: ' + r.error, 'error');
+    }
+  });
+
+  // Reset
+  $('themeResetBtn').addEventListener('click', async () => {
+    if (!data) { showStatus(themeSaveStatus, 'Bitte zuerst anmelden.', 'error'); return; }
+    delete data.theme;
+    showStatus(themeSaveStatus, 'Wird zurückgesetzt …', 'info');
+    const r = await window.saveContent(data);
+    if (r.ok) {
+      window.removeTheme();
+      showStatus(themeSaveStatus, 'Auf Standard zurückgesetzt ✓', 'success');
+    } else {
+      showStatus(themeSaveStatus, 'Fehler: ' + r.error, 'error');
+    }
+  });
+
 }());
