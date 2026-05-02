@@ -1,29 +1,30 @@
 /* ============================================================
    CHAMISSO-GRUNDSCHULE — styles.css
-   School-blue / warm-amber palette, mobile-first responsive
+   Chamisso brand palette (navy / teal / yellow), mobile-first
    ============================================================ */
 
 /* ============================================================
    1. CSS CUSTOM PROPERTIES
    ============================================================ */
 :root {
-  /* Colors — friendly school palette */
-  --clr-primary:       #1E3A8A;
-  --clr-primary-dark:  #1E2C66;
-  --clr-accent:        #F59E0B;
-  --clr-accent-hover:  #D97706;
-  --clr-accent-light:  #FEF3C7;
+  /* ── Chamisso brand palette ────────────────────────────── */
+  --clr-primary:       #0B304C;   /* dark navy  — nav, headings, footer   */
+  --clr-primary-dark:  #071E30;   /* deeper navy — darkened contexts       */
+  --clr-secondary:     #3D86A6;   /* teal/blue  — logo, links, accents     */
+  --clr-accent:        #EECE03;   /* school yellow — CTA, highlights       */
+  --clr-accent-hover:  #C8A800;   /* darker yellow on hover                */
+  --clr-accent-light:  #FEFCE8;   /* pale yellow tint for surfaces         */
   --clr-bg:            #FFFFFF;
   --clr-surface:       #F8FAFC;
-  --clr-surface-warm:  #FFFBEB;
+  --clr-surface-warm:  #FFFEF5;
   --clr-text:          #1E293B;
   --clr-muted:         #64748B;
   --clr-border:        #E2E8F0;
   --clr-success:       #10B981;
   --clr-error:         #EF4444;
 
-  /* Gradient */
-  --gradient-hero: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%);
+  /* Gradient — dark navy → teal */
+  --gradient-hero: linear-gradient(135deg, #0B304C 0%, #3D86A6 100%);
 
   /* Typography — friendly, legible */
   --font-heading: 'Quicksand', system-ui, -apple-system, sans-serif;
@@ -184,15 +185,16 @@ h3 {
 
 .btn-primary {
   background: var(--clr-accent);
-  color: var(--clr-bg);
+  color: var(--clr-primary);
   border: 2px solid var(--clr-accent);
 }
 
 .btn-primary:hover {
   background: var(--clr-accent-hover);
   border-color: var(--clr-accent-hover);
+  color: var(--clr-primary);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(8, 145, 178, 0.4);
+  box-shadow: 0 8px 24px rgba(238, 206, 3, 0.35);
 }
 
 .btn-outline {
@@ -321,7 +323,7 @@ h3 {
   font-weight: 700;
 }
 
-.nav-links .nav-cta:hover { background: var(--clr-accent-hover); color: #fff !important; }
+.nav-links .nav-cta:hover { background: var(--clr-accent-hover); color: var(--clr-primary) !important; }
 
 /* ── Dropdowns ─────────────────────────────────────────── */
 .nav-links .has-dropdown { position: relative; }
@@ -833,7 +835,7 @@ h3 {
   background: linear-gradient(
     to top,
     rgba(15, 23, 42, 0.72) 0%,
-    rgba(8, 145, 178, 0.3) 100%
+    rgba(61, 134, 166, 0.3) 100%
   );
   display: flex;
   align-items: center;
@@ -978,7 +980,7 @@ h3 {
 }
 
 .location-card {
-  background: var(--clr-white);
+  background: var(--clr-bg);
   border: 1px solid var(--clr-border);
   border-radius: var(--radius-lg, 12px);
   padding: 1.75rem;
@@ -1007,7 +1009,7 @@ h3 {
 }
 
 .loc-row a {
-  color: var(--clr-teal);
+  color: var(--clr-secondary);
   text-decoration: none;
 }
 
@@ -1074,7 +1076,7 @@ h3 {
   border-radius: var(--radius-full);
   background: var(--clr-accent-light);
   color: var(--clr-accent);
-  border: 1px solid rgba(8, 145, 178, 0.2);
+  border: 1px solid rgba(61, 134, 166, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1130,8 +1132,8 @@ h3 {
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-  border-color: var(--clr-accent);
-  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.14);
+  border-color: var(--clr-secondary);
+  box-shadow: 0 0 0 3px rgba(61, 134, 166, 0.18);
 }
 
 .form-group input.error,
@@ -1200,7 +1202,7 @@ h3 {
   padding: 3rem 2rem;
   background: var(--clr-accent-light);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(8, 145, 178, 0.2);
+  border: 1px solid rgba(61, 134, 166, 0.2);
 }
 
 .success-message.show {
@@ -1536,7 +1538,7 @@ h3 {
   bottom: 1rem;
   right: 1rem;
   padding: 0.6rem 1rem;
-  background: rgba(30, 58, 138, 0.85);
+  background: rgba(11, 48, 76, 0.85);
   color: #fff;
   font-weight: 600;
   border-radius: var(--radius-sm);
