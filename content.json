@@ -40,6 +40,15 @@
     "brochureUrl": "/downloads/chamisso-flyer.pdf"
   },
 
+  "theme": {
+    "--clr-primary":      "#0B304C",
+    "--clr-accent":       "#EECE03",
+    "--clr-accent-hover": "#D3B502",
+    "--clr-accent-light": "#F1EFE3",
+    "--clr-text":         "#333333",
+    "--gradient-hero":    "linear-gradient(135deg, #0B304C 0%, #1E5879 60%, #63B9D3 100%)"
+  },
+
   "pages": {},
 
   "posts": [
