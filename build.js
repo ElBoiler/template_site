@@ -148,6 +148,7 @@ function renderPage(page, header, footer) {
   const tplName =
     page.template === 'home'      ? 'home.html'      :
     page.template === 'aktuelles' ? 'aktuelles.html' :
+    page.template === 'archiv'    ? 'archiv.html'    :
     page.template === 'kontakt'   ? 'kontakt.html'   :
                                     'page.html';
 

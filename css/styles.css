@@ -1732,6 +1732,62 @@ h3 {
 .news-cta-row { text-align: center; margin-top: 2rem; }
 .news-empty { text-align: center; color: var(--clr-muted); padding: 3rem 0; }
 
+.aktuelles-year-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--clr-accent);
+  margin-bottom: 1.5rem;
+}
+
+.news-archive-cta {
+  text-align: center;
+  margin-top: 2.5rem;
+}
+
+.btn-outline-dark {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 2px solid var(--clr-primary);
+  color: var(--clr-primary);
+  background: transparent;
+  transition: all var(--trans);
+  cursor: pointer;
+}
+.btn-outline-dark:hover {
+  background: var(--clr-primary);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.archive-back {
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+.archive-back a {
+  color: var(--clr-primary);
+  font-weight: 600;
+  text-decoration: underline;
+}
+.archive-back a:hover { color: var(--clr-accent-hover); }
+
+.archive-year-section { margin-bottom: 3rem; }
+.archive-year-heading {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--clr-primary);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--clr-accent);
+  display: inline-block;
+}
+
 /* ── Quicklinks ───────────────────────────────────────── */
 .quicklink-grid {
   display: grid;
