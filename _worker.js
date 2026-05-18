@@ -13,6 +13,7 @@
  */
 
 const CONTENT_KEY = 'bds_content';
+const ADMIN_PW_KEY  = '__admin_pw';
 
 export default {
   async fetch(request, env) {
@@ -25,8 +26,14 @@ export default {
     }
 
     if (url.pathname === '/api/ping') {
-      if (!isAuthed(request, env)) return jsonRes({ ok: false, error: 'Unauthorized' }, 401);
+      if (!await isAuthed(request, env)) return jsonRes({ ok: false, error: 'Unauthorized' }, 401);
       return jsonRes({ ok: true });
+    }
+
+    if (url.pathname === '/api/setup') {
+      if (request.method === 'GET')  return handleGetSetup(env);
+      if (request.method === 'POST') return handlePostSetup(request, env);
+      return new Response('Method Not Allowed', { status: 405 });
     }
 
     const m = url.pathname.match(/^\/aktuelles\/([^/]+)\/?$/);
@@ -38,8 +45,19 @@ export default {
 
 /* ── helpers ─────────────────────────────────────────────── */
 
-function isAuthed(request, env) {
-  return request.headers.get('Authorization') === `Bearer ${env.WORKER_SECRET}`;
+async function isAuthed(request, env) {
+  const auth = request.headers.get('Authorization') || '';
+  if (!auth.startsWith('Bearer ')) return false;
+  const provided = auth.slice(7);
+  if (!provided) return false;
+  if (env.WORKER_SECRET) return provided === env.WORKER_SECRET;
+  const stored = await env.BDS_CONTENT.get(ADMIN_PW_KEY);
+  return stored ? provided === stored : false;
+}
+
+async function hasAuthConfigured(env) {
+  if (env.WORKER_SECRET) return true;
+  return !!(await env.BDS_CONTENT.get(ADMIN_PW_KEY));
 }
 
 function jsonRes(data, status = 200) {
@@ -102,13 +120,31 @@ async function handleGetContent(request, env) {
 }
 
 async function handlePostContent(request, env) {
-  if (!isAuthed(request, env)) return jsonRes({ error: 'Unauthorized' }, 401);
+  if (!await isAuthed(request, env)) return jsonRes({ error: 'Unauthorized' }, 401);
 
   const body = await request.text();
   try { JSON.parse(body); }
   catch (_) { return jsonRes({ error: 'Invalid JSON' }, 400); }
 
   await env.BDS_CONTENT.put(CONTENT_KEY, body);
+  return jsonRes({ ok: true });
+}
+
+/* ── /api/setup ───────────────────────────────────────────── */
+
+async function handleGetSetup(env) {
+  const configured = await hasAuthConfigured(env);
+  return jsonRes({ needsSetup: !configured });
+}
+
+async function handlePostSetup(request, env) {
+  if (await hasAuthConfigured(env)) return jsonRes({ error: 'Already configured' }, 403);
+  let body;
+  try { body = await request.json(); } catch (_) { return jsonRes({ error: 'Invalid JSON' }, 400); }
+  if (!body || typeof body.password !== 'string' || body.password.length < 8) {
+    return jsonRes({ error: 'Passwort muss mindestens 8 Zeichen haben' }, 400);
+  }
+  await env.BDS_CONTENT.put(ADMIN_PW_KEY, body.password);
   return jsonRes({ ok: true });
 }
 
