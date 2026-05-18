@@ -516,7 +516,7 @@
   /* ── Image upload & extraction ────────────────────────── */
 
   function handleImageFile(file) {
-    if (!file || !file.type.match(/^image\/(jpeg|png|gif)$/)) return;
+    if (!file || !file.type.match(/^image\/(jpeg|png|gif|avif|webp)$/)) return;
     if (!colorThief) {
       showStatus(themeSaveStatus, 'Farb-Bibliothek nicht geladen.', 'error');
       return;
@@ -537,6 +537,7 @@
       setRoleColour('Primary', primary);
       setRoleColour('Accent',  accent);
 
+      themeImgThumb.onload = () => URL.revokeObjectURL(url);
       themeImgThumb.src = url;
       renderExtractedSwatches();
       buildSwatchPopup(rolePopupPrimary, 'Primary');
@@ -544,7 +545,6 @@
       previewTheme();
 
       themePaletteCard.hidden = false;
-      URL.revokeObjectURL(url);
     };
 
     img.crossOrigin = 'anonymous';
