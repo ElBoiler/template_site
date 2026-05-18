@@ -80,34 +80,60 @@
       <!-- ── COLOUR SCHEME PANEL ──────────────────────────── -->
       <div class="admin-panel" data-panel="theme">
         <h2>Farbschema</h2>
+        <p class="admin-help">Bild hochladen → Farben extrahieren → Primär- und Akzentfarbe zuweisen → Anwenden.</p>
 
-        <div class="theme-layout">
-          <!-- colour pickers -->
-          <div class="theme-layout-pickers">
-            <p class="theme-roles-label">Farben bearbeiten</p>
-            <div id="colourGrid" class="colour-grid"></div>
+        <!-- Upload zone -->
+        <div class="theme-drop-zone" id="themeDropZone" role="button" tabindex="0" aria-label="Bild hochladen">
+          <input type="file" id="themeImageInput" accept=".jpg,.jpeg,.png,.gif,.avif,.webp" class="theme-file-input" aria-hidden="true">
+          <div id="themeDropPrompt" class="theme-drop-inner">
+            <span class="theme-drop-icon">🖼</span>
+            <span class="theme-drop-label">Bild hier ablegen oder klicken zum Hochladen</span>
+            <span class="theme-drop-formats">JPG · PNG · GIF · AVIF · WebP</span>
+          </div>
+        </div>
 
-            <details class="theme-seed-details">
-              <summary class="theme-seed-summary">Farben aus Bild ableiten</summary>
-              <div class="theme-drop-zone" id="themeDropZone" role="button" tabindex="0" aria-label="Bild hochladen">
-                <input type="file" id="themeImageInput" accept=".jpg,.jpeg,.png,.gif,.avif,.webp" class="theme-file-input" aria-hidden="true">
-                <div class="theme-drop-inner">
-                  <span class="theme-drop-icon">🖼</span>
-                  <span class="theme-drop-label">Bild hier ablegen oder klicken</span>
-                  <span class="theme-drop-formats">JPG · PNG · GIF · AVIF · WebP</span>
-                </div>
-              </div>
-              <div id="themeSeedResult" hidden>
-                <div class="theme-palette-row">
-                  <img id="themeImgThumbnail" class="theme-thumbnail" alt="Hochgeladenes Bild">
-                  <div id="themeSwatches" class="theme-swatches" aria-label="Extrahierte Farben"></div>
-                </div>
-              </div>
-            </details>
+        <!-- Palette card (hidden until image uploaded) -->
+        <div id="themePaletteCard" hidden>
+
+          <!-- Thumbnail + swatches -->
+          <div class="theme-palette-row">
+            <img id="themeImgThumbnail" class="theme-thumbnail" alt="Hochgeladenes Bild">
+            <div id="themeSwatches" class="theme-swatches" aria-label="Extrahierte Farben"></div>
           </div>
 
-          <!-- live mockup -->
-          <div class="theme-layout-preview">
+          <!-- Role pickers -->
+          <div class="theme-roles">
+            <p class="theme-roles-label">Rollen zuweisen</p>
+
+            <div class="theme-role-row">
+              <span class="theme-role-name">Primär</span>
+              <button type="button" class="theme-role-swatch" id="rolePickerPrimary"
+                      aria-haspopup="true" aria-label="Primärfarbe wählen">
+                <span class="theme-role-dot" id="roleDotPrimary"></span>
+                <span class="theme-role-arrow">▾</span>
+              </button>
+              <div class="theme-role-popup hidden" id="rolePopupPrimary" role="listbox"
+                   aria-label="Primärfarbe aus Palette wählen"></div>
+              <input type="text" id="roleHexPrimary" class="theme-hex-input"
+                     maxlength="7" placeholder="#0B304C" aria-label="Hex-Wert Primärfarbe">
+            </div>
+
+            <div class="theme-role-row">
+              <span class="theme-role-name">Akzent</span>
+              <button type="button" class="theme-role-swatch" id="rolePickerAccent"
+                      aria-haspopup="true" aria-label="Akzentfarbe wählen">
+                <span class="theme-role-dot" id="roleDotAccent"></span>
+                <span class="theme-role-arrow">▾</span>
+              </button>
+              <div class="theme-role-popup hidden" id="rolePopupAccent" role="listbox"
+                   aria-label="Akzentfarbe aus Palette wählen"></div>
+              <input type="text" id="roleHexAccent" class="theme-hex-input"
+                     maxlength="7" placeholder="#EECE03" aria-label="Hex-Wert Akzentfarbe">
+            </div>
+          </div>
+
+          <!-- Mini mockup preview -->
+          <div class="theme-preview-section">
             <p class="theme-roles-label">Vorschau</p>
             <div class="theme-mockup" id="themeMockup" aria-hidden="true">
               <div class="mockup-header">
@@ -132,14 +158,15 @@
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="theme-actions">
-          <button id="themeApplyBtn" class="btn btn-primary">Farbschema anwenden</button>
-          <button id="themeResetBtn" class="btn-link">Auf Standard zurücksetzen</button>
-          <span id="themeSaveStatus" class="admin-status"></span>
-        </div>
+          <!-- Actions -->
+          <div class="theme-actions">
+            <button id="themeApplyBtn" class="btn btn-primary">Farbschema anwenden</button>
+            <button id="themeResetBtn" class="btn-link">Auf Standard zurücksetzen</button>
+            <span id="themeSaveStatus" class="admin-status"></span>
+          </div>
 
+        </div><!-- /themePaletteCard -->
       </div><!-- /theme panel -->
 
     </section>
