@@ -22,18 +22,20 @@
   const postsEmpty = $('postsEmpty');
   const newPostBtn = $('newPostBtn');
 
-  const postEditor      = $('postEditor');
-  const postIdInput     = $('postId');
-  const postTitleInput  = $('postTitle');
-  const postSlugInput   = $('postSlug');
-  const postDateInput   = $('postDate');
-  const postImageInput  = $('postImage');
-  const postExcerptInput= $('postExcerpt');
-  const postBodyInput   = $('postBody');
-  const savePostBtn     = $('savePostBtn');
-  const deletePostBtn   = $('deletePostBtn');
-  const cancelPostBtn   = $('cancelPostBtn');
-  const postSaveStatus  = $('postSaveStatus');
+  const postEditor           = $('postEditor');
+  const postIdInput          = $('postId');
+  const postTitleInput       = $('postTitle');
+  const postSlugInput        = $('postSlug');
+  const postDateInput        = $('postDate');
+  const postImageInput       = $('postImage');
+  const postImageFileInput   = $('postImageFile');
+  const postImageUploadStatus= $('postImageUploadStatus');
+  const postExcerptInput     = $('postExcerpt');
+  const postBodyInput        = $('postBody');
+  const savePostBtn          = $('savePostBtn');
+  const deletePostBtn        = $('deletePostBtn');
+  const cancelPostBtn        = $('cancelPostBtn');
+  const postSaveStatus       = $('postSaveStatus');
 
   const contactAddress  = $('contactAddress');
   const contactPhone    = $('contactPhone');
@@ -42,6 +44,9 @@
   const socialFacebook  = $('socialFacebook');
   const socialInstagram = $('socialInstagram');
   const socialTwitter   = $('socialTwitter');
+  const mapEnabled      = $('mapEnabled');
+  const mapLat          = $('mapLat');
+  const mapLng          = $('mapLng');
   const saveContactBtn  = $('saveContactBtn');
   const contactSaveStatus = $('contactSaveStatus');
 
@@ -207,6 +212,33 @@
   cancelPostBtn.addEventListener('click', closePostEditor);
   postEditor.addEventListener('click', (e) => { if (e.target === postEditor) closePostEditor(); });
 
+  postImageFileInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const apiKey = localStorage.getItem('bds_api_key');
+    if (!apiKey) { showStatus(postImageUploadStatus, 'Bitte zuerst anmelden.', 'error'); return; }
+    showStatus(postImageUploadStatus, 'Wird hochgeladen …', 'info');
+    const fd = new FormData();
+    fd.append('file', file);
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${apiKey}` },
+        body: fd
+      });
+      const json = await res.json().catch(() => ({}));
+      if (json.ok) {
+        postImageInput.value = json.url;
+        showStatus(postImageUploadStatus, 'Hochgeladen ✓', 'success');
+      } else {
+        showStatus(postImageUploadStatus, 'Fehler: ' + (json.error || 'Unbekannt'), 'error');
+      }
+    } catch (_) {
+      showStatus(postImageUploadStatus, 'Upload fehlgeschlagen.', 'error');
+    }
+    e.target.value = '';
+  });
+
   postTitleInput.addEventListener('blur', () => {
     if (!postSlugInput.value.trim() && postTitleInput.value.trim()) {
       postSlugInput.value = slugify(postTitleInput.value);
@@ -264,6 +296,7 @@
   function fillContactFields() {
     const c = (data && data.contact) || {};
     const s = c.social || {};
+    const m = c.map || {};
     contactAddress.value  = c.address || '';
     contactPhone.value    = c.phone || '';
     contactEmail.value    = c.email || '';
@@ -271,6 +304,9 @@
     socialFacebook.value  = s.facebook || '';
     socialInstagram.value = s.instagram || '';
     socialTwitter.value   = s.twitter || '';
+    mapEnabled.checked    = !!m.enabled;
+    mapLat.value          = m.lat != null ? m.lat : '';
+    mapLng.value          = m.lng != null ? m.lng : '';
   }
 
   saveContactBtn.addEventListener('click', async () => {
@@ -283,6 +319,11 @@
       facebook:  socialFacebook.value.trim(),
       instagram: socialInstagram.value.trim(),
       twitter:   socialTwitter.value.trim()
+    };
+    data.contact.map = {
+      enabled: mapEnabled.checked,
+      lat: parseFloat(mapLat.value) || 52.6031,
+      lng: parseFloat(mapLng.value) || 13.3551
     };
     showStatus(contactSaveStatus, 'Wird gespeichert …', 'info');
     const r = await window.saveContent(data);

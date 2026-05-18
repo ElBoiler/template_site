@@ -52,6 +52,11 @@ const DEFAULT_CONTENT = {
       facebook:  '',
       instagram: '',
       twitter:   ''
+    },
+    map: {
+      enabled: false,
+      lat: 52.6031,
+      lng: 13.3551
     }
   },
 
@@ -260,6 +265,31 @@ function renderContact(data) {
     });
   }
 
+  // OpenStreetMap widget
+  const mapSection = document.getElementById('mapSection');
+  if (mapSection) {
+    const m = c.map || {};
+    if (m.enabled && m.lat && m.lng) {
+      const lat  = parseFloat(m.lat);
+      const lng  = parseFloat(m.lng);
+      const d    = 0.008;
+      const bbox = `${lng - d},${lat - d},${lng + d},${lat + d}`;
+      const src  = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lng}`;
+      mapSection.innerHTML =
+        `<div class="container">` +
+        `<iframe title="Schulstandort auf der Karte" src="${src}" ` +
+        `width="100%" height="350" style="border:1px solid #ccc;border-radius:8px;display:block" ` +
+        `loading="lazy" referrerpolicy="no-referrer"></iframe>` +
+        `<p class="map-link" style="margin-top:.5rem;font-size:.875rem">` +
+        `<a href="https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=16/${lat}/${lng}" ` +
+        `target="_blank" rel="noopener noreferrer">Größere Karte anzeigen ↗</a></p>` +
+        `</div>`;
+      mapSection.hidden = false;
+    } else {
+      mapSection.hidden = true;
+    }
+  }
+
   // Social links — hide ones without URLs
   const socialContainer = document.getElementById('socialLinksContainer');
   if (socialContainer) {
@@ -373,6 +403,18 @@ function renderNewsGrid(data, limit) {
   grid.innerHTML = slice.map(newsCardHtml).join('');
 }
 
+/* Returns the Date of September 1 that started the current Schuljahr. */
+function schuljahrStart() {
+  const now = new Date();
+  const y   = now.getFullYear();
+  return now.getMonth() >= 8 ? new Date(y, 8, 1) : new Date(y - 1, 8, 1);
+}
+
+function schuljahrLabel(start) {
+  const y = start.getFullYear();
+  return `Schuljahr ${y}/${String(y + 1).slice(2)}`;
+}
+
 function renderAktuellesCurrentYear(data) {
   const grid    = document.getElementById('newsGrid');
   const empty   = document.getElementById('newsEmpty');
@@ -380,12 +422,12 @@ function renderAktuellesCurrentYear(data) {
   const archCta = document.getElementById('archiveCta');
   if (!grid) return;
 
-  const currentYear = new Date().getFullYear();
+  const cutoff   = schuljahrStart();
   const allPosts = (data.posts || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-  const currentPosts = allPosts.filter(p => p.date && new Date(p.date).getFullYear() === currentYear);
-  const hasOlder     = allPosts.some(p => p.date && new Date(p.date).getFullYear() < currentYear);
+  const currentPosts = allPosts.filter(p => p.date && new Date(p.date) >= cutoff);
+  const hasOlder     = allPosts.some(p => p.date && new Date(p.date) < cutoff);
 
-  if (yearLbl) yearLbl.textContent = String(currentYear);
+  if (yearLbl) yearLbl.textContent = schuljahrLabel(cutoff);
 
   if (!currentPosts.length) {
     grid.innerHTML = '';
@@ -403,9 +445,9 @@ function renderArchive(data) {
   const empty     = document.getElementById('archiveEmpty');
   if (!container) return;
 
-  const currentYear = new Date().getFullYear();
-  const allPosts = (data.posts || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-  const olderPosts = allPosts.filter(p => p.date && new Date(p.date).getFullYear() < currentYear);
+  const cutoff     = schuljahrStart();
+  const allPosts   = (data.posts || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const olderPosts = allPosts.filter(p => p.date && new Date(p.date) < cutoff);
 
   if (!olderPosts.length) {
     container.innerHTML = '';

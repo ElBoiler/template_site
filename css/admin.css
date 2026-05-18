@@ -195,6 +195,28 @@
 .btn-link:hover { color: var(--clr-accent-hover); }
 .btn-danger { color: var(--clr-error); }
 .btn-danger:hover { color: #B91C1C; }
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  border: 1.5px solid var(--clr-border);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: #fff;
+  color: var(--clr-text);
+  cursor: pointer;
+}
+.btn-outline:hover { border-color: var(--clr-primary); color: var(--clr-primary); }
+.btn-sm { padding: 0.25rem 0.6rem; font-size: 0.8rem; }
+
+.image-upload-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.image-upload-row input[type="text"] { flex: 1; min-width: 0; }
 
 .admin-status {
   display: inline-block;
