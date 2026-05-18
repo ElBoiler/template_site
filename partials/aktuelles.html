@@ -17,8 +17,12 @@
 
     <section class="news-list-section section-pad">
       <div class="container">
-        <ul class="news-grid news-grid--full" id="newsGrid" data-list-slot="posts.all"></ul>
-        <p class="news-empty" id="newsEmpty" hidden>Es sind noch keine Beiträge veröffentlicht.</p>
+        <p class="aktuelles-year-label" id="aktuellesYear"></p>
+        <ul class="news-grid news-grid--full" id="newsGrid"></ul>
+        <p class="news-empty" id="newsEmpty" hidden>Keine Beiträge für dieses Jahr.</p>
+        <div class="news-archive-cta" id="archiveCta" hidden>
+          <a href="/aktuelles/archiv" class="btn btn-outline-dark">Ältere Beiträge im Archiv →</a>
+        </div>
       </div>
     </section>
   </main>

@@ -336,6 +336,22 @@ function renderHomepage(data) {
   renderNewsGrid(data, 3);
 }
 
+function newsCardHtml(p) {
+  const href = `/aktuelles/${encodeURIComponent(p.slug || p.id)}`;
+  const img  = p.image ? `<a class="news-card__image" href="${href}"><img src="${escAttr(p.image)}" alt="${escAttr(p.title || '')}" loading="lazy"></a>` : '';
+  return (
+    `<li class="news-card">` +
+      img +
+      `<div class="news-card__body">` +
+        `<p class="news-card__date">${escText(formatDate(p.date))}</p>` +
+        `<h3 class="news-card__title"><a href="${href}">${escText(p.title || '')}</a></h3>` +
+        `<p class="news-card__excerpt">${escText(p.excerpt || '')}</p>` +
+        `<a class="news-card__more" href="${href}">Weiterlesen →</a>` +
+      `</div>` +
+    `</li>`
+  );
+}
+
 function renderNewsGrid(data, limit) {
   const grid  = document.getElementById('newsGrid');
   const empty = document.getElementById('newsEmpty');
@@ -354,21 +370,66 @@ function renderNewsGrid(data, limit) {
   }
   if (empty) empty.hidden = true;
 
-  grid.innerHTML = slice.map(p => {
-    const href = `/aktuelles/${encodeURIComponent(p.slug || p.id)}`;
-    const img  = p.image ? `<a class="news-card__image" href="${href}"><img src="${escAttr(p.image)}" alt="${escAttr(p.title || '')}" loading="lazy"></a>` : '';
-    return (
-      `<li class="news-card">` +
-        img +
-        `<div class="news-card__body">` +
-          `<p class="news-card__date">${escText(formatDate(p.date))}</p>` +
-          `<h3 class="news-card__title"><a href="${href}">${escText(p.title || '')}</a></h3>` +
-          `<p class="news-card__excerpt">${escText(p.excerpt || '')}</p>` +
-          `<a class="news-card__more" href="${href}">Weiterlesen →</a>` +
-        `</div>` +
-      `</li>`
-    );
-  }).join('');
+  grid.innerHTML = slice.map(newsCardHtml).join('');
+}
+
+function renderAktuellesCurrentYear(data) {
+  const grid    = document.getElementById('newsGrid');
+  const empty   = document.getElementById('newsEmpty');
+  const yearLbl = document.getElementById('aktuellesYear');
+  const archCta = document.getElementById('archiveCta');
+  if (!grid) return;
+
+  const currentYear = new Date().getFullYear();
+  const allPosts = (data.posts || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const currentPosts = allPosts.filter(p => p.date && new Date(p.date).getFullYear() === currentYear);
+  const hasOlder     = allPosts.some(p => p.date && new Date(p.date).getFullYear() < currentYear);
+
+  if (yearLbl) yearLbl.textContent = String(currentYear);
+
+  if (!currentPosts.length) {
+    grid.innerHTML = '';
+    if (empty) empty.hidden = false;
+  } else {
+    if (empty) empty.hidden = true;
+    grid.innerHTML = currentPosts.map(newsCardHtml).join('');
+  }
+
+  if (archCta) archCta.hidden = !hasOlder;
+}
+
+function renderArchive(data) {
+  const container = document.getElementById('archiveContent');
+  const empty     = document.getElementById('archiveEmpty');
+  if (!container) return;
+
+  const currentYear = new Date().getFullYear();
+  const allPosts = (data.posts || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const olderPosts = allPosts.filter(p => p.date && new Date(p.date).getFullYear() < currentYear);
+
+  if (!olderPosts.length) {
+    container.innerHTML = '';
+    if (empty) empty.hidden = false;
+    return;
+  }
+  if (empty) empty.hidden = true;
+
+  const byYear = {};
+  olderPosts.forEach(p => {
+    const y = String(new Date(p.date).getFullYear());
+    if (!byYear[y]) byYear[y] = [];
+    byYear[y].push(p);
+  });
+
+  const years = Object.keys(byYear).sort((a, b) => Number(b) - Number(a));
+  container.innerHTML = years.map(year =>
+    `<section class="archive-year-section">` +
+      `<h2 class="archive-year-heading">${escText(year)}</h2>` +
+      `<ul class="news-grid news-grid--full">` +
+        byYear[year].map(newsCardHtml).join('') +
+      `</ul>` +
+    `</section>`
+  ).join('');
 }
 
 
@@ -403,8 +464,9 @@ function removeTheme() {
 function applyContent(data) {
   renderContact(data);
   renderPage(data);
-  if (window.__PAGE_KEY === '/')          renderHomepage(data);
-  if (window.__PAGE_KEY === '/aktuelles') renderNewsGrid(data, null);
+  if (window.__PAGE_KEY === '/')                 renderHomepage(data);
+  if (window.__PAGE_KEY === '/aktuelles')        renderAktuellesCurrentYear(data);
+  if (window.__PAGE_KEY === '/aktuelles/archiv') renderArchive(data);
 }
 
 
