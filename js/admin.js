@@ -56,7 +56,8 @@
   const eventsSaveStatus = $('eventsSaveStatus');
 
 
-  let data = null;
+  let data      = null;
+  let setupMode = false;
 
 
   function escAttr(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
@@ -92,6 +93,29 @@
     if (!key) { loginError.textContent = 'Bitte Passwort eingeben.'; return; }
     loginError.textContent = '';
     loginBtn.disabled = true;
+
+    if (setupMode) {
+      if (key.length < 8) {
+        loginError.textContent = 'Mindestens 8 Zeichen erforderlich.';
+        loginBtn.disabled = false;
+        return;
+      }
+      const r = await fetch('/api/setup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: key })
+      });
+      const json = await r.json().catch(() => ({}));
+      loginBtn.disabled = false;
+      if (json.ok) {
+        localStorage.setItem('bds_api_key', key);
+        enterEditor();
+      } else {
+        loginError.textContent = 'Fehler: ' + (json.error || 'Setup fehlgeschlagen');
+      }
+      return;
+    }
+
     const ok = await tryLogin(key);
     loginBtn.disabled = false;
     if (!ok) {
@@ -334,9 +358,19 @@
     const stored = localStorage.getItem('bds_api_key');
     if (stored && await tryLogin(stored)) {
       enterEditor();
-    } else {
-      apiKeyInput.focus();
+      return;
     }
+    try {
+      const r = await fetch('/api/setup');
+      const d = await r.json();
+      if (d.needsSetup) {
+        setupMode = true;
+        loginSection.querySelector('.admin-help').textContent =
+          'Kein Passwort gesetzt. Geben Sie ein neues Passwort ein (mind. 8 Zeichen) und klicken Sie „Anmelden", um es dauerhaft zu speichern.';
+        loginBtn.textContent = 'Passwort festlegen';
+      }
+    } catch (_) { /* worker not reachable */ }
+    apiKeyInput.focus();
   })();
 
 
