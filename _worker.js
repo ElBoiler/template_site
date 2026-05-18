@@ -5,6 +5,8 @@
  *   GET  /api/content      → read from KV (auto-seeds from /content.json if empty)
  *   POST /api/content      → write to KV (requires Bearer WORKER_SECRET)
  *   GET  /api/ping         → auth probe
+ *   POST /api/upload       → upload image to KV (requires Bearer auth); returns { url }
+ *   GET  /uploads/:key     → serve uploaded image from KV
  *   GET  /aktuelles/:slug  → server-renders an individual news post from KV
  *                            using partials/post.html as a template, so admin-
  *                            published posts get correct <title>/<meta og:>
@@ -29,6 +31,14 @@ export default {
       if (!await isAuthed(request, env)) return jsonRes({ ok: false, error: 'Unauthorized' }, 401);
       return jsonRes({ ok: true });
     }
+
+    if (url.pathname === '/api/upload') {
+      if (request.method === 'POST') return handleUpload(request, env);
+      return new Response('Method Not Allowed', { status: 405 });
+    }
+
+    const uploadMatch = url.pathname.match(/^\/uploads\/([^/]+)$/);
+    if (uploadMatch) return handleServeUpload(decodeURIComponent(uploadMatch[1]), env);
 
     if (url.pathname === '/api/setup') {
       if (request.method === 'GET')  return handleGetSetup(env);
@@ -128,6 +138,49 @@ async function handlePostContent(request, env) {
 
   await env.BDS_CONTENT.put(CONTENT_KEY, body);
   return jsonRes({ ok: true });
+}
+
+/* ── /api/upload + /uploads/:key ─────────────────────────── */
+
+const ALLOWED_IMAGE_TYPES = {
+  'image/jpeg': 'jpg',
+  'image/png':  'png',
+  'image/gif':  'gif',
+  'image/avif': 'avif',
+};
+
+async function handleUpload(request, env) {
+  if (!await isAuthed(request, env)) return jsonRes({ error: 'Unauthorized' }, 401);
+
+  let formData;
+  try { formData = await request.formData(); }
+  catch (_) { return jsonRes({ error: 'Invalid form data' }, 400); }
+
+  const file = formData.get('file');
+  if (!file || typeof file === 'string') return jsonRes({ error: 'No file provided' }, 400);
+  if (!ALLOWED_IMAGE_TYPES[file.type]) return jsonRes({ error: 'Nur JPG, PNG, GIF und AVIF erlaubt' }, 400);
+  if (file.size > 5 * 1024 * 1024) return jsonRes({ error: 'Datei zu groß (max. 5 MB)' }, 400);
+
+  const ext = ALLOWED_IMAGE_TYPES[file.type];
+  const rand = Math.random().toString(36).slice(2, 9);
+  const key = `${Date.now()}-${rand}.${ext}`;
+
+  const buf = await file.arrayBuffer();
+  await env.BDS_CONTENT.put(`img:${key}`, buf, { metadata: { type: file.type } });
+
+  return jsonRes({ ok: true, url: `/uploads/${key}` });
+}
+
+async function handleServeUpload(key, env) {
+  const { value, metadata } = await env.BDS_CONTENT.getWithMetadata(`img:${key}`, { type: 'arrayBuffer' });
+  if (!value) return new Response('Not Found', { status: 404 });
+  const type = (metadata && metadata.type) || 'image/jpeg';
+  return new Response(value, {
+    headers: {
+      'Content-Type': type,
+      'Cache-Control': 'public, max-age=31536000, immutable',
+    }
+  });
 }
 
 /* ── /api/setup ───────────────────────────────────────────── */

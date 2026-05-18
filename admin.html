@@ -63,6 +63,14 @@
         <div class="form-group"><label for="socialFacebook">Facebook</label><input id="socialFacebook" type="url"></div>
         <div class="form-group"><label for="socialInstagram">Instagram</label><input id="socialInstagram" type="url"></div>
         <div class="form-group"><label for="socialTwitter">Twitter / X</label><input id="socialTwitter" type="url"></div>
+        <h3>Standortkarte (OpenStreetMap)</h3>
+        <div class="form-group">
+          <label>
+            <input id="mapEnabled" type="checkbox"> Karte auf Kontaktseite anzeigen
+          </label>
+        </div>
+        <div class="form-group"><label for="mapLat">Breitengrad (Latitude)</label><input id="mapLat" type="number" step="0.0001" placeholder="52.6031"></div>
+        <div class="form-group"><label for="mapLng">Längengrad (Longitude)</label><input id="mapLng" type="number" step="0.0001" placeholder="13.3551"></div>
         <button id="saveContactBtn" class="btn btn-primary">Speichern</button>
         <span id="contactSaveStatus" class="admin-status"></span>
       </div>
@@ -151,7 +159,15 @@
         <div class="form-group"><label for="postTitle">Titel</label><input id="postTitle" type="text"></div>
         <div class="form-group"><label for="postSlug">Slug (URL-Endung)</label><input id="postSlug" type="text"></div>
         <div class="form-group"><label for="postDate">Datum</label><input id="postDate" type="date"></div>
-        <div class="form-group"><label for="postImage">Bild-URL (optional)</label><input id="postImage" type="text" placeholder="/img/news/…"></div>
+        <div class="form-group">
+          <label for="postImage">Bild (optional)</label>
+          <div class="image-upload-row">
+            <input id="postImage" type="text" placeholder="/img/news/… oder Bild hochladen →">
+            <label class="btn btn-sm btn-outline" for="postImageFile" style="cursor:pointer;white-space:nowrap">Bild wählen</label>
+            <input id="postImageFile" type="file" accept=".jpg,.jpeg,.png,.gif,.avif" style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px">
+          </div>
+          <span id="postImageUploadStatus" class="admin-status"></span>
+        </div>
         <div class="form-group"><label for="postExcerpt">Kurzbeschreibung</label><textarea id="postExcerpt" rows="2"></textarea></div>
         <div class="form-group"><label for="postBody">Inhalt (HTML)</label><textarea id="postBody" rows="10"></textarea></div>
         <div class="admin-modal-actions">
