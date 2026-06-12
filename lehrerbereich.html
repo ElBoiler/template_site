@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Neuigkeiten und Berichte aus dem Schulalltag der Chamisso-Grundschule Berlin.">
-  <title>Aktuelles | Chamisso-Grundschule</title>
+  <meta name="description" content="Geschützter Bereich für Lehrkräfte der Chamisso-Grundschule.">
+  <title>Lehrerbereich | Chamisso-Grundschule</title>
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Aktuelles | Chamisso-Grundschule">
-  <meta property="og:description" content="Neuigkeiten und Berichte aus dem Schulalltag der Chamisso-Grundschule Berlin.">
+  <meta property="og:title" content="Lehrerbereich | Chamisso-Grundschule">
+  <meta property="og:description" content="Geschützter Bereich für Lehrkräfte der Chamisso-Grundschule.">
   <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="/css/styles.css">
 
 </head>
-<body class="page-aktuelles">
+<body class="page-lehrerbereich">
   <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
   <nav class="navbar" id="navbar" aria-label="Hauptnavigation">
@@ -41,20 +41,67 @@
   <main id="main" class="page-main">
     <header class="page-hero">
       <div class="container">
-        <p class="page-eyebrow">Aktuelles</p>
-        <h1 class="page-title">Aus dem Schulalltag</h1>
-        <p class="page-subtitle">Neuigkeiten, Berichte und Eindrücke aus unserer Schule.</p>
+        <p class="page-eyebrow">Intern</p>
+        <h1 class="page-title">Lehrerbereich</h1>
       </div>
     </header>
 
-    <section class="news-list-section section-pad">
+    <section class="page-content section-pad">
       <div class="container">
-        <p class="aktuelles-year-label" id="aktuellesYear"></p>
-        <ul class="news-grid news-grid--full" id="newsGrid"></ul>
-        <p class="news-empty" id="newsEmpty" hidden>Keine Beiträge für dieses Jahr.</p>
-        <div class="news-archive-cta" id="archiveCta" hidden>
-          <a href="/aktuelles/archiv" class="btn btn-outline-dark">Ältere Beiträge im Archiv →</a>
+
+        <!-- Login state -->
+        <div id="lbLogin" class="lb-login-card">
+          <p class="lb-login-hint">Dieser Bereich ist nur für Lehrkräfte der Chamisso-Grundschule zugänglich.</p>
+          <form id="lbLoginForm" class="lb-login-form" novalidate>
+            <label for="lbPwInput" class="lb-login-label">Passwort</label>
+            <div class="lb-login-row">
+              <input id="lbPwInput" type="password" class="lb-login-input" placeholder="Lehrer-Passwort" autocomplete="current-password" required>
+              <button type="submit" class="btn btn--primary lb-login-btn">Anmelden</button>
+            </div>
+            <p id="lbLoginError" class="lb-login-error" hidden>Falsches Passwort. Bitte erneut versuchen.</p>
+          </form>
         </div>
+
+        <!-- Authenticated state (hidden until login) -->
+        <div id="lbContent" class="lb-content" hidden>
+
+          <div class="lb-topbar">
+            <span class="lb-welcome">Willkommen im Lehrerbereich.</span>
+            <button id="lbLogout" class="btn btn--secondary btn--sm">Abmelden</button>
+          </div>
+
+          <!-- Handbuch -->
+          <section class="lb-section" id="lbSecHandbuch">
+            <h2 class="lb-section-title">Handbuch</h2>
+            <div id="lbHandbuchBody" class="lb-handbuch prose"></div>
+            <div id="lbHandbuchPdf" class="lb-pdf-row" hidden>
+              <a id="lbHandbuchPdfLink" href="#" class="btn btn--outline btn--sm" download>Als PDF herunterladen</a>
+            </div>
+          </section>
+
+          <!-- Ankündigungen -->
+          <section class="lb-section" id="lbSecAnnouncements">
+            <h2 class="lb-section-title">Ankündigungen</h2>
+            <ul id="lbAnnouncementsList" class="lb-list"></ul>
+            <p id="lbAnnouncementsEmpty" class="lb-empty" hidden>Keine aktuellen Ankündigungen.</p>
+          </section>
+
+          <!-- Nützliche Links -->
+          <section class="lb-section" id="lbSecLinks">
+            <h2 class="lb-section-title">Nützliche Links</h2>
+            <ul id="lbLinksList" class="lb-links-list"></ul>
+            <p id="lbLinksEmpty" class="lb-empty" hidden>Keine Links hinterlegt.</p>
+          </section>
+
+          <!-- Downloads -->
+          <section class="lb-section" id="lbSecDownloads">
+            <h2 class="lb-section-title">Downloads</h2>
+            <ul id="lbDownloadsList" class="lb-dl-list"></ul>
+            <p id="lbDownloadsEmpty" class="lb-empty" hidden>Keine Downloads verfügbar.</p>
+          </section>
+
+        </div>
+
       </div>
     </section>
   </main>
@@ -108,9 +155,10 @@
   </footer>
 
 
-  <script>window.__PAGE_KEY = "/aktuelles";</script>
+  <script>window.__PAGE_KEY = "/lehrerbereich";</script>
   <script src="/js/i18n.js"></script>
   <script src="/js/content.js"></script>
+  <script src="/js/lehrerbereich.js"></script>
   <script src="/js/main.js"></script>
 </body>
 </html>

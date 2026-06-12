@@ -14,8 +14,11 @@
  *   *                      → static asset fallthrough
  */
 
-const CONTENT_KEY = 'bds_content';
-const ADMIN_PW_KEY  = '__admin_pw';
+const CONTENT_KEY         = 'bds_content';
+const ADMIN_PW_KEY        = '__admin_pw';
+const TEACHER_PW_KEY      = '__teacher_pw';
+const TEACHER_CONTENT_KEY = 'teacher_content';
+const TEACHER_FILE_PREFIX = 'teacher-file:';
 
 export default {
   async fetch(request, env) {
@@ -46,6 +49,32 @@ export default {
       return new Response('Method Not Allowed', { status: 405 });
     }
 
+    if (url.pathname.startsWith('/api/teacher/')) {
+      const sub = url.pathname.slice('/api/teacher/'.length);
+      if (sub === 'setup') {
+        if (request.method === 'GET')  return handleTeacherGetSetup(env);
+        if (request.method === 'POST') return handleTeacherPostSetup(request, env);
+        return new Response('Method Not Allowed', { status: 405 });
+      }
+      if (sub === 'ping') {
+        if (!await isTeacherAuthed(request, env)) return jsonRes({ ok: false, error: 'Unauthorized' }, 401);
+        return jsonRes({ ok: true });
+      }
+      if (sub === 'content') {
+        if (request.method === 'GET')  return handleTeacherGetContent(request, env);
+        if (request.method === 'POST') return handleTeacherPostContent(request, env);
+        return new Response('Method Not Allowed', { status: 405 });
+      }
+      if (sub === 'upload') {
+        if (request.method === 'POST') return handleTeacherUpload(request, env);
+        return new Response('Method Not Allowed', { status: 405 });
+      }
+      return new Response('Not Found', { status: 404 });
+    }
+
+    const tfMatch = url.pathname.match(/^\/teacher-files\/([^/]+)$/);
+    if (tfMatch) return handleServeTeacherFile(decodeURIComponent(tfMatch[1]), env);
+
     const m = url.pathname.match(/^\/aktuelles\/([^/]+)\/?$/);
     if (m) return handlePostPage(decodeURIComponent(m[1]), request, env);
 
@@ -68,6 +97,19 @@ async function isAuthed(request, env) {
 async function hasAuthConfigured(env) {
   if (env.WORKER_SECRET) return true;
   return !!(await env.BDS_CONTENT.get(ADMIN_PW_KEY));
+}
+
+async function isTeacherAuthed(request, env) {
+  const auth = request.headers.get('Authorization') || '';
+  if (!auth.startsWith('Bearer ')) return false;
+  const provided = auth.slice(7);
+  if (!provided) return false;
+  const stored = await env.BDS_CONTENT.get(TEACHER_PW_KEY);
+  return stored ? provided === stored : false;
+}
+
+async function isTeacherOrAdminAuthed(request, env) {
+  return (await isAuthed(request, env)) || (await isTeacherAuthed(request, env));
 }
 
 function jsonRes(data, status = 200) {
@@ -199,6 +241,83 @@ async function handlePostSetup(request, env) {
   }
   await env.BDS_CONTENT.put(ADMIN_PW_KEY, body.password);
   return jsonRes({ ok: true });
+}
+
+/* ── /api/teacher/* ──────────────────────────────────────── */
+
+async function handleTeacherGetSetup(env) {
+  const configured = !!(await env.BDS_CONTENT.get(TEACHER_PW_KEY));
+  return jsonRes({ configured });
+}
+
+async function handleTeacherPostSetup(request, env) {
+  if (!await isAuthed(request, env)) return jsonRes({ error: 'Unauthorized' }, 401);
+  let body;
+  try { body = await request.json(); } catch (_) { return jsonRes({ error: 'Invalid JSON' }, 400); }
+  if (!body || typeof body.password !== 'string' || body.password.length < 8) {
+    return jsonRes({ error: 'Passwort muss mindestens 8 Zeichen haben' }, 400);
+  }
+  await env.BDS_CONTENT.put(TEACHER_PW_KEY, body.password);
+  return jsonRes({ ok: true });
+}
+
+async function handleTeacherGetContent(request, env) {
+  if (!await isTeacherOrAdminAuthed(request, env)) return jsonRes({ error: 'Unauthorized' }, 401);
+  const raw = await env.BDS_CONTENT.get(TEACHER_CONTENT_KEY);
+  if (!raw) return new Response('{}', { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' } });
+  return new Response(raw, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' } });
+}
+
+async function handleTeacherPostContent(request, env) {
+  if (!await isAuthed(request, env)) return jsonRes({ error: 'Unauthorized' }, 401);
+  const body = await request.text();
+  try { JSON.parse(body); } catch (_) { return jsonRes({ error: 'Invalid JSON' }, 400); }
+  await env.BDS_CONTENT.put(TEACHER_CONTENT_KEY, body);
+  return jsonRes({ ok: true });
+}
+
+const ALLOWED_TEACHER_TYPES = {
+  'application/pdf': 'pdf',
+  'application/msword': 'doc',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
+  'application/vnd.ms-excel': 'xls',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
+  'text/plain': 'txt',
+  'application/zip': 'zip',
+  'image/jpeg': 'jpg', 'image/png': 'png', 'image/gif': 'gif', 'image/avif': 'avif',
+};
+
+async function handleTeacherUpload(request, env) {
+  if (!await isAuthed(request, env)) return jsonRes({ error: 'Unauthorized' }, 401);
+  let formData;
+  try { formData = await request.formData(); } catch (_) { return jsonRes({ error: 'Invalid form data' }, 400); }
+  const file = formData.get('file');
+  if (!file || typeof file === 'string') return jsonRes({ error: 'No file provided' }, 400);
+  if (!ALLOWED_TEACHER_TYPES[file.type]) return jsonRes({ error: 'Dateityp nicht erlaubt' }, 400);
+  if (file.size > 10 * 1024 * 1024) return jsonRes({ error: 'Datei zu groß (max. 10 MB)' }, 400);
+  const rand      = Math.random().toString(36).slice(2, 9);
+  const rawLabel  = (formData.get('label') || file.name || 'datei').slice(0, 60);
+  const safeLabel = rawLabel.replace(/[^\w.\-äöüÄÖÜß]/g, '_');
+  const key       = `${Date.now()}-${rand}-${safeLabel}`;
+  const buf       = await file.arrayBuffer();
+  await env.BDS_CONTENT.put(`${TEACHER_FILE_PREFIX}${key}`, buf, { metadata: { type: file.type, name: safeLabel } });
+  return jsonRes({ ok: true, key });
+}
+
+async function handleServeTeacherFile(key, env) {
+  const { value, metadata } = await env.BDS_CONTENT.getWithMetadata(
+    `${TEACHER_FILE_PREFIX}${key}`, { type: 'arrayBuffer' }
+  );
+  if (!value) return new Response('Not Found', { status: 404 });
+  const type = (metadata && metadata.type) || 'application/octet-stream';
+  const name = (metadata && metadata.name) || key;
+  return new Response(value, {
+    headers: {
+      'Content-Type': type,
+      'Content-Disposition': `attachment; filename="${name}"`,
+      'Cache-Control': 'private, max-age=3600',
+    }
+  });
 }
 
 /* ── /aktuelles/:slug SSR ─────────────────────────────────── */
