@@ -20,6 +20,16 @@
     onScroll();
   }
 
+  /* Hide the logo if it fails to load. Was an inline onerror="" handler;
+     moved here so the CSP can forbid inline handlers. Cover the case where
+     the image already errored before this script ran. */
+  const logoImg = document.querySelector('.nav-logo-img');
+  if (logoImg) {
+    const hideLogo = () => { logoImg.style.display = 'none'; };
+    logoImg.addEventListener('error', hideLogo);
+    if (logoImg.complete && logoImg.naturalWidth === 0) hideLogo();
+  }
+
 
   /* ── 2. Mobile menu ───────────────────────────────────── */
   const hamburger  = document.getElementById('hamburger');

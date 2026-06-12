@@ -17,6 +17,12 @@
 
 'use strict';
 
+/* Page identity. Was set by an inline <script>window.__PAGE_KEY=…> in each
+   page; that was moved to <body data-page-key="…"> so the CSP can forbid
+   inline scripts. content.js loads at the end of <body>, so the attribute
+   is already parsed here. */
+window.__PAGE_KEY = (document.body && document.body.dataset.pageKey) || window.__PAGE_KEY;
+
 /* ── Theme: apply cached values instantly (prevents flash) ── */
 (function () {
   try {

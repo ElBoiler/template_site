@@ -3,7 +3,7 @@
 <head>
 {{HEAD}}
 </head>
-<body class="page-{{pageSlug}}">
+<body class="page-{{pageSlug}}" data-page-key="{{pageKey}}">
 {{HEADER}}
 
   <main id="main" class="page-main">
@@ -24,7 +24,6 @@
 
 {{FOOTER}}
 
-  <script>window.__PAGE_KEY = "{{pageKey}}";</script>
   <script src="/js/i18n.js"></script>
   <script src="/js/content.js"></script>
   <script src="/js/main.js"></script>

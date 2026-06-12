@@ -78,7 +78,15 @@ export default {
     const m = url.pathname.match(/^\/aktuelles\/([^/]+)\/?$/);
     if (m) return handlePostPage(decodeURIComponent(m[1]), request, env);
 
-    return env.ASSETS.fetch(request);
+    if (url.pathname === '/robots.txt')  return handleRobots(url.origin);
+    if (url.pathname === '/sitemap.xml') return handleSitemap(url.origin, request, env);
+
+    try {
+      return await env.ASSETS.fetch(request);
+    } catch (e) {
+      console.error('asset fetch failed', e);
+      return new Response('Not Found', { status: 404 });
+    }
   }
 };
 
@@ -147,6 +155,53 @@ async function loadContent(request, env) {
     } catch (_) { /* ignore */ }
   }
   try { return raw ? JSON.parse(raw) : {}; } catch (_) { return {}; }
+}
+
+/* ── /robots.txt + /sitemap.xml ──────────────────────────── */
+
+function handleRobots(origin) {
+  const body =
+    'User-agent: *\n' +
+    'Allow: /\n' +
+    'Disallow: /admin.html\n' +
+    'Disallow: /lehrerbereich\n' +
+    '\n' +
+    `Sitemap: ${origin}/sitemap.xml\n`;
+  return new Response(body, {
+    headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+  });
+}
+
+async function handleSitemap(origin, request, env) {
+  // Stable build date — avoids every URL falsely claiming it changed today.
+  const LASTMOD = '2026-06-12';
+  const paths = new Set(['/']);
+
+  try {
+    const routes = JSON.parse(await fetchAsset('/pages/_routes.json', request, env));
+    const add = (href) => {
+      if (!href || href === '/lehrerbereich') return; // keep the private teacher area out
+      paths.add(href);
+    };
+    (routes.groups || []).forEach(g => g.children ? g.children.forEach(c => add(c.href)) : add(g.href));
+    (routes.footer || []).forEach(f => add(f.href));
+  } catch (_) { /* fall back to just "/" */ }
+
+  // Individual news posts (server-rendered at /aktuelles/:slug).
+  try {
+    const data  = await loadContent(request, env);
+    const posts = (data && Array.isArray(data.posts)) ? data.posts : [];
+    posts.forEach(p => { if (p && p.slug) paths.add(`/aktuelles/${p.slug}`); });
+  } catch (_) { /* ignore */ }
+
+  const body =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+    [...paths].map(p => `  <url><loc>${origin}${p}</loc><lastmod>${LASTMOD}</lastmod></url>`).join('\n') +
+    '\n</urlset>\n';
+  return new Response(body, {
+    headers: { 'Content-Type': 'application/xml; charset=utf-8' }
+  });
 }
 
 /* ── /api/content ────────────────────────────────────────── */
