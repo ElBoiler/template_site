@@ -21,10 +21,12 @@
     {
       // Dedicated namespace for THIS site. The previous id
       // (0231215d7d7b4e80a433c9245e220c9e) was a namespace SHARED across several
-      // template-derived projects — their writes polluted each other's content.
-      // Create an isolated one:  npx wrangler kv namespace create BDS_CONTENT
-      // then paste the printed id below (keep the binding name BDS_CONTENT).
-      "binding": "BDS_CONTENT",
+      // template-derived projects under the generic binding name BDS_CONTENT —
+      // their writes polluted each other's content. Renamed the binding to
+      // CHAMISSO_CONTENT for clarity and pointed it at an isolated namespace.
+      // Create one:  npx wrangler kv namespace create CHAMISSO_CONTENT
+      // then paste the printed id below.
+      "binding": "CHAMISSO_CONTENT",
       "id": "REPLACE_WITH_NEW_NAMESPACE_ID"
     }
   ]

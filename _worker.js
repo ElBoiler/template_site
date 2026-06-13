@@ -98,13 +98,13 @@ async function isAuthed(request, env) {
   const provided = auth.slice(7);
   if (!provided) return false;
   if (env.WORKER_SECRET) return provided === env.WORKER_SECRET;
-  const stored = await env.BDS_CONTENT.get(ADMIN_PW_KEY);
+  const stored = await env.CHAMISSO_CONTENT.get(ADMIN_PW_KEY);
   return stored ? provided === stored : false;
 }
 
 async function hasAuthConfigured(env) {
   if (env.WORKER_SECRET) return true;
-  return !!(await env.BDS_CONTENT.get(ADMIN_PW_KEY));
+  return !!(await env.CHAMISSO_CONTENT.get(ADMIN_PW_KEY));
 }
 
 async function isTeacherAuthed(request, env) {
@@ -112,7 +112,7 @@ async function isTeacherAuthed(request, env) {
   if (!auth.startsWith('Bearer ')) return false;
   const provided = auth.slice(7);
   if (!provided) return false;
-  const stored = await env.BDS_CONTENT.get(TEACHER_PW_KEY);
+  const stored = await env.CHAMISSO_CONTENT.get(TEACHER_PW_KEY);
   return stored ? provided === stored : false;
 }
 
@@ -143,14 +143,14 @@ function formatDate(iso) {
 }
 
 async function loadContent(request, env) {
-  let raw = await env.BDS_CONTENT.get(CONTENT_KEY);
+  let raw = await env.CHAMISSO_CONTENT.get(CONTENT_KEY);
   if (!raw) {
     try {
       const seedUrl = new URL('/content.json', request.url).toString();
       const seedRes = await env.ASSETS.fetch(new Request(seedUrl));
       if (seedRes.ok) {
         raw = await seedRes.text();
-        await env.BDS_CONTENT.put(CONTENT_KEY, raw);
+        await env.CHAMISSO_CONTENT.put(CONTENT_KEY, raw);
       }
     } catch (_) { /* ignore */ }
   }
@@ -207,14 +207,14 @@ async function handleSitemap(origin, request, env) {
 /* ── /api/content ────────────────────────────────────────── */
 
 async function handleGetContent(request, env) {
-  let data = await env.BDS_CONTENT.get(CONTENT_KEY);
+  let data = await env.CHAMISSO_CONTENT.get(CONTENT_KEY);
   if (!data) {
     try {
       const seedUrl = new URL('/content.json', request.url).toString();
       const seedRes = await env.ASSETS.fetch(new Request(seedUrl));
       if (seedRes.ok) {
         data = await seedRes.text();
-        await env.BDS_CONTENT.put(CONTENT_KEY, data);
+        await env.CHAMISSO_CONTENT.put(CONTENT_KEY, data);
       }
     } catch (_) { /* ignore */ }
   }
@@ -233,7 +233,7 @@ async function handlePostContent(request, env) {
   try { JSON.parse(body); }
   catch (_) { return jsonRes({ error: 'Invalid JSON' }, 400); }
 
-  await env.BDS_CONTENT.put(CONTENT_KEY, body);
+  await env.CHAMISSO_CONTENT.put(CONTENT_KEY, body);
   return jsonRes({ ok: true });
 }
 
@@ -263,13 +263,13 @@ async function handleUpload(request, env) {
   const key = `${Date.now()}-${rand}.${ext}`;
 
   const buf = await file.arrayBuffer();
-  await env.BDS_CONTENT.put(`img:${key}`, buf, { metadata: { type: file.type } });
+  await env.CHAMISSO_CONTENT.put(`img:${key}`, buf, { metadata: { type: file.type } });
 
   return jsonRes({ ok: true, url: `/uploads/${key}` });
 }
 
 async function handleServeUpload(key, env) {
-  const { value, metadata } = await env.BDS_CONTENT.getWithMetadata(`img:${key}`, { type: 'arrayBuffer' });
+  const { value, metadata } = await env.CHAMISSO_CONTENT.getWithMetadata(`img:${key}`, { type: 'arrayBuffer' });
   if (!value) return new Response('Not Found', { status: 404 });
   const type = (metadata && metadata.type) || 'image/jpeg';
   return new Response(value, {
@@ -294,14 +294,14 @@ async function handlePostSetup(request, env) {
   if (!body || typeof body.password !== 'string' || body.password.length < 8) {
     return jsonRes({ error: 'Passwort muss mindestens 8 Zeichen haben' }, 400);
   }
-  await env.BDS_CONTENT.put(ADMIN_PW_KEY, body.password);
+  await env.CHAMISSO_CONTENT.put(ADMIN_PW_KEY, body.password);
   return jsonRes({ ok: true });
 }
 
 /* ── /api/teacher/* ──────────────────────────────────────── */
 
 async function handleTeacherGetSetup(env) {
-  const configured = !!(await env.BDS_CONTENT.get(TEACHER_PW_KEY));
+  const configured = !!(await env.CHAMISSO_CONTENT.get(TEACHER_PW_KEY));
   return jsonRes({ configured });
 }
 
@@ -312,13 +312,13 @@ async function handleTeacherPostSetup(request, env) {
   if (!body || typeof body.password !== 'string' || body.password.length < 8) {
     return jsonRes({ error: 'Passwort muss mindestens 8 Zeichen haben' }, 400);
   }
-  await env.BDS_CONTENT.put(TEACHER_PW_KEY, body.password);
+  await env.CHAMISSO_CONTENT.put(TEACHER_PW_KEY, body.password);
   return jsonRes({ ok: true });
 }
 
 async function handleTeacherGetContent(request, env) {
   if (!await isTeacherOrAdminAuthed(request, env)) return jsonRes({ error: 'Unauthorized' }, 401);
-  const raw = await env.BDS_CONTENT.get(TEACHER_CONTENT_KEY);
+  const raw = await env.CHAMISSO_CONTENT.get(TEACHER_CONTENT_KEY);
   if (!raw) return new Response('{}', { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' } });
   return new Response(raw, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' } });
 }
@@ -327,7 +327,7 @@ async function handleTeacherPostContent(request, env) {
   if (!await isAuthed(request, env)) return jsonRes({ error: 'Unauthorized' }, 401);
   const body = await request.text();
   try { JSON.parse(body); } catch (_) { return jsonRes({ error: 'Invalid JSON' }, 400); }
-  await env.BDS_CONTENT.put(TEACHER_CONTENT_KEY, body);
+  await env.CHAMISSO_CONTENT.put(TEACHER_CONTENT_KEY, body);
   return jsonRes({ ok: true });
 }
 
@@ -355,12 +355,12 @@ async function handleTeacherUpload(request, env) {
   const safeLabel = rawLabel.replace(/[^\w.\-äöüÄÖÜß]/g, '_');
   const key       = `${Date.now()}-${rand}-${safeLabel}`;
   const buf       = await file.arrayBuffer();
-  await env.BDS_CONTENT.put(`${TEACHER_FILE_PREFIX}${key}`, buf, { metadata: { type: file.type, name: safeLabel } });
+  await env.CHAMISSO_CONTENT.put(`${TEACHER_FILE_PREFIX}${key}`, buf, { metadata: { type: file.type, name: safeLabel } });
   return jsonRes({ ok: true, key });
 }
 
 async function handleServeTeacherFile(key, env) {
-  const { value, metadata } = await env.BDS_CONTENT.getWithMetadata(
+  const { value, metadata } = await env.CHAMISSO_CONTENT.getWithMetadata(
     `${TEACHER_FILE_PREFIX}${key}`, { type: 'arrayBuffer' }
   );
   if (!value) return new Response('Not Found', { status: 404 });
