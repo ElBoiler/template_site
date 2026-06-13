@@ -17,6 +17,12 @@
 
 'use strict';
 
+/* Page identity. Was set by an inline <script>window.__PAGE_KEY=…> in each
+   page; that was moved to <body data-page-key="…"> so the CSP can forbid
+   inline scripts. content.js loads at the end of <body>, so the attribute
+   is already parsed here. */
+window.__PAGE_KEY = (document.body && document.body.dataset.pageKey) || window.__PAGE_KEY;
+
 /* ── Theme: apply cached values instantly (prevents flash) ── */
 (function () {
   try {
@@ -342,25 +348,9 @@ function renderHomepage(data) {
     window.initCarousel(items);
   }
 
-  const eventsList = document.getElementById('eventsList');
-  if (eventsList) {
-    const items = home.veranstaltungen || [];
-    if (!items.length) {
-      eventsList.innerHTML = '<li class="event-item"><div class="event-body"><p>Aktuell keine Veranstaltungen geplant.</p></div></li>';
-    } else {
-      eventsList.innerHTML = items.map(ev => {
-        const { day, month } = formatDayMonth(ev.date);
-        return (
-          `<li class="event-item">` +
-            `<div class="event-date"><strong>${escText(day)}</strong>${escText(month)}</div>` +
-            `<div class="event-body">` +
-              `<h3>${escText(ev.title || '')}</h3>` +
-              (ev.body ? `<p>${escText(ev.body)}</p>` : '') +
-            `</div>` +
-          `</li>`
-        );
-      }).join('');
-    }
+  const items = home.veranstaltungen || [];
+  if (typeof window.renderMiniCalendar === 'function') {
+    window.renderMiniCalendar(items);
   }
 
   renderNewsGrid(data, 3);
@@ -503,12 +493,19 @@ function removeTheme() {
    APPLY
    ============================================================ */
 
+function renderVeranstaltungen(data) {
+  const events = (data.homepage && data.homepage.veranstaltungen) || [];
+  window.__EVENTS = events;
+  if (typeof window.initCalendar === 'function') window.initCalendar(events);
+}
+
 function applyContent(data) {
   renderContact(data);
   renderPage(data);
   if (window.__PAGE_KEY === '/')                 renderHomepage(data);
   if (window.__PAGE_KEY === '/aktuelles')        renderAktuellesCurrentYear(data);
   if (window.__PAGE_KEY === '/aktuelles/archiv') renderArchive(data);
+  if (window.__PAGE_KEY === '/veranstaltungen')  renderVeranstaltungen(data);
 }
 
 

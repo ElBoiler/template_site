@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex,nofollow">
   <title>Admin — Chamisso-Grundschule</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/admin.css">
 </head>
@@ -42,6 +39,7 @@
         <button class="admin-tab" role="tab" data-tab="contact">Kontakt</button>
         <button class="admin-tab" role="tab" data-tab="events">Veranstaltungen</button>
         <button class="admin-tab" role="tab" data-tab="theme">🎨 Farbschema</button>
+        <button class="admin-tab" role="tab" data-tab="lehrer">Lehrerbereich</button>
       </nav>
 
       <div class="admin-panel is-active" data-panel="posts">
@@ -77,9 +75,10 @@
 
       <div class="admin-panel" data-panel="events">
         <div class="admin-panel-header">
-          <h2>Veranstaltungen (Startseite)</h2>
+          <h2>Veranstaltungen</h2>
           <button id="newEventBtn" class="btn btn-primary">+ Neue Veranstaltung</button>
         </div>
+        <p class="admin-help">Erscheinen auf der Startseite (Mini-Kalender) und auf der <a href="/veranstaltungen">/veranstaltungen</a>-Seite.</p>
         <ul id="eventsList" class="events-admin-list"></ul>
         <button id="saveEventsBtn" class="btn btn-primary">Speichern</button>
         <span id="eventsSaveStatus" class="admin-status"></span>
@@ -150,6 +149,71 @@
 
       </div><!-- /theme panel -->
 
+      <!-- ── LEHRERBEREICH PANEL ──────────────────────────── -->
+      <div class="admin-panel" data-panel="lehrer">
+        <h2>Lehrerbereich</h2>
+
+        <div class="lb-admin-section">
+          <h3>Lehrer-Passwort</h3>
+          <p class="admin-help">Gemeinsames Passwort für den Lehrerbereich — unabhängig vom Admin-Passwort (mind. 8 Zeichen).</p>
+          <div class="form-group">
+            <label for="lbAdminPwInput">Neues Passwort</label>
+            <input id="lbAdminPwInput" type="password" autocomplete="new-password" placeholder="••••••••">
+          </div>
+          <button id="lbSetPwBtn" class="btn btn-primary">Passwort setzen</button>
+          <span id="lbPwStatus" class="admin-status"></span>
+        </div>
+
+        <div class="lb-admin-section">
+          <h3>Handbuch</h3>
+          <div class="form-group">
+            <label for="lbHandbuchEditor">Inhalt (HTML)</label>
+            <textarea id="lbHandbuchEditor" rows="12" placeholder="HTML-Inhalt des Handbuchs …"></textarea>
+          </div>
+          <div class="lb-pdf-row">
+            <div class="lb-pdf-current" id="lbPdfCurrent" hidden>
+              <span>PDF: </span><span id="lbPdfName"></span>
+              <button type="button" class="btn-link btn-danger" id="lbPdfRemove">Entfernen</button>
+            </div>
+            <label class="btn btn-sm btn-outline" for="lbPdfFile" style="cursor:pointer">PDF hochladen</label>
+            <input type="file" id="lbPdfFile" accept=".pdf" style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px">
+            <span id="lbPdfUploadStatus" class="admin-status"></span>
+          </div>
+        </div>
+
+        <div class="lb-admin-section">
+          <div class="admin-panel-header">
+            <h3>Ankündigungen (nur für Lehrer)</h3>
+            <button id="lbNewAnnBtn" class="btn btn-primary btn-sm">+ Neu</button>
+          </div>
+          <ul id="lbAnnList" class="events-admin-list"></ul>
+          <p id="lbAnnEmpty" class="admin-empty" hidden>Noch keine Ankündigungen.</p>
+        </div>
+
+        <div class="lb-admin-section">
+          <h3>Nützliche Links</h3>
+          <ul id="lbLinksList" class="lb-links-list"></ul>
+          <button id="lbAddLinkBtn" class="btn btn-outline btn-sm">+ Link hinzufügen</button>
+        </div>
+
+        <div class="lb-admin-section">
+          <h3>Downloads</h3>
+          <ul id="lbDlList" class="lb-dl-list"></ul>
+          <div class="lb-dl-upload-row">
+            <input id="lbDlName" type="text" placeholder="Bezeichnung …" class="lb-dl-name-input">
+            <label class="btn btn-sm btn-outline" for="lbDlFile" style="cursor:pointer">Datei wählen</label>
+            <input type="file" id="lbDlFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip" style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px">
+            <span id="lbDlUploadStatus" class="admin-status"></span>
+          </div>
+        </div>
+
+        <div class="lb-save-row">
+          <button id="lbSaveBtn" class="btn btn-primary">Alles speichern</button>
+          <span id="lbSaveStatus" class="admin-status"></span>
+        </div>
+
+      </div><!-- /lehrer panel -->
+
     </section>
 
     <div id="postEditor" class="admin-modal" hidden role="dialog" aria-modal="true" aria-labelledby="postEditorTitle">
@@ -181,9 +245,10 @@
 
   </main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.4.0/color-thief.umd.js"></script>
+  <script src="/vendor/color-thief.umd.js"></script>
   <script src="/js/i18n.js"></script>
   <script src="/js/content.js"></script>
   <script src="/js/admin.js"></script>
+  <script src="/js/admin-lehrer.js"></script>
 </body>
 </html>

@@ -4,6 +4,44 @@
    ============================================================ */
 
 /* ============================================================
+   0. SELF-HOSTED FONTS (DSGVO: no request to Google servers)
+   Quicksand + Inter are variable fonts — one file covers the
+   whole weight axis. latin + latin-ext subsets only.
+   ============================================================ */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/quicksand-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/quicksand-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ============================================================
    1. CSS CUSTOM PROPERTIES
    ============================================================ */
 :root {
@@ -1870,3 +1908,99 @@ h3 {
   }
   .carousel-slide { transition: opacity 0.01ms ease !important; }
 }
+
+/* ── Calendar page ────────────────────────────────────────── */
+.cal-toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+.cal-nav { display: flex; align-items: center; gap: 0.5rem; }
+.cal-nav-btn { background: none; border: 1px solid var(--clr-border); border-radius: var(--radius-sm); width: 2rem; height: 2rem; cursor: pointer; font-size: 1.25rem; line-height: 1; color: var(--clr-text); display: flex; align-items: center; justify-content: center; }
+.cal-nav-btn:hover { background: var(--clr-bg-alt); }
+.cal-month-label { font-size: 1.1rem; font-weight: 600; color: var(--clr-heading); min-width: 12ch; text-align: center; }
+.cal-toggles { display: flex; gap: 0; border: 1px solid var(--clr-border); border-radius: var(--radius-sm); overflow: hidden; }
+.cal-toggle { background: none; border: none; padding: 0.35rem 0.9rem; cursor: pointer; font-size: 0.875rem; color: var(--clr-muted); transition: background 0.15s, color 0.15s; }
+.cal-toggle.is-active { background: var(--clr-primary); color: #fff; }
+.cal-toggle:hover:not(.is-active) { background: var(--clr-bg-alt); }
+
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--clr-border); border: 1px solid var(--clr-border); border-radius: var(--radius-sm); overflow: hidden; }
+.cal-head { background: var(--clr-bg-alt); text-align: center; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--clr-muted); padding: 0.4rem 0; }
+.cal-cell { background: #fff; min-height: 5rem; padding: 0.35rem 0.4rem 0.25rem; position: relative; cursor: default; }
+.cal-cell--has-events { cursor: pointer; }
+.cal-cell--has-events:hover { background: var(--clr-bg-alt); }
+.cal-cell--today { background: #fef9ec; }
+.cal-cell--today .cal-cell-day { font-weight: 700; color: var(--clr-primary); }
+.cal-cell--empty { background: var(--clr-bg-alt); cursor: default; }
+.cal-cell-day { font-size: 0.82rem; color: var(--clr-muted); }
+.cal-dots { display: flex; flex-wrap: wrap; gap: 2px; margin-top: 4px; }
+.cal-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+.cal-detail { margin-top: 1rem; padding: 1rem 1.25rem; border: 1px solid var(--clr-border); border-radius: var(--radius); background: var(--clr-bg-alt); }
+.cal-detail-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 0.75rem; }
+.cal-detail-title { font-size: 1.05rem; font-weight: 600; color: var(--clr-heading); }
+.cal-detail-close { background: none; border: none; cursor: pointer; font-size: 1.2rem; color: var(--clr-muted); line-height: 1; }
+.cal-detail-close:hover { color: var(--clr-text); }
+.cal-detail-meta { font-size: 0.82rem; color: var(--clr-muted); display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin-bottom: 0.6rem; }
+.cal-detail-body { font-size: 0.9rem; line-height: 1.7; }
+
+.cal-list { display: flex; flex-direction: column; gap: 0; }
+.cal-list-month { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--clr-muted); margin: 1.25rem 0 0.4rem; }
+.cal-list-item { display: grid; grid-template-columns: 3.5rem 1fr; gap: 0 0.75rem; padding: 0.65rem 0; border-bottom: 1px solid var(--clr-border); align-items: start; }
+.cal-list-day { font-size: 1.5rem; font-weight: 700; color: var(--clr-primary); line-height: 1; }
+.cal-list-info {}
+.cal-list-title { font-weight: 600; color: var(--clr-heading); font-size: 0.95rem; }
+.cal-list-meta { font-size: 0.8rem; color: var(--clr-muted); margin-top: 0.15rem; }
+.cal-list-body { font-size: 0.85rem; color: var(--clr-text); margin-top: 0.3rem; line-height: 1.6; }
+.cal-empty { text-align: center; color: var(--clr-muted); font-size: 0.9rem; padding: 2rem 0; }
+
+/* Mini-calendar (homepage) */
+.mini-cal-wrap { max-width: 360px; }
+.mini-cal-wrap .cal-grid { }
+.mini-cal-wrap .cal-cell { min-height: 2.4rem; padding: 0.2rem 0.25rem; }
+.mini-cal-wrap .cal-head { font-size: 0.7rem; padding: 0.25rem 0; }
+.mini-cal-wrap .cal-cell-day { font-size: 0.75rem; }
+.mini-cal-wrap .cal-dots { gap: 1px; margin-top: 2px; }
+.mini-cal-wrap .cal-dot { width: 5px; height: 5px; }
+.mini-cal-wrap .cal-month-label { font-size: 0.95rem; min-width: 10ch; }
+.events-cta-row { margin-top: 0.75rem; text-align: right; }
+.events-cta-row a { font-size: 0.875rem; }
+
+@media (max-width: 640px) {
+  .cal-toolbar { gap: 0.6rem; }
+  .cal-cell { min-height: 3rem; }
+  .cal-month-label { min-width: 9ch; font-size: 0.95rem; }
+}
+
+/* ── Lehrerbereich page ────────────────────────────────────── */
+.lb-login-card { max-width: 420px; margin: 2rem auto; padding: 2rem; background: var(--clr-bg-alt); border: 1px solid var(--clr-border); border-radius: var(--radius); }
+.lb-login-hint { font-size: 0.9rem; color: var(--clr-muted); margin-bottom: 1.25rem; }
+.lb-login-label { display: block; font-size: 0.875rem; font-weight: 600; color: var(--clr-text); margin-bottom: 0.4rem; }
+.lb-login-row { display: flex; gap: 0.5rem; }
+.lb-login-input { flex: 1; padding: 0.5rem 0.75rem; border: 1px solid var(--clr-border); border-radius: var(--radius-sm); font-size: 0.9rem; color: var(--clr-text); background: #fff; }
+.lb-login-input:focus { outline: none; border-color: var(--clr-primary); box-shadow: 0 0 0 2px rgba(var(--clr-primary-rgb,74,144,217),0.2); }
+.lb-login-btn { white-space: nowrap; }
+.lb-login-error { font-size: 0.85rem; color: var(--clr-error, #c0392b); margin-top: 0.6rem; }
+
+.lb-content { }
+.lb-topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.6rem 0 1.25rem; border-bottom: 1px solid var(--clr-border); margin-bottom: 1.5rem; }
+.lb-welcome { font-size: 0.9rem; color: var(--clr-muted); }
+.lb-section { margin-bottom: 2.5rem; }
+.lb-section-title { font-size: 1.1rem; font-weight: 700; color: var(--clr-heading); margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--clr-primary); display: inline-block; }
+.lb-handbuch { margin-bottom: 0.75rem; }
+.lb-pdf-row { margin-top: 0.5rem; }
+.lb-empty { font-size: 0.875rem; color: var(--clr-muted); font-style: italic; }
+
+.lb-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0; }
+.lb-item { padding: 0.85rem 0; border-bottom: 1px solid var(--clr-border); }
+.lb-item-date { display: block; font-size: 0.78rem; font-weight: 600; color: var(--clr-primary); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.15rem; }
+.lb-item-title { display: block; font-size: 0.95rem; color: var(--clr-heading); margin-bottom: 0.25rem; }
+.lb-item-body { font-size: 0.875rem; color: var(--clr-text); line-height: 1.65; margin-top: 0.3rem; }
+
+.lb-links-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+.lb-link-item { }
+.lb-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; color: var(--clr-primary); text-decoration: none; padding: 0.3rem 0; }
+.lb-link:hover { text-decoration: underline; }
+.lb-link-icon { font-size: 0.85em; }
+
+.lb-dl-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+.lb-dl-item { }
+.lb-dl-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; color: var(--clr-text); text-decoration: none; padding: 0.3rem 0; }
+.lb-dl-link:hover { color: var(--clr-primary); text-decoration: underline; }
+.lb-dl-icon { font-size: 1.1em; color: var(--clr-primary); }

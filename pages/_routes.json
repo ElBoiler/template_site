@@ -14,6 +14,12 @@
       ]
     },
     {
+      "label": "Über uns",
+      "children": [
+        { "label": "Wer wir sind", "href": "/ueber-uns/wer-wir-sind" }
+      ]
+    },
+    {
       "label": "Unterricht",
       "children": [
         { "label": "Unterrichtszeiten",            "href": "/unterricht/unterrichtszeiten" },
@@ -36,9 +42,11 @@
         { "label": "Sichere Suche im Internet für Kinder","href": "/fuer-eltern/sichere-suche" }
       ]
     },
-    { "label": "Förderverein", "href": "/foerderverein" },
-    { "label": "Aktuelles",    "href": "/aktuelles" },
-    { "label": "Kontakt",      "href": "/kontakt" }
+    { "label": "Förderverein",    "href": "/foerderverein" },
+    { "label": "Aktuelles",       "href": "/aktuelles" },
+    { "label": "Veranstaltungen", "href": "/veranstaltungen" },
+    { "label": "Kontakt",         "href": "/kontakt" },
+    { "label": "Lehrerbereich",   "href": "/lehrerbereich" }
   ],
   "footer": [
     { "label": "Impressum",   "href": "/impressum" },

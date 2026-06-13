@@ -146,11 +146,13 @@ function outputPathFor(page) {
 
 function renderPage(page, header, footer) {
   const tplName =
-    page.template === 'home'      ? 'home.html'      :
-    page.template === 'aktuelles' ? 'aktuelles.html' :
-    page.template === 'archiv'    ? 'archiv.html'    :
-    page.template === 'kontakt'   ? 'kontakt.html'   :
-                                    'page.html';
+    page.template === 'home'           ? 'home.html'           :
+    page.template === 'aktuelles'      ? 'aktuelles.html'      :
+    page.template === 'archiv'         ? 'archiv.html'         :
+    page.template === 'kontakt'        ? 'kontakt.html'        :
+    page.template === 'veranstaltungen'? 'veranstaltungen.html':
+    page.template === 'lehrerbereich'  ? 'lehrerbereich.html'  :
+                                         'page.html';
 
   const tpl = read(path.join(PARTIALS, tplName));
   const head = buildHead(page);

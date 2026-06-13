@@ -5,3 +5,20 @@ LICENSE
 docs/
 .gitattributes
 .gitignore
+
+# Never serve VCS / local tooling / secrets as static assets
+# (the asset directory is the repo root — without these they are
+#  publicly downloadable from the live URL)
+.git/
+.claude/
+.wrangler/
+.dev.vars*
+.env*
+
+# Build tooling — not needed at runtime, no reason to serve it.
+# NOTE: do NOT add partials/ or pages/ here — the Worker fetches
+# /partials/*.html and /pages/_routes.json at runtime to server-render
+# /aktuelles/:slug (see _worker.js handlePostPage); ignoring them would 404
+# those fetches and 500 the post pages.
+build.js
+package.json

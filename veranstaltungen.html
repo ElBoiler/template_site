@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Kooperationen der Chamisso-Grundschule in Berlin-Reinickendorf: Musikschulen, Sportvereine, Bibliotheken und soziale Träger als Partner der Schule.">
-  <title>Kooperationen | Chamisso-Grundschule</title>
+  <meta name="description" content="Kalenderansicht aller Veranstaltungen und Termine der Chamisso-Grundschule.">
+  <title>Veranstaltungen | Chamisso-Grundschule</title>
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Kooperationen | Chamisso-Grundschule">
-  <meta property="og:description" content="Kooperationen der Chamisso-Grundschule in Berlin-Reinickendorf: Musikschulen, Sportvereine, Bibliotheken und soziale Träger als Partner der Schule.">
+  <meta property="og:title" content="Veranstaltungen | Chamisso-Grundschule">
+  <meta property="og:description" content="Kalenderansicht aller Veranstaltungen und Termine der Chamisso-Grundschule.">
   <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
   <link rel="stylesheet" href="/css/styles.css">
 
 </head>
-<body class="page-kooperationen" data-page-key="/unsere-schule/kooperationen">
+<body class="page-veranstaltungen" data-page-key="/veranstaltungen">
   <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
   <nav class="navbar" id="navbar" aria-label="Hauptnavigation">
@@ -38,15 +38,31 @@
   <main id="main" class="page-main">
     <header class="page-hero">
       <div class="container">
-        <p class="page-eyebrow">Partner &amp; Netzwerke</p>
-        <h1 class="page-title">Kooperationen</h1>
-        <p class="page-subtitle">Gemeinsam mit unseren Partnern gestalten wir Schule.</p>
+        <p class="page-eyebrow">Aktuelles</p>
+        <h1 class="page-title">Veranstaltungen</h1>
+        <p class="page-subtitle">Termine und Events an der Chamisso-Grundschule.</p>
       </div>
     </header>
 
     <section class="page-content section-pad">
       <div class="container">
-        <div class="prose" data-content="page.body"><p>Wir kooperieren mit Musikschulen, Sportvereinen, Bibliotheken und sozialen Trägern im Bezirk Reinickendorf.</p><ul><li>Gesobau</li><li>Schulpsychologie Reinickendorf</li><li>Jugendamt und Jugendhilfe, ComX</li><li>Schulstation Lebenswelt gGmbH</li><li>Lernförderung (BuT) Studienkreis</li><li>Roma-Mediation und Chamisso-Kleinklasse, Aufwind e.V.</li><li>Schulische Inklusionsassistenten</li><li>Förderverein der Chamisso-Schule e.V.</li><li>Netzwerk der Schulen des Märkischen Viertels</li><li>Lesepaten, Verein Berliner Kaufleute und Industrieller (VBKI)</li><li>Werteunterricht: ev. / kath. Kirche, Lebenskunde (HVD), Islamunterricht (islamische Föderation)</li><li>Mathe- und Sprachpat:innen Bildung und Gesellschaft e.V.</li><li>Rotary-Club</li></ul></div>
+
+        <div class="cal-toolbar">
+          <div class="cal-nav">
+            <button id="calPrev" class="cal-nav-btn" aria-label="Vorheriger Monat">&#8249;</button>
+            <h2 id="calMonthLabel" class="cal-month-label"></h2>
+            <button id="calNext" class="cal-nav-btn" aria-label="Nächster Monat">&#8250;</button>
+          </div>
+          <div class="cal-toggles" role="group" aria-label="Ansicht wählen">
+            <button id="calToggleGrid" class="cal-toggle is-active" aria-pressed="true">Kalender</button>
+            <button id="calToggleList" class="cal-toggle" aria-pressed="false">Liste</button>
+          </div>
+        </div>
+
+        <div id="calGrid" class="cal-grid-wrap"></div>
+        <div id="calList" class="cal-list-wrap" hidden></div>
+        <div id="calDetail" class="cal-detail" hidden></div>
+
       </div>
     </section>
   </main>
@@ -101,6 +117,7 @@
 
   <script src="/js/i18n.js"></script>
   <script src="/js/content.js"></script>
+  <script src="/js/calendar.js"></script>
   <script src="/js/main.js"></script>
 </body>
 </html>

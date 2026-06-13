@@ -3,7 +3,7 @@
 <head>
 {{HEAD}}
 </head>
-<body class="page-home">
+<body class="page-home" data-page-key="/">
 {{HEADER}}
 
   <main id="main">
@@ -29,7 +29,10 @@
           <p class="section-eyebrow">Aktuelle Veranstaltungen</p>
           <h2>Was bei uns gerade passiert</h2>
         </div>
-        <ul class="events-list" id="eventsList" data-list-slot="home.veranstaltungen"></ul>
+        <div id="miniCalendar" class="mini-cal-wrap"></div>
+        <p class="events-cta-row">
+          <a class="btn btn-outline" href="/veranstaltungen">Alle Veranstaltungen</a>
+        </p>
       </div>
     </section>
 
@@ -70,9 +73,9 @@
 
 {{FOOTER}}
 
-  <script>window.__PAGE_KEY = "/";</script>
   <script src="/js/i18n.js"></script>
   <script src="/js/content.js"></script>
+  <script src="/js/calendar.js"></script>
   <script src="/js/main.js"></script>
 </body>
 </html>

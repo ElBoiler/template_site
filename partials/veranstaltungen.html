@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+{{HEAD}}
+</head>
+<body class="page-veranstaltungen" data-page-key="/veranstaltungen">
+{{HEADER}}
+
+  <main id="main" class="page-main">
+    <header class="page-hero">
+      <div class="container">
+        <p class="page-eyebrow">Aktuelles</p>
+        <h1 class="page-title">Veranstaltungen</h1>
+        <p class="page-subtitle">Termine und Events an der Chamisso-Grundschule.</p>
+      </div>
+    </header>
+
+    <section class="page-content section-pad">
+      <div class="container">
+
+        <div class="cal-toolbar">
+          <div class="cal-nav">
+            <button id="calPrev" class="cal-nav-btn" aria-label="Vorheriger Monat">&#8249;</button>
+            <h2 id="calMonthLabel" class="cal-month-label"></h2>
+            <button id="calNext" class="cal-nav-btn" aria-label="Nächster Monat">&#8250;</button>
+          </div>
+          <div class="cal-toggles" role="group" aria-label="Ansicht wählen">
+            <button id="calToggleGrid" class="cal-toggle is-active" aria-pressed="true">Kalender</button>
+            <button id="calToggleList" class="cal-toggle" aria-pressed="false">Liste</button>
+          </div>
+        </div>
+
+        <div id="calGrid" class="cal-grid-wrap"></div>
+        <div id="calList" class="cal-list-wrap" hidden></div>
+        <div id="calDetail" class="cal-detail" hidden></div>
+
+      </div>
+    </section>
+  </main>
+
+{{FOOTER}}
+
+  <script src="/js/i18n.js"></script>
+  <script src="/js/content.js"></script>
+  <script src="/js/calendar.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

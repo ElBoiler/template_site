@@ -546,3 +546,57 @@
   .theme-editor-layout { grid-template-columns: 1fr; }
   .theme-editor-right { position: static; }
 }
+
+/* ── Events tab — extended fields ─────────────────────────── */
+.event-row__meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.4rem; }
+.event-row__meta input[type="text"],
+.event-row__meta select,
+.event-row__meta input[type="time"] { padding: 0.28rem 0.5rem; border: 1px solid var(--clr-border); border-radius: var(--radius-sm); font-size: 0.82rem; color: var(--clr-text); background: #fff; }
+.event-row__meta input[type="text"] { width: 140px; }
+.event-row__meta select { width: 110px; }
+.event-row__meta input[type="time"] { width: 95px; }
+.event-row__meta input:disabled,
+.event-row__meta select:disabled { opacity: 0.45; cursor: not-allowed; }
+.event-row__alldayToggle { display: flex; align-items: center; gap: 0.3rem; font-size: 0.82rem; color: var(--clr-text); }
+
+/* ── Lehrerbereich admin tab ──────────────────────────────── */
+.lb-admin-section { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--clr-border); }
+.lb-admin-section:last-child { border-bottom: none; }
+.lb-admin-section h3 { font-size: 0.95rem; font-weight: 700; color: var(--clr-heading); margin-bottom: 0.75rem; }
+
+.lb-pdf-row { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.5rem; }
+.lb-pdf-current { font-size: 0.82rem; color: var(--clr-muted); }
+
+/* Announcements rows */
+.ann-row { background: var(--clr-bg-alt); border: 1px solid var(--clr-border); border-radius: var(--radius-sm); padding: 0.75rem; margin-bottom: 0.5rem; }
+.ann-row__inputs { display: flex; flex-direction: column; gap: 0.4rem; }
+.ann-row__inputs input[type="date"],
+.ann-row__inputs input[type="text"] { width: 100%; padding: 0.3rem 0.5rem; border: 1px solid var(--clr-border); border-radius: var(--radius-sm); font-size: 0.85rem; background: #fff; }
+.ann-row__inputs textarea { width: 100%; min-height: 60px; padding: 0.3rem 0.5rem; border: 1px solid var(--clr-border); border-radius: var(--radius-sm); font-size: 0.85rem; resize: vertical; background: #fff; }
+.ann-row__del { background: none; border: none; cursor: pointer; font-size: 0.78rem; color: var(--clr-error, #c0392b); padding: 0.2rem 0; margin-top: 0.25rem; }
+.ann-row__del:hover { text-decoration: underline; }
+
+/* Links rows */
+.lb-link-row { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.4rem; }
+.lb-link-label { flex: 0 0 130px; padding: 0.3rem 0.5rem; border: 1px solid var(--clr-border); border-radius: var(--radius-sm); font-size: 0.85rem; background: #fff; }
+.lb-link-url { flex: 1; padding: 0.3rem 0.5rem; border: 1px solid var(--clr-border); border-radius: var(--radius-sm); font-size: 0.85rem; background: #fff; }
+.lb-link-del { background: none; border: none; cursor: pointer; color: var(--clr-error, #c0392b); font-size: 1rem; line-height: 1; padding: 0 0.3rem; }
+
+/* Downloads rows */
+.lb-dl-row { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; padding: 0.4rem 0; border-bottom: 1px solid var(--clr-border); }
+.lb-dl-name { flex: 1; font-size: 0.85rem; color: var(--clr-text); }
+.lb-dl-del { background: none; border: none; cursor: pointer; font-size: 0.78rem; color: var(--clr-error, #c0392b); }
+.lb-dl-del:hover { text-decoration: underline; }
+.lb-dl-upload-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+.lb-dl-name-input { padding: 0.3rem 0.5rem; border: 1px solid var(--clr-border); border-radius: var(--radius-sm); font-size: 0.85rem; width: 180px; background: #fff; }
+
+.lb-save-row { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--clr-border); }
+
+@media (max-width: 600px) {
+  .event-row__meta { flex-direction: column; }
+  .event-row__meta input[type="text"],
+  .event-row__meta select,
+  .event-row__meta input[type="time"] { width: 100%; }
+  .lb-link-row { flex-wrap: wrap; }
+  .lb-link-label { flex: 1 1 100%; }
+}

@@ -148,6 +148,7 @@
     fillContactFields();
     renderEvents();
     loadThemeIntoPickers();
+    if (typeof window.initLehrTab === 'function') window.initLehrTab();
   }
 
 
@@ -335,18 +336,35 @@
 
 
   /* ── Events ───────────────────────────────────────────── */
+  const CATEGORIES = ['Schule', 'Kultur', 'Sport', 'Eltern', 'Sonstiges'];
+
   function renderEvents() {
     const events = (data.homepage && data.homepage.veranstaltungen) || [];
-    eventsListEl.innerHTML = events.map((ev, i) =>
-      `<li class="event-row" data-i="${i}">` +
-        `<div class="event-row__inputs">` +
-          `<input type="date"  data-field="date"  value="${escAttr(ev.date || '')}">` +
-          `<input type="text"  data-field="title" placeholder="Titel"  value="${escAttr(ev.title || '')}">` +
-          `<textarea data-field="body" rows="2" placeholder="Beschreibung">${escText(ev.body || '')}</textarea>` +
-        `</div>` +
-        `<button type="button" class="btn-link btn-danger" data-action="remove">Entfernen</button>` +
-      `</li>`
-    ).join('');
+    eventsListEl.innerHTML = events.map((ev, i) => {
+      const allDay = ev.allDay !== false;
+      const catOptions = CATEGORIES.map(c =>
+        `<option value="${escAttr(c)}" ${(ev.category || 'Schule') === c ? 'selected' : ''}>${escText(c)}</option>`
+      ).join('');
+      return (
+        `<li class="event-row" data-i="${i}">` +
+          `<div class="event-row__inputs">` +
+            `<input type="date" data-field="date" value="${escAttr(ev.date || '')}">` +
+            `<input type="text" data-field="title" placeholder="Titel" value="${escAttr(ev.title || '')}">` +
+            `<div class="event-row__meta">` +
+              `<input type="text" data-field="location" placeholder="Ort (optional)" value="${escAttr(ev.location || '')}">` +
+              `<select data-field="category">${catOptions}</select>` +
+              `<label class="event-row__alldayToggle">` +
+                `<input type="checkbox" data-field="allDay" ${allDay ? 'checked' : ''}> Ganztägig` +
+              `</label>` +
+              `<input type="time" data-field="startTime" value="${escAttr(ev.startTime || '')}" ${allDay ? 'disabled' : ''}>` +
+              `<input type="time" data-field="endTime"   value="${escAttr(ev.endTime   || '')}" ${allDay ? 'disabled' : ''}>` +
+            `</div>` +
+            `<textarea data-field="body" rows="2" placeholder="Beschreibung">${escText(ev.body || '')}</textarea>` +
+          `</div>` +
+          `<button type="button" class="btn-link btn-danger" data-action="remove">Entfernen</button>` +
+        `</li>`
+      );
+    }).join('');
   }
 
   eventsListEl.addEventListener('click', (e) => {
@@ -358,10 +376,19 @@
     renderEvents();
   });
 
+  eventsListEl.addEventListener('change', (e) => {
+    const cb = e.target.closest('[data-field="allDay"]');
+    if (!cb) return;
+    const row = cb.closest('.event-row');
+    row.querySelectorAll('[data-field="startTime"], [data-field="endTime"]').forEach(el => {
+      el.disabled = cb.checked;
+    });
+  });
+
   newEventBtn.addEventListener('click', () => {
     data.homepage = data.homepage || {};
     data.homepage.veranstaltungen = data.homepage.veranstaltungen || [];
-    data.homepage.veranstaltungen.push({ date: '', title: '', body: '' });
+    data.homepage.veranstaltungen.push({ date: '', title: '', location: '', category: 'Schule', allDay: true, startTime: '', endTime: '', body: '' });
     renderEvents();
   });
 
@@ -369,10 +396,16 @@
     data.homepage = data.homepage || {};
     const out = [];
     eventsListEl.querySelectorAll('.event-row').forEach(row => {
+      const allDayCb = row.querySelector('[data-field="allDay"]');
       out.push({
-        date:  row.querySelector('[data-field="date"]').value.trim(),
-        title: row.querySelector('[data-field="title"]').value.trim(),
-        body:  row.querySelector('[data-field="body"]').value.trim()
+        date:      row.querySelector('[data-field="date"]').value.trim(),
+        title:     row.querySelector('[data-field="title"]').value.trim(),
+        location:  row.querySelector('[data-field="location"]').value.trim(),
+        category:  row.querySelector('[data-field="category"]').value,
+        allDay:    allDayCb ? allDayCb.checked : true,
+        startTime: row.querySelector('[data-field="startTime"]').value,
+        endTime:   row.querySelector('[data-field="endTime"]').value,
+        body:      row.querySelector('[data-field="body"]').value.trim()
       });
     });
     data.homepage.veranstaltungen = out.filter(e => e.title || e.date);

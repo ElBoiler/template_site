@@ -28,9 +28,9 @@
       { "src": "/img/banner/banner-03.jpg", "alt": "Schülerinnen und Schüler im Klassenraum",  "caption": "Lernen mit Freude" }
     ],
     "veranstaltungen": [
-      { "date": "2025-12-09", "title": "Schulkonzert",     "body": "Konzert der Bettina-von-Arnim-Schülerband im Musikraum." },
-      { "date": "2025-12-18", "title": "Wintermarkt",      "body": "Stände, Mitmachaktionen und Glühpunsch auf dem Schulhof." },
-      { "date": "2025-12-19", "title": "Weihnachtssingen", "body": "Gemeinsames Singen aller Klassen." }
+      { "date": "2025-12-09", "title": "Schulkonzert",     "body": "Konzert der Bettina-von-Arnim-Schülerband im Musikraum.", "location": "Musikraum",  "category": "Kultur",  "allDay": true, "startTime": "", "endTime": "" },
+      { "date": "2025-12-18", "title": "Wintermarkt",      "body": "Stände, Mitmachaktionen und Glühpunsch auf dem Schulhof.", "location": "Schulhof", "category": "Schule",  "allDay": true, "startTime": "", "endTime": "" },
+      { "date": "2025-12-19", "title": "Weihnachtssingen", "body": "Gemeinsames Singen aller Klassen.",                       "location": "Aula",     "category": "Kultur",  "allDay": true, "startTime": "", "endTime": "" }
     ],
     "welcome": {
       "heading": "Willkommen an der Chamisso-Grundschule",
