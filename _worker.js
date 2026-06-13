@@ -112,6 +112,8 @@ async function isTeacherAuthed(request, env) {
   if (!auth.startsWith('Bearer ')) return false;
   const provided = auth.slice(7);
   if (!provided) return false;
+  // Prefer the encrypted wrangler secret; fall back to legacy KV password.
+  if (env.TEACHER_SECRET) return provided === env.TEACHER_SECRET;
   const stored = await env.CHAMISSO_CONTENT.get(TEACHER_PW_KEY);
   return stored ? provided === stored : false;
 }
@@ -301,12 +303,14 @@ async function handlePostSetup(request, env) {
 /* ── /api/teacher/* ──────────────────────────────────────── */
 
 async function handleTeacherGetSetup(env) {
-  const configured = !!(await env.CHAMISSO_CONTENT.get(TEACHER_PW_KEY));
+  const configured = !!env.TEACHER_SECRET || !!(await env.CHAMISSO_CONTENT.get(TEACHER_PW_KEY));
   return jsonRes({ configured });
 }
 
 async function handleTeacherPostSetup(request, env) {
   if (!await isAuthed(request, env)) return jsonRes({ error: 'Unauthorized' }, 401);
+  // When the password is managed as an encrypted secret it can't be changed via the API.
+  if (env.TEACHER_SECRET) return jsonRes({ error: 'Passwort wird als Secret verwaltet' }, 403);
   let body;
   try { body = await request.json(); } catch (_) { return jsonRes({ error: 'Invalid JSON' }, 400); }
   if (!body || typeof body.password !== 'string' || body.password.length < 8) {
