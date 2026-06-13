@@ -12,6 +12,7 @@ docs/
 .git/
 .claude/
 .wrangler/
+.gstack/
 .dev.vars*
 .env*
 
