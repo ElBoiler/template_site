@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "template-site",
+  "account_id": "d33fea6ffcbf40d07ed389710042c28e",
   "compatibility_date": "2025-09-27",
   "observability": {
     "enabled": true
@@ -27,7 +28,7 @@
       // Create one:  npx wrangler kv namespace create CHAMISSO_CONTENT
       // then paste the printed id below.
       "binding": "CHAMISSO_CONTENT",
-      "id": "REPLACE_WITH_NEW_NAMESPACE_ID"
+      "id": "a9ce372883ae4f73a471edf376e0c2ba"
     }
   ]
 }
