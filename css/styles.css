@@ -1572,6 +1572,10 @@ h3 {
 .prose .img-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.6rem; margin: 0.4rem 0 1.6rem; }
 .prose .img-gallery img { width: 100%; height: 150px; object-fit: cover; border-radius: 6px; }
 .prose .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1.1rem; margin: 1rem 0 1.8rem; }
+.prose details.archive { margin: 2rem 0 0; border-top: 1px solid #e2e2e2; padding-top: 1rem; }
+.prose details.archive > summary { cursor: pointer; font-family: var(--font-heading); font-weight: 600; font-size: 1.2rem; color: var(--clr-primary); }
+.prose details.archive[open] > summary { margin-bottom: 1.2rem; }
+.prose .meta-attribution { font-size: 0.85rem; color: #6a6a6a; margin-top: 1.6rem; }
 .prose .product-grid figure { margin: 0; }
 .prose .product-grid img { width: 100%; height: 210px; object-fit: cover; border-radius: 8px; }
 .prose .product-grid figcaption { text-align: center; margin-top: 0.5rem; }
