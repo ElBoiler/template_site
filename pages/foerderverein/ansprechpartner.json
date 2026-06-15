@@ -1,0 +1,10 @@
+{
+  "template": "page",
+  "key": "/foerderverein/ansprechpartner",
+  "slug": "ansprechpartner",
+  "title": "AnsprechpartnerInnen",
+  "eyebrow": "Förderverein",
+  "subtitle": "Der Vorstand des Fördervereins der Chamisso-Grundschule.",
+  "description": "AnsprechpartnerInnen und Vorstand des Fördervereins der Chamisso-Grundschule.",
+  "body": "<p>Der Vorstand des Fördervereins der Chamisso-Grundschule:</p><ul><li><strong>1. Vorsitzende:</strong> Melanie de Waard</li><li><strong>2. Vorsitzende:</strong> Melina Brauer</li><li><strong>Schriftführerin:</strong> Margit Bremer</li><li><strong>Kassenwärtin:</strong> Susanne Dützmann</li></ul><p>Sie erreichen den Förderverein per E-Mail unter <a href=\"mailto:foerderverein@chamisso-grundschule.de\">foerderverein@chamisso-grundschule.de</a> oder über das Sekretariat.</p><p><a class=\"btn btn--outline\" href=\"/downloads/foerderverein-ansprechpartner.pdf\" download>AnsprechpartnerInnen (PDF)</a></p>"
+}
