@@ -46,7 +46,7 @@
     { "label": "Aktuelles",       "href": "/aktuelles" },
     { "label": "Veranstaltungen", "href": "/veranstaltungen" },
     { "label": "Kontakt",         "href": "/kontakt" },
-    { "label": "Lehrerbereich",   "href": "/lehrerbereich" }
+    { "label": "Kollegium",       "href": "/kollegium" }
   ],
   "footer": [
     { "label": "Impressum",   "href": "/impressum" },

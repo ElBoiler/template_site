@@ -24,6 +24,11 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // Permanent redirect: the teacher area was renamed /lehrerbereich → /kollegium.
+    if (url.pathname === '/lehrerbereich' || url.pathname === '/lehrerbereich/') {
+      return Response.redirect(`${url.origin}/kollegium`, 301);
+    }
+
     if (url.pathname === '/api/content') {
       if (request.method === 'GET')  return handleGetContent(request, env);
       if (request.method === 'POST') return handlePostContent(request, env);
@@ -166,7 +171,7 @@ function handleRobots(origin) {
     'User-agent: *\n' +
     'Allow: /\n' +
     'Disallow: /admin.html\n' +
-    'Disallow: /lehrerbereich\n' +
+    'Disallow: /kollegium\n' +
     '\n' +
     `Sitemap: ${origin}/sitemap.xml\n`;
   return new Response(body, {
@@ -182,7 +187,7 @@ async function handleSitemap(origin, request, env) {
   try {
     const routes = JSON.parse(await fetchAsset('/pages/_routes.json', request, env));
     const add = (href) => {
-      if (!href || href === '/lehrerbereich') return; // keep the private teacher area out
+      if (!href || href === '/kollegium') return; // keep the private teacher area out
       paths.add(href);
     };
     (routes.groups || []).forEach(g => g.children ? g.children.forEach(c => add(c.href)) : add(g.href));

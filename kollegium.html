@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="BVG-Schülerticket an der Chamisso-Grundschule beantragen.">
-  <title>BVG-Ticket (Schülerticket) | Chamisso-Grundschule</title>
+  <meta name="description" content="Geschützter Bereich für die Lehrkräfte der Chamisso-Grundschule.">
+  <title>Kollegium | Chamisso-Grundschule</title>
   <meta property="og:type" content="website">
-  <meta property="og:title" content="BVG-Ticket (Schülerticket) | Chamisso-Grundschule">
-  <meta property="og:description" content="BVG-Schülerticket an der Chamisso-Grundschule beantragen.">
+  <meta property="og:title" content="Kollegium | Chamisso-Grundschule">
+  <meta property="og:description" content="Geschützter Bereich für die Lehrkräfte der Chamisso-Grundschule.">
   <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
   <link rel="stylesheet" href="/css/styles.css">
 
 </head>
-<body class="page-bvg-ticket" data-page-key="/fuer-eltern/bvg-ticket">
+<body class="page-lehrerbereich" data-page-key="/kollegium">
   <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
   <nav class="navbar" id="navbar" aria-label="Hauptnavigation">
@@ -38,15 +38,67 @@
   <main id="main" class="page-main">
     <header class="page-hero">
       <div class="container">
-        <p class="page-eyebrow">Für Eltern</p>
-        <h1 class="page-title">BVG-Ticket (Schülerticket)</h1>
-        <p class="page-subtitle">Kostenfreies Schülerticket für unsere Schülerinnen und Schüler.</p>
+        <p class="page-eyebrow">Intern</p>
+        <h1 class="page-title">Kollegium</h1>
       </div>
     </header>
 
     <section class="page-content section-pad">
       <div class="container">
-        <div class="prose" data-content="page.body"><p>Es gibt gute Neuigkeiten! Ab dem 01.08.2019 gibt es für alle Schülerinnen und Schüler in Berlin ein kostenloses BVG-Ticket.</p><p>Sie können es aber nur online beantragen:<br><a href="https://www.bvg.de/schuelerticket" rel="noopener">www.bvg.de/schuelerticket</a></p><p>Sie benötigen den Schülerausweis I (erhältlich im Sekretariat) Ihres Kindes und ein Foto.</p></div>
+
+        <!-- Login state -->
+        <div id="lbLogin" class="lb-login-card">
+          <p class="lb-login-hint">Dieser Bereich ist nur für Lehrkräfte der Chamisso-Grundschule zugänglich.</p>
+          <form id="lbLoginForm" class="lb-login-form" novalidate>
+            <label for="lbPwInput" class="lb-login-label">Passwort</label>
+            <div class="lb-login-row">
+              <input id="lbPwInput" type="password" class="lb-login-input" placeholder="Lehrer-Passwort" autocomplete="current-password" required>
+              <button type="submit" class="btn btn--primary lb-login-btn">Anmelden</button>
+            </div>
+            <p id="lbLoginError" class="lb-login-error" hidden>Falsches Passwort. Bitte erneut versuchen.</p>
+          </form>
+        </div>
+
+        <!-- Authenticated state (hidden until login) -->
+        <div id="lbContent" class="lb-content" hidden>
+
+          <div class="lb-topbar">
+            <span class="lb-welcome">Willkommen im Kollegiumsbereich.</span>
+            <button id="lbLogout" class="btn btn--secondary btn--sm">Abmelden</button>
+          </div>
+
+          <!-- Handbuch -->
+          <section class="lb-section" id="lbSecHandbuch">
+            <h2 class="lb-section-title">Handbuch</h2>
+            <div id="lbHandbuchBody" class="lb-handbuch prose"></div>
+            <div id="lbHandbuchPdf" class="lb-pdf-row" hidden>
+              <a id="lbHandbuchPdfLink" href="#" class="btn btn--outline btn--sm" download>Als PDF herunterladen</a>
+            </div>
+          </section>
+
+          <!-- Ankündigungen -->
+          <section class="lb-section" id="lbSecAnnouncements">
+            <h2 class="lb-section-title">Ankündigungen</h2>
+            <ul id="lbAnnouncementsList" class="lb-list"></ul>
+            <p id="lbAnnouncementsEmpty" class="lb-empty" hidden>Keine aktuellen Ankündigungen.</p>
+          </section>
+
+          <!-- Nützliche Links -->
+          <section class="lb-section" id="lbSecLinks">
+            <h2 class="lb-section-title">Nützliche Links</h2>
+            <ul id="lbLinksList" class="lb-links-list"></ul>
+            <p id="lbLinksEmpty" class="lb-empty" hidden>Keine Links hinterlegt.</p>
+          </section>
+
+          <!-- Downloads -->
+          <section class="lb-section" id="lbSecDownloads">
+            <h2 class="lb-section-title">Downloads</h2>
+            <ul id="lbDownloadsList" class="lb-dl-list"></ul>
+            <p id="lbDownloadsEmpty" class="lb-empty" hidden>Keine Downloads verfügbar.</p>
+          </section>
+
+        </div>
+
       </div>
     </section>
   </main>
@@ -105,6 +157,7 @@
 
   <script src="/js/i18n.js"></script>
   <script src="/js/content.js"></script>
+  <script src="/js/lehrerbereich.js"></script>
   <script src="/js/main.js"></script>
 </body>
 </html>
