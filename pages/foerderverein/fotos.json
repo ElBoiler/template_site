@@ -1,0 +1,10 @@
+{
+  "template": "page",
+  "key": "/foerderverein/fotos",
+  "slug": "fotos",
+  "title": "Fotos",
+  "eyebrow": "Förderverein",
+  "subtitle": "Einblicke in die Arbeit und Aktionen des Fördervereins.",
+  "description": "Fotos vom Förderverein der Chamisso-Grundschule.",
+  "body": "<p>Einblicke in die Arbeit und Aktionen des Fördervereins der Chamisso-Grundschule.</p><div class=\"img-gallery\"><img src=\"/img/pages/foerderverein/foerderverein-1.jpg\" alt=\"Aktion des Fördervereins der Chamisso-Grundschule\" loading=\"lazy\"><img src=\"/img/pages/foerderverein/foerderverein-2.jpg\" alt=\"Aktion des Fördervereins der Chamisso-Grundschule\" loading=\"lazy\"><img src=\"/img/pages/foerderverein/foerderverein-3.jpg\" alt=\"Aktion des Fördervereins der Chamisso-Grundschule\" loading=\"lazy\"></div>"
+}
