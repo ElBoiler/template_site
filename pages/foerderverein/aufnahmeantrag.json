@@ -1,0 +1,10 @@
+{
+  "template": "page",
+  "key": "/foerderverein/aufnahmeantrag",
+  "slug": "aufnahmeantrag",
+  "title": "Aufnahmeantrag",
+  "eyebrow": "Förderverein",
+  "subtitle": "Werden Sie Mitglied und unterstützen Sie die Chamisso-Grundschule.",
+  "description": "Mitglied werden im Förderverein der Chamisso-Grundschule — Aufnahmeantrag herunterladen.",
+  "body": "<p>Werden Sie Mitglied im Förderverein der Chamisso-Grundschule und investieren Sie in die Zukunft unserer Kinder — schon ab <strong>1,– € im Monat</strong> (gerne auch mehr).</p><p>Bitte laden Sie den Aufnahmeantrag herunter, füllen ihn aus und senden ihn per E-Mail an <a href=\"mailto:foerderverein@chamisso-grundschule.de\">foerderverein@chamisso-grundschule.de</a> oder geben ihn im Sekretariat ab.</p><p><a class=\"btn btn--primary\" href=\"/downloads/foerderverein-aufnahmeantrag.pdf\" download>Aufnahmeantrag herunterladen (PDF)</a></p>"
+}

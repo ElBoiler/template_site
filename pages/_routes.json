@@ -42,7 +42,16 @@
         { "label": "Sichere Suche im Internet für Kinder","href": "/fuer-eltern/sichere-suche" }
       ]
     },
-    { "label": "Förderverein",    "href": "/foerderverein" },
+    {
+      "label": "Förderverein",
+      "children": [
+        { "label": "Übersicht",            "href": "/foerderverein" },
+        { "label": "Aufnahmeantrag",       "href": "/foerderverein/aufnahmeantrag" },
+        { "label": "Werbeartikel",         "href": "/foerderverein/werbeartikel" },
+        { "label": "AnsprechpartnerInnen", "href": "/foerderverein/ansprechpartner" },
+        { "label": "Fotos",                "href": "/foerderverein/fotos" }
+      ]
+    },
     { "label": "Aktuelles",       "href": "/aktuelles" },
     { "label": "Veranstaltungen", "href": "/veranstaltungen" },
     { "label": "Kontakt",         "href": "/kontakt" },

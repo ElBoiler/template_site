@@ -1563,6 +1563,18 @@ h3 {
 .prose a { color: var(--clr-primary); text-decoration: underline; }
 .prose a:hover { color: var(--clr-accent-hover); }
 .prose .btn { text-decoration: none; }
+.prose img { max-width: 100%; height: auto; }
+.prose figure { margin: 0 0 1.4rem; }
+.prose figure img { display: block; width: 100%; border-radius: 8px; }
+.prose figcaption { font-size: 0.85rem; color: #6a6a6a; margin-top: 0.45rem; text-align: center; }
+.prose .page-lead { margin: 0 0 1.8rem; }
+.prose .figure-logo img { width: auto; max-width: 320px; margin: 0 auto; border-radius: 0; }
+.prose .img-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.6rem; margin: 0.4rem 0 1.6rem; }
+.prose .img-gallery img { width: 100%; height: 150px; object-fit: cover; border-radius: 6px; }
+.prose .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1.1rem; margin: 1rem 0 1.8rem; }
+.prose .product-grid figure { margin: 0; }
+.prose .product-grid img { width: 100%; height: 210px; object-fit: cover; border-radius: 8px; }
+.prose .product-grid figcaption { text-align: center; margin-top: 0.5rem; }
 
 /* ── Hero carousel (homepage) ─────────────────────────── */
 .hero-carousel {
