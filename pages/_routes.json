@@ -1,6 +1,6 @@
 {
   "groups": [
-    { "label": "Start", "href": "/" },
+    { "label": "Aktuelles", "href": "/aktuelles" },
     {
       "label": "Unsere Schule",
       "children": [
@@ -32,10 +32,10 @@
     },
     { "label": "EFöB",            "href": "/efoeb" },
     { "label": "Schulsozialarbeit","href": "/schulsozialarbeit" },
-    { "label": "Mittagessen",     "href": "/mittagessen" },
     {
       "label": "Für Eltern",
       "children": [
+        { "label": "Mittagessen",                        "href": "/mittagessen" },
         { "label": "Krankmeldung",                       "href": "/fuer-eltern/krankmeldung" },
         { "label": "Berlin-Pass",                        "href": "/fuer-eltern/berlin-pass" },
         { "label": "BVG-Ticket",                         "href": "/fuer-eltern/bvg-ticket" },
@@ -52,7 +52,6 @@
         { "label": "Fotos",                "href": "/foerderverein/fotos" }
       ]
     },
-    { "label": "Aktuelles",       "href": "/aktuelles" },
     { "label": "Veranstaltungen", "href": "/veranstaltungen" },
     { "label": "Kontakt",         "href": "/kontakt" },
     { "label": "Kollegium",       "href": "/kollegium" }
