@@ -97,14 +97,44 @@ export default {
 
 /* ── helpers ─────────────────────────────────────────────── */
 
-async function isAuthed(request, env) {
+function bearer(request) {
   const auth = request.headers.get('Authorization') || '';
-  if (!auth.startsWith('Bearer ')) return false;
-  const provided = auth.slice(7);
+  return auth.startsWith('Bearer ') ? auth.slice(7) : '';
+}
+
+async function sha256Hex(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf), b => b.toString(16).padStart(2, '0')).join('');
+}
+
+/** Constant-time compare of two equal-length hex strings (no early exit). */
+function ctEqualHex(a, b) {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+/** Compare a bearer token against a raw env-var secret, in constant time. */
+async function matchesSecret(provided, rawSecret) {
+  if (!provided || !rawSecret) return false;
+  return ctEqualHex(await sha256Hex(provided), await sha256Hex(rawSecret));
+}
+
+/** Compare a bearer token against a stored credential — either a SHA-256 hash
+ *  (current format) or a legacy plaintext password (pre-hashing setups). */
+async function matchesStored(provided, stored) {
+  if (!provided || !stored) return false;
+  const target = /^[0-9a-f]{64}$/.test(stored) ? stored : await sha256Hex(stored);
+  return ctEqualHex(await sha256Hex(provided), target);
+}
+
+async function isAuthed(request, env) {
+  const provided = bearer(request);
   if (!provided) return false;
-  if (env.WORKER_SECRET) return provided === env.WORKER_SECRET;
+  if (env.WORKER_SECRET) return matchesSecret(provided, env.WORKER_SECRET);
   const stored = await env.CHAMISSO_CONTENT.get(ADMIN_PW_KEY);
-  return stored ? provided === stored : false;
+  return stored ? matchesStored(provided, stored) : false;
 }
 
 async function hasAuthConfigured(env) {
@@ -113,14 +143,12 @@ async function hasAuthConfigured(env) {
 }
 
 async function isTeacherAuthed(request, env) {
-  const auth = request.headers.get('Authorization') || '';
-  if (!auth.startsWith('Bearer ')) return false;
-  const provided = auth.slice(7);
+  const provided = bearer(request);
   if (!provided) return false;
   // Prefer the encrypted wrangler secret; fall back to legacy KV password.
-  if (env.TEACHER_SECRET) return provided === env.TEACHER_SECRET;
+  if (env.TEACHER_SECRET) return matchesSecret(provided, env.TEACHER_SECRET);
   const stored = await env.CHAMISSO_CONTENT.get(TEACHER_PW_KEY);
-  return stored ? provided === stored : false;
+  return stored ? matchesStored(provided, stored) : false;
 }
 
 async function isTeacherOrAdminAuthed(request, env) {
@@ -266,8 +294,7 @@ async function handleUpload(request, env) {
   if (file.size > 5 * 1024 * 1024) return jsonRes({ error: 'Datei zu groß (max. 5 MB)' }, 400);
 
   const ext = ALLOWED_IMAGE_TYPES[file.type];
-  const rand = Math.random().toString(36).slice(2, 9);
-  const key = `${Date.now()}-${rand}.${ext}`;
+  const key = `${crypto.randomUUID()}.${ext}`;
 
   const buf = await file.arrayBuffer();
   await env.CHAMISSO_CONTENT.put(`img:${key}`, buf, { metadata: { type: file.type } });
@@ -301,7 +328,7 @@ async function handlePostSetup(request, env) {
   if (!body || typeof body.password !== 'string' || body.password.length < 8) {
     return jsonRes({ error: 'Passwort muss mindestens 8 Zeichen haben' }, 400);
   }
-  await env.CHAMISSO_CONTENT.put(ADMIN_PW_KEY, body.password);
+  await env.CHAMISSO_CONTENT.put(ADMIN_PW_KEY, await sha256Hex(body.password));
   return jsonRes({ ok: true });
 }
 
@@ -321,7 +348,7 @@ async function handleTeacherPostSetup(request, env) {
   if (!body || typeof body.password !== 'string' || body.password.length < 8) {
     return jsonRes({ error: 'Passwort muss mindestens 8 Zeichen haben' }, 400);
   }
-  await env.CHAMISSO_CONTENT.put(TEACHER_PW_KEY, body.password);
+  await env.CHAMISSO_CONTENT.put(TEACHER_PW_KEY, await sha256Hex(body.password));
   return jsonRes({ ok: true });
 }
 
@@ -359,10 +386,9 @@ async function handleTeacherUpload(request, env) {
   if (!file || typeof file === 'string') return jsonRes({ error: 'No file provided' }, 400);
   if (!ALLOWED_TEACHER_TYPES[file.type]) return jsonRes({ error: 'Dateityp nicht erlaubt' }, 400);
   if (file.size > 10 * 1024 * 1024) return jsonRes({ error: 'Datei zu groß (max. 10 MB)' }, 400);
-  const rand      = Math.random().toString(36).slice(2, 9);
   const rawLabel  = (formData.get('label') || file.name || 'datei').slice(0, 60);
   const safeLabel = rawLabel.replace(/[^\w.\-äöüÄÖÜß]/g, '_');
-  const key       = `${Date.now()}-${rand}-${safeLabel}`;
+  const key       = `${crypto.randomUUID()}-${safeLabel}`;
   const buf       = await file.arrayBuffer();
   await env.CHAMISSO_CONTENT.put(`${TEACHER_FILE_PREFIX}${key}`, buf, { metadata: { type: file.type, name: safeLabel } });
   return jsonRes({ ok: true, key });

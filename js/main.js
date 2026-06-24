@@ -124,14 +124,8 @@
       });
     }, { threshold: 0.1 });
     revealEls.forEach(el => obs.observe(el));
-    window.observeRevealEls = function () {
-      document.querySelectorAll('.reveal:not(.visible)').forEach(el => obs.observe(el));
-    };
   } else {
     revealEls.forEach(el => el.classList.add('visible'));
-    window.observeRevealEls = function () {
-      document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
-    };
   }
 
 

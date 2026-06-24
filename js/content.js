@@ -1,7 +1,7 @@
 /* ============================================================
    CHAMISSO-GRUNDSCHULE — content.js
    Single source of truth for editable content across all pages.
-   Loaded by every generated HTML page (after i18n.js).
+   Loaded by every generated HTML page.
 
    Schema (content.json / KV):
      {
@@ -176,20 +176,6 @@ async function saveContent(data) {
   }
 }
 
-async function resetContent() {
-  _cached = null;
-  localStorage.removeItem(CONTENT_KEY);
-  const apiKey = localStorage.getItem('bds_api_key');
-  if (!apiKey) return;
-  try {
-    await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-      body: JSON.stringify(DEFAULT_CONTENT)
-    });
-  } catch (_) { /* ignore */ }
-}
-
 function deepMerge(defaults, overrides) {
   if (overrides == null) return defaults;
   if (Array.isArray(overrides)) return overrides;
@@ -225,14 +211,6 @@ function formatDate(iso) {
   if (isNaN(d.getTime())) return iso;
   return `${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
-
-function formatDayMonth(iso) {
-  const d = new Date(iso);
-  if (isNaN(d.getTime())) return { day: '', month: '' };
-  const monthsShort = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
-  return { day: String(d.getDate()), month: monthsShort[d.getMonth()] };
-}
-
 
 /* ============================================================
    RENDERERS
@@ -495,7 +473,6 @@ function removeTheme() {
 
 function renderVeranstaltungen(data) {
   const events = (data.homepage && data.homepage.veranstaltungen) || [];
-  window.__EVENTS = events;
   if (typeof window.initCalendar === 'function') window.initCalendar(events);
 }
 
@@ -532,7 +509,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 window.getContent          = getContent;
 window.saveContent         = saveContent;
-window.resetContent        = resetContent;
 window.applyContent        = applyContent;
 window.DEFAULT_CONTENT     = DEFAULT_CONTENT;
 window.applyAndCacheTheme  = applyAndCacheTheme;
